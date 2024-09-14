@@ -1,0 +1,77 @@
+{
+    "filter": {
+        "type" : [
+            "gilet",
+            "pantalon",
+            "jupe",
+            "jupon",
+            "chemise",
+            "guimpe",
+            "chemisier",
+            "caraco",
+            "tablier",
+            "tablier à bavette",
+            "chale",
+            "faux-culs",
+            "foulard",
+            "mouchoir",
+            "faux-cols",
+            "chapeaux",
+            "coiffes",
+            "chaussures",
+            "chaussons",
+            "sabots",
+            "bijoux",
+            "livres",
+            "AUTRES"
+        ],
+        "genre": [
+            "homme",
+            "femme",
+            "garcon",
+            "fille",
+            "bebe"
+        ],
+        "couleur": [
+            "blanc",
+            "noir",
+            "gris clair",
+            "gris foncé",
+            "bleu clair",
+            "bleu foncé",
+            "beige clair",
+            "beige foncé",
+            "brun clair",
+            "brun foncé",
+            "bordeau",
+            "violet clair",
+            "violet foncé",
+            "jaune",
+            "rouge",
+            "vert clair",
+            "vert foncé",
+            "AUTRES"
+        ],
+        "taille": [
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL",
+            "3XL",
+            "autre",
+            "< 2 ans",
+            "4-6 ans",
+            "8-10 ans",
+            "12-14 ans",
+            "16 ans et +"
+        ],
+        "etat": [
+            "non empruntable",
+            "neuf",
+            "bon état",
+            "état moyen",
+            "usagé"
+        ]
+    }
+}

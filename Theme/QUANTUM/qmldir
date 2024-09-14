@@ -1,0 +1,8 @@
+module Theme.QUANTUM
+singleton Colors 1.0 Colors.qml
+singleton Fonts 1.0 Fonts.qml
+Button 1.0 Controls/Button.qml
+Tag 1.0 Controls/Tag.qml
+Switch 1.0 Controls/Switch.qml
+Header 1.0 Controls/Header.qml
+AppliQuantum 1.0 Controls/AppliQuantum.qml

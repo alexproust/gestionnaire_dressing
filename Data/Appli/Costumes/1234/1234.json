@@ -1,0 +1,32 @@
+{
+    "id": "1234",
+    "type": [
+        "jupon",
+        "jupe"
+    ],
+    "description": "Robe a froufrou",
+    "genre": "femme",
+    "mode": "Vieux",
+    "epoque": "1600",
+    "couleur": "vert foncé",
+    "taille": "M",
+    "etat": "neuf",
+    "placement": "A5E3",
+    "photos": [
+        {
+            "name": "vue global",
+            "path": "robe-vintage-pour-ado-365.webp"
+        },
+        {
+            "name": "poste drone",
+            "path": "drone.png"
+        },
+        {
+            "name": "poste figther 2",
+            "path": "fighter2.png"
+        }
+    ],
+    "emprunteur": "Jean Michel",
+    "date_emprunt": "07/08/2024",
+    "date_retour": "09/09/2024"
+}

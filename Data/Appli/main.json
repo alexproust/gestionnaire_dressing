@@ -1,0 +1,16 @@
+{
+    "main": [
+        {
+            "title": "Costumes",
+            "articles": [
+                {
+                    "path": "Costumes/1234/1234.json"
+                }
+            ]
+        },
+        {
+            "title": "Autre",
+            "articles": []
+        }
+    ]
+}
