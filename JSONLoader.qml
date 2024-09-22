@@ -14,22 +14,8 @@ QtObject {
             if (xhr.readyState !== XMLHttpRequest.DONE) {
                 return;
             }
-            text = xhr.responseText;
             jsonObject = JSON.parse(xhr.responseText);
         }
         xhr.send();
-    }
-
-    function write(url, model) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("PUT", url);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== XMLHttpRequest.DONE) {
-                return;
-            }
-            // text = xhr.responseText;
-            // jsonObject = JSON.parse(xhr.responseText);
-        }
-        xhr.send(JSON.stringify(model));
     }
 }

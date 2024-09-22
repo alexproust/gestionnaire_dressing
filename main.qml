@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls 2.15
+import QtQuick.LocalStorage
+import "Database.js" as JS
 
 import Theme.QUANTUM 1.0
 
@@ -9,49 +11,6 @@ AppliQuantum {
     title: "Gestionnaire dressing"
     property var model: ({})
     property var filterTemplate: ({})
-
-
-    property JSONLoader main: JSONLoader {
-        source: "Data/Appli/main.json"
-
-        function loadJsonTile(path) {
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", path);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState !== XMLHttpRequest.DONE) {
-                    return;
-                }
-                var dataContent = JSON.parse(xhr.responseText);
-                for (var i = 0; i < dataContent.length; i++ ) {
-                    var key = "costume_" + i;
-                    model[key] = {};
-                    model[key].content =dataContent[i]
-                }
-                modelChanged();
-            }
-            xhr.send();
-        }
-
-        onJsonObjectChanged: {
-            var dressing = jsonObject.main;
-            root.headtitle = dressing.title;
-            var dataPath = "Data/Appli/" + dressing.data;
-            loadJsonTile(dataPath)
-        }
-    }
-
-    property JSONWriter save: JSONWriter{
-        source: "file://C:/Users/Alex/Documents/Gestionnaire_dressing/Data/Appli/test.json"
-        dataModel: model
-
-        function recordJsonFile() {
-            write(model)
-        }
-
-        onDataModelChanged: {
-            recordJsonFile()
-        }
-    }
 
     property JSONLoader filter: JSONLoader {
         source: "Data/Appli/Costumes/filter.json"
@@ -87,6 +46,25 @@ AppliQuantum {
 
             rawModel: root.model
             filter: root.filterTemplate
+
+            onAddSelect: {
+                let rowid = JS.dbInsert()
+                JS.dbUpdate(rowid,"","","","","","","","","","");
+                JS.dbReadAll()
+                for (var i = 0; i < listModel.count; i++ ) {
+                    var key = i;
+                    model[key] = {};
+                    model[key].id =listModel.get(i).id
+                    model[key].type =listModel.get(i).type
+                    model[key].description =listModel.get(i).description
+                    model[key].genre =listModel.get(i).genre
+                    model[key].couleur =listModel.get(i).couleur
+                    model[key].taille =listModel.get(i).taille
+                }
+                modelChanged();
+                demoDetail.costumeSelected = Object.values(model)[0]
+                demoDetail.visible = true
+            }
         }
 
         ScrollView {
@@ -103,8 +81,8 @@ AppliQuantum {
                 clip: true
 
                 Repeater {
+                    id: itemRepeter
                     model: Object.keys(filters.filteredModel).length;
-
                     delegate: DemoTile {
                         costume: Object.values(filters.filteredModel)[index]
                         onTileSelect: {
@@ -117,9 +95,46 @@ AppliQuantum {
         }
     }
 
+    ListModel {
+        id: listModel
+        Component.onCompleted: {
+            JS.dbReadAll()
+            for (var i = 0; i < listModel.count; i++ ) {
+                var key = i;
+                model[key] = {};
+                model[key].id =listModel.get(i).id
+                model[key].type =listModel.get(i).type
+                model[key].description =listModel.get(i).description
+                model[key].genre =listModel.get(i).genre
+                model[key].couleur =listModel.get(i).couleur
+                model[key].taille =listModel.get(i).taille
+            }
+            modelChanged();
+        }
+    }
 
     DemoDetail{
         id: demoDetail
         filter: root.filterTemplate
+        onRecordModification: {
+            JS.dbUpdate(
+                        costumeSelected.id,
+                        costumeSelected.type,
+                        costumeSelected.description,
+                        costumeSelected.genre,
+                        costumeSelected.mode,
+                        costumeSelected.epoque,
+                        costumeSelected.couleur,
+                        costumeSelected.taille,
+                        costumeSelected.etat,
+                        costumeSelected.emplacement,
+                        costumeSelected.emprunteur
+                        )
+            modelChanged();
+        }
+    }
+
+    Component.onCompleted: {
+        JS.dbInit()
     }
 }

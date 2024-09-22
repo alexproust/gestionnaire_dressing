@@ -12,6 +12,9 @@ ColumnLayout {
     property var locale: Qt.locale()
     property date currentDate: new Date()
     onRawModelChanged: customFilter();
+
+    signal addSelect()
+
     onFilterChanged: {
         if (filter.type)
         {
@@ -42,16 +45,15 @@ ColumnLayout {
 
     function customFilter() {
         filteredModel = rawModel;
-        console.info("customFilter")
         filteredModel = Object.values(filteredModel).filter(function(obj) {
             if (inStockSwitch.isSelected) {
                 console.info("show in stock articles")
-                var date_emprunt = Date.fromLocaleDateString(Qt.locale(), obj.content.date_emprunt,Locale.ShortFormat)
+                var date_emprunt = Date.fromLocaleDateString(Qt.locale(), obj.date_emprunt,Locale.ShortFormat)
                 print("Date emprunt : " + date_emprunt)
-                var date_retour = Date.fromLocaleDateString(Qt.locale(), obj.content.date_retour,Locale.ShortFormat)
+                var date_retour = Date.fromLocaleDateString(Qt.locale(), obj.date_retour,Locale.ShortFormat)
                 print("Date retour : " + date_retour)
-                // if (obj.content.date_emprunt === undefined && Date.fromLocaleDateString(obj.content.date_emprunt) !== filterRepeaterType.itemAt(i).text) {
-                //         console.info("pas de " + filterRepeaterType.itemAt(i).text + " sur " + obj.content.id)
+                // if (obj.date_emprunt === undefined && Date.fromLocaleDateString(obj.date_emprunt) !== filterRepeaterType.itemAt(i).text) {
+                //         console.info("pas de " + filterRepeaterType.itemAt(i).text + " sur " + obj.id)
                 //         return false;
                 // }
                 print("Current date : " + currentDate)
@@ -67,23 +69,21 @@ ColumnLayout {
             for(var i = 0; i < filterRepeaterType.count; i++ ) {
                 if(filterRepeaterType.itemAt(i).isSelected) {
                     console.info(filterRepeaterType.itemAt(i).text + " selected")
-                    if (obj.content.type.length >= 1 ) {
-                            if( obj.content.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
-                                console.info(obj.content.id + "(" + obj.content.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
-                                return false;
-                            }
-                            else {
-                                console.info(obj.content.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
-                            }
-                        }
+                    if( obj.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
+                        console.info(obj.id + "(" + obj.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                        return false;
+                    }
+                    else {
+                        console.info(obj.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                    }
                 }
             }
             for(var i = 0; i < filterRepeaterGenre.count; i++ ) {
                 if(filterRepeaterGenre.itemAt(i).isSelected) {
                     console.info(filterRepeaterGenre.itemAt(i).text + " selected")
-                    console.info(obj.content.genre)
-                    if (obj.content.genre === undefined || obj.content.genre !== filterRepeaterGenre.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterGenre.itemAt(i).text + " sur " + obj.content.id)
+                    console.info(obj.genre)
+                    if (obj.genre === undefined || obj.genre !== filterRepeaterGenre.itemAt(i).text) {
+                        console.info("pas de " + filterRepeaterGenre.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
@@ -91,9 +91,9 @@ ColumnLayout {
             for(var i = 0; i < filterRepeaterCouleur.count; i++ ) {
                 if(filterRepeaterCouleur.itemAt(i).isSelected) {
                     console.info(filterRepeaterCouleur.itemAt(i).text + " selected")
-                    console.info(obj.content.genre)
-                    if (obj.content.color === undefined || obj.content.color !== filterRepeaterCouleur.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterCouleur.itemAt(i).text + " sur " + obj.content.id)
+                    console.info(obj.genre)
+                    if (obj.color === undefined || obj.color !== filterRepeaterCouleur.itemAt(i).text) {
+                        console.info("pas de " + filterRepeaterCouleur.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
@@ -101,9 +101,9 @@ ColumnLayout {
             for(var i = 0; i < filterRepeaterTaille.count; i++ ) {
                 if(filterRepeaterTaille.itemAt(i).isSelected) {
                     console.info(filterRepeaterTaille.itemAt(i).text + " selected")
-                    console.info(obj.content.genre)
-                    if (obj.content.taille === undefined || obj.content.taille !== filterRepeaterTaille.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterTaille.itemAt(i).text + " sur " + obj.content.id)
+                    console.info(obj.genre)
+                    if (obj.taille === undefined || obj.taille !== filterRepeaterTaille.itemAt(i).text) {
+                        console.info("pas de " + filterRepeaterTaille.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
@@ -111,9 +111,9 @@ ColumnLayout {
             for(var i = 0; i < filterRepeaterEtat.count; i++ ) {
                 if(filterRepeaterEtat.itemAt(i).isSelected) {
                     console.info(filterRepeaterEtat.itemAt(i).text + " selected")
-                    console.info(obj.content.genre)
-                    if (obj.content.etat === undefined || obj.content.etat !== filterRepeaterEtat.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterEtat.itemAt(i).text + " sur " + obj.content.id)
+                    console.info(obj.genre)
+                    if (obj.etat === undefined || obj.etat !== filterRepeaterEtat.itemAt(i).text) {
+                        console.info("pas de " + filterRepeaterEtat.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
@@ -125,11 +125,22 @@ ColumnLayout {
 
     }
 
-    Tag {
+    RowLayout{
+        Tag {
         id : inStockSwitch
         text: qsTr("Produit en stock")
         onClicked: {
             customFilter();
+        }
+    }
+
+        Tag {
+            id : addButton
+            text: qsTr("Ajouter")
+            onClicked: {
+                addButton.isSelected = false
+                addSelect();
+            }
         }
     }
 

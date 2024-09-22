@@ -18,27 +18,33 @@ Rectangle {
     signal recordModification()
 
     Tag {
-        text: "Modification"
+        id: modificationButton
+        text: isSelected ? "Annuler" : "Modification"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
             demoDetail.editMode = !demoDetail.editMode
-            if (isSelected){
-                demoDetail.recordModification()
-            }
         }
     }
 
 
     Tag {
-        text: "Fermer"
+        text: demoDetail.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            isSelected = false
-            parent.visible = false
+            if (demoDetail.editMode){
+                demoDetail.editMode = !demoDetail.editMode
+                modificationButton.isSelected = false
+                isSelected = false
+                demoDetail.recordModification()
+            }
+            else {
+                isSelected = false
+                parent.visible = false
+            }
         }
     }
 
@@ -50,7 +56,7 @@ Rectangle {
         hoverEnabled: true
         preventStealing: true
         onClicked: {
-            parent.visible = false
+            // parent.visible = false
         }
         z: z-1
     }
@@ -66,7 +72,7 @@ Rectangle {
             Layout.preferredWidth: row.width / 2
             Layout.leftMargin: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
-            source: costumeSelected.content.photos ? "./Data/Appli/Costumes/" + costumeSelected.content.id + "/" + costumeSelected.content.photos[0].path : "./Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp"
+            source: costumeSelected.photos ? "./Data/Appli/Costumes/" + costumeSelected.id + "/" + costumeSelected.photos[0].path : "./Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp"
         }
 
         ColumnLayout {
@@ -78,7 +84,7 @@ Rectangle {
             spacing: 12
             Text {
                 Layout.fillWidth: true
-                text: "Id: " + costumeSelected.content.id
+                text: "Id: " + costumeSelected.id
                 font: Fonts.subtitle1
             }
 
@@ -87,7 +93,7 @@ Rectangle {
                     id: typeText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Type: " + costumeSelected.content.type : "Type: "
+                    text: !demoDetail.editMode ? "Type: " + costumeSelected.type : "Type: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -99,74 +105,186 @@ Rectangle {
                     visible: demoDetail.editMode
                     model: filter.type
                     onCurrentIndexChanged: {
-                        costumeSelected.content.type = filter.type[currentIndex]
+                        costumeSelected.type = filter.type[currentIndex]
                         console.debug(filter.type[currentIndex])
                     }
                 }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Description: " + costumeSelected.content.description
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Description: " + costumeSelected.description : "Description: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+                TextArea {
+                    id: descriptionInput
+                    text: costumeSelected.description
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    onTextChanged: {
+                        costumeSelected.description = text
+                        console.debug(costumeSelected.description)
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Genre: " + costumeSelected.content.genre
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    id: genreText
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Genre: " + costumeSelected.genre : "Genre: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+
+                ComboBox {
+                    id: genreSelected
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    model: filter.genre
+                    onCurrentIndexChanged: {
+                        costumeSelected.genre = filter.genre[currentIndex]
+                        console.debug(filter.genre[currentIndex])
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Mode: " + costumeSelected.content.mode
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Mode: " + costumeSelected.mode : "Mode: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+                TextField {
+                    id: modeInput
+                    text: costumeSelected.mode
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    onTextChanged: {
+                        costumeSelected.mode = text
+                        console.debug(costumeSelected.mode)
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Epoque: " + costumeSelected.content.epoque
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Epoque: " + costumeSelected.epoque : "Epoque: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+                TextField {
+                    id: epoqueInput
+                    text: costumeSelected.epoque
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    onTextChanged: {
+                        costumeSelected.epoque = text
+                        console.debug(costumeSelected.epoque)
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Couleur: " +costumeSelected.content.couleur
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    id: couleurText
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Couleur: " + costumeSelected.couleur : "Couleur: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+
+                ComboBox {
+                    id: couleurSelected
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    model: filter.couleur
+                    onCurrentIndexChanged: {
+                        costumeSelected.couleur = filter.couleur[currentIndex]
+                        console.debug(filter.couleur[currentIndex])
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Taille: " +costumeSelected.content.taille
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    id: tailleText
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Taille: " + costumeSelected.taille : "Taille: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+
+                ComboBox {
+                    id: tailleSelected
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    model: filter.taille
+                    onCurrentIndexChanged: {
+                        costumeSelected.taille = filter.taille[currentIndex]
+                        console.debug(filter.taille[currentIndex])
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Etat: " + costumeSelected.content.etat
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    id: etatText
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Etat: " + costumeSelected.etat : "Etat: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+
+                ComboBox {
+                    id: etatSelected
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    model: filter.etat
+                    onCurrentIndexChanged: {
+                        costumeSelected.etat = filter.etat[currentIndex]
+                        console.debug(filter.etat[currentIndex])
+                    }
+                }
             }
 
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: "Emplacement: " +costumeSelected.content.placement
-                font: Fonts.body1
-                wrapMode: Text.WordWrap
+            RowLayout {
+                Text {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    text: !demoDetail.editMode ? "Emplacement: " + costumeSelected.placement : "Emplacement: "
+                    font: Fonts.body1
+                    wrapMode: Text.WordWrap
+                }
+                TextField {
+                    id: placementInput
+                    text: costumeSelected.placement
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 64
+                    visible: demoDetail.editMode
+                    onTextChanged: {
+                        costumeSelected.placement = text
+                        console.debug(costumeSelected.placement)
+                    }
+                }
             }
         }
     }

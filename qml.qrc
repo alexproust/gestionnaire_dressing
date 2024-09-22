@@ -5,9 +5,6 @@
         <file>DemoDetail.qml</file>
         <file>DemoTile.qml</file>
         <file>Filters.qml</file>
-        <file>Data/Appli/Costumes/1234/c2030.png</file>
-        <file>Data/Appli/Costumes/1234/drone.png</file>
-        <file>Data/Appli/Costumes/1234/fighter2.png</file>
         <file>Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp</file>
         <file>Data/Appli/Costumes/filter.json</file>
         <file>Data/Appli/main.json</file>
@@ -56,6 +53,6 @@
         <file>Theme/QUANTUM/Controls/Button.qml</file>
         <file>Theme/QUANTUM/Controls/Switch.qml</file>
         <file>Data/Appli/Costumes/data.json</file>
-        <file>JSONWriter.qml</file>
+        <file>Database.js</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,13 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         },
         Qt::QueuedConnection);
+    QString customPath = "OffLineStorage";
+    QDir dir;
+    if(dir.mkpath(QString(customPath))){
+        qInfo() << "Default path >> "+engine.offlineStoragePath();
+        engine.setOfflineStoragePath(QString(customPath));
+        qInfo() << "New path >> "+engine.offlineStoragePath();
+    }
     engine.load(url);
 
     return app.exec();
