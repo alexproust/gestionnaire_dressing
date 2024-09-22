@@ -7,20 +7,14 @@ import Theme.QUANTUM 1.0
 
 Rectangle {
     id: tile
-    width: 320
-    height: 360
+    width: 260
+    height: 280
 
     signal tileSelect()
 
     property var costume: ({})
 
     layer.enabled: true
-    // layer.effect: DropShadow {
-    //     color: Colors.bluegrey100
-    //     radius: 6
-    //     transparentBorder: true
-    //     verticalOffset: 4
-    // }
 
     MouseArea {
         id: ma
@@ -57,26 +51,46 @@ Rectangle {
         anchors.margins: 16
         spacing: 12
 
-        Text {
-            Layout.fillWidth: true
-            text: costume.content.id
-            font: Fonts.subtitle1
-        }
+        RowLayout{
+            Text {
+                Layout.fillWidth: true
+                text: costume.content.id
+                font: Fonts.subtitle1
+            }
 
-        Text {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 64
-            text: costume.content.description
-            font: Fonts.body1
-            wrapMode: Text.WordWrap
+            Text {
+                Layout.fillWidth: true
+                text: costume.content.type
+                font: Fonts.body1
+                wrapMode: Text.WordWrap
+            }
         }
 
         Image {
-            Layout.preferredHeight: tile.height / 2
-            Layout.preferredWidth: tile.width
+            Layout.preferredHeight: 2* tile.height / 3
+            Layout.maximumWidth: tile.width
+            Layout.fillWidth: true
             Layout.leftMargin: -col.anchors.leftMargin
+            fillMode: Image.PreserveAspectFit
+            source: costume.content.photos ? "./Data/Appli/Costumes/" + costume.content.id + "/" + costume.content.photos[0].path : "./Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp"
+        }
 
-            source: "./Data/Appli/Costumes/" + costume.content.id + "/" + costume.content.photos[0].path
+        RowLayout{
+            Layout.fillWidth: true
+            Text {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 64
+                text: costume.content.genre
+                font: Fonts.body1
+                wrapMode: Text.WordWrap
+            }
+            Text {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 64
+                text: costume.content.taille
+                font: Fonts.body1
+                wrapMode: Text.WordWrap
+            }
         }
     }
 }

@@ -5,7 +5,6 @@
         <file>DemoDetail.qml</file>
         <file>DemoTile.qml</file>
         <file>Filters.qml</file>
-        <file>Data/Appli/Costumes/1234/1234.json</file>
         <file>Data/Appli/Costumes/1234/c2030.png</file>
         <file>Data/Appli/Costumes/1234/drone.png</file>
         <file>Data/Appli/Costumes/1234/fighter2.png</file>
@@ -56,5 +55,7 @@
         <file>Theme/QUANTUM/qmldir</file>
         <file>Theme/QUANTUM/Controls/Button.qml</file>
         <file>Theme/QUANTUM/Controls/Switch.qml</file>
+        <file>Data/Appli/Costumes/data.json</file>
+        <file>JSONWriter.qml</file>
     </qresource>
 </RCC>

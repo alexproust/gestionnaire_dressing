@@ -62,23 +62,20 @@ ColumnLayout {
                 }
             }
             else {
-                console.info("show all articles")
+                // console.info("show all articles")
             }
             for(var i = 0; i < filterRepeaterType.count; i++ ) {
                 if(filterRepeaterType.itemAt(i).isSelected) {
                     console.info(filterRepeaterType.itemAt(i).text + " selected")
                     if (obj.content.type.length >= 1 ) {
-                        for(var j = 0 ; j < obj.content.type.length ; j++) {
-                            if( obj.content.type[j] !== filterRepeaterType.itemAt(i).text) {
-                                console.info(obj.content.id + " pas de type " + filterRepeaterType.itemAt(i).text)
+                            if( obj.content.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
+                                console.info(obj.content.id + "(" + obj.content.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                                return false;
                             }
                             else {
-                                console.info(obj.content.id + " de type " + filterRepeaterType.itemAt(i).text)
-                                return true
+                                console.info(obj.content.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
                             }
                         }
-                        return false;
-                    }
                 }
             }
             for(var i = 0; i < filterRepeaterGenre.count; i++ ) {
@@ -144,9 +141,10 @@ ColumnLayout {
 
     Flow {
         Layout.minimumHeight: 200
-        Layout.preferredHeight: 280
+        Layout.preferredHeight: 270
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
+        spacing: 3
         Repeater{
             id: filterRepeaterType
             model: 0
@@ -166,9 +164,11 @@ ColumnLayout {
     }
 
     Flow {
+        Layout.minimumHeight: 65
         Layout.preferredHeight: 80
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
+        spacing: 3
         Repeater{
             id: filterRepeaterGenre
             model: 0
@@ -188,9 +188,11 @@ ColumnLayout {
     }
 
     Flow {
-        Layout.preferredHeight: 200
+        Layout.minimumHeight: 170
+        Layout.preferredHeight: 210
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
+        spacing: 3
         Repeater{
             id: filterRepeaterCouleur
             model: 0
@@ -210,9 +212,11 @@ ColumnLayout {
     }
 
     Flow {
-        Layout.preferredHeight: 150
+        Layout.minimumHeight: 100
+        Layout.preferredHeight: 140
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
+        spacing: 3
         Repeater{
             id: filterRepeaterTaille
             model: 0
@@ -232,9 +236,11 @@ ColumnLayout {
     }
 
     Flow {
+        Layout.minimumHeight: 50
         Layout.preferredHeight: 150
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
+        spacing: 3
         Repeater{
             id: filterRepeaterEtat
             model: 0

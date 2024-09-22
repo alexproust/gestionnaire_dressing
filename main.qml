@@ -1,11 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls 2.15
 
 import Theme.QUANTUM 1.0
 
 AppliQuantum {
     id: root
-    title: "Démonstrateurs AVS/FLX"
+    title: "Gestionnaire dressing"
     property var model: ({})
     property var filterTemplate: ({})
 
@@ -13,30 +14,42 @@ AppliQuantum {
     property JSONLoader main: JSONLoader {
         source: "Data/Appli/main.json"
 
-        function loadJsonTile(key) {
+        function loadJsonTile(path) {
             let xhr = new XMLHttpRequest();
-            xhr.open("GET", model[key].path);
+            xhr.open("GET", path);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState !== XMLHttpRequest.DONE) {
                     return;
                 }
-                model[key].content = JSON.parse(xhr.responseText);
+                var dataContent = JSON.parse(xhr.responseText);
+                for (var i = 0; i < dataContent.length; i++ ) {
+                    var key = "costume_" + i;
+                    model[key] = {};
+                    model[key].content =dataContent[i]
+                }
                 modelChanged();
             }
             xhr.send();
         }
 
         onJsonObjectChanged: {
-            var demonstrateurs = jsonObject.main[0];
+            var dressing = jsonObject.main;
+            root.headtitle = dressing.title;
+            var dataPath = "Data/Appli/" + dressing.data;
+            loadJsonTile(dataPath)
+        }
+    }
 
-            root.title = demonstrateurs.title;
-            for(var i = 0; i < demonstrateurs.articles.length; i++ ) {
-                var refBench = demonstrateurs.articles[i];
-                var key = "bench_" + i;
-                model[key] = {};
-                model[key].path = "Data/Appli/" + refBench.path;
-                loadJsonTile(key)
-            }
+    property JSONWriter save: JSONWriter{
+        source: "file://C:/Users/Alex/Documents/Gestionnaire_dressing/Data/Appli/test.json"
+        dataModel: model
+
+        function recordJsonFile() {
+            write(model)
+        }
+
+        onDataModelChanged: {
+            recordJsonFile()
         }
     }
 
@@ -53,62 +66,60 @@ AppliQuantum {
             filterTemplateChanged()
         }
     }
-    width: 1920
-    height: 1080
 
     RowLayout {
         anchors.fill: parent
+        anchors.topMargin: 85
         anchors.margins: 24
         spacing: 12
-
-/*         Text {
-            text: "Nos Démonstrateurs"
-            font: Fonts.title1
-            color: Colors.blue600
-        } */
 
         Filters { ///< Filters
             id: filters
             height: parent.height
-            Layout.preferredWidth: 400
+            Layout.minimumWidth: 300
+            Layout.preferredWidth: 550
             Layout.preferredHeight: parent.height
             Layout.alignment: Qt.AlignVCenter
             Layout.fillHeight: true
+            Layout.fillWidth: true
+
             spacing: 8
 
             rawModel: root.model
             filter: root.filterTemplate
-            // Rectangle {
-            //     anchors.fill: parent
-            //     opacity: 0.2
-            //     color: "red"
-            // }
         }
 
-        Flow {
-            id: itemFlow
-            Layout.preferredWidth: 1500
+        ScrollView {
+            Layout.preferredWidth: parent.width
+            Layout.maximumWidth: parent.width
             Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 24
-            clip: true
+            contentWidth: availableWidth
+            Flow {
+                id: itemFlow
+                anchors.fill: parent
+                spacing: 24
+                clip: true
 
-            Repeater {
-                model: Object.keys(filters.filteredModel).length;
+                Repeater {
+                    model: Object.keys(filters.filteredModel).length;
 
-                delegate: DemoTile {
-                    costume: Object.values(filters.filteredModel)[index]
-                    onTileSelect: {
-                        demoDetail.costumeSelected = costume
-                        demoDetail.visible = true
+                    delegate: DemoTile {
+                        costume: Object.values(filters.filteredModel)[index]
+                        onTileSelect: {
+                            demoDetail.costumeSelected = costume
+                            demoDetail.visible = true
+                        }
                     }
                 }
             }
         }
     }
+
+
     DemoDetail{
         id: demoDetail
+        filter: root.filterTemplate
     }
 }
