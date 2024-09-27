@@ -16,15 +16,27 @@ Rectangle {
     visible: false
     color: Colors.bluegrey25
     signal recordModification()
+    signal deleteCostume()
 
     Tag {
         id: modificationButton
-        text: isSelected ? "Annuler" : "Modification"
+        text: isSelected ? "Annuler" : "Modifier"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
             demoDetail.editMode = !demoDetail.editMode
+        }
+    }
+    Tag {
+        id: suppressionButton
+        text: "Supprimer"
+        anchors.left: modificationButton.right
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: {
+            isSelected = false
+            demoDetail.deleteCostume()
         }
     }
 
@@ -72,7 +84,7 @@ Rectangle {
             Layout.preferredWidth: row.width / 2
             Layout.leftMargin: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
-            source: costumeSelected.photos ? "./Data/Appli/Costumes/" + costumeSelected.id + "/" + costumeSelected.photos[0].path : "./Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp"
+            source: costumeSelected.photos ? "./Data/Photos/" + costumeSelected.id + "/" + costumeSelected.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         ColumnLayout {
@@ -106,7 +118,6 @@ Rectangle {
                     model: filter.type
                     onCurrentIndexChanged: {
                         costumeSelected.type = filter.type[currentIndex]
-                        console.debug(filter.type[currentIndex])
                     }
                 }
             }
@@ -121,13 +132,12 @@ Rectangle {
                 }
                 TextArea {
                     id: descriptionInput
-                    text: costumeSelected.description
+                    text: costumeSelected.description ? costumeSelected.description : "Undefined"
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
                         costumeSelected.description = text
-                        console.debug(costumeSelected.description)
                     }
                 }
             }
@@ -150,7 +160,6 @@ Rectangle {
                     model: filter.genre
                     onCurrentIndexChanged: {
                         costumeSelected.genre = filter.genre[currentIndex]
-                        console.debug(filter.genre[currentIndex])
                     }
                 }
             }
@@ -165,13 +174,12 @@ Rectangle {
                 }
                 TextField {
                     id: modeInput
-                    text: costumeSelected.mode
+                    text: costumeSelected.mode ? costumeSelected.mode : "Undefined"
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
                         costumeSelected.mode = text
-                        console.debug(costumeSelected.mode)
                     }
                 }
             }
@@ -186,13 +194,12 @@ Rectangle {
                 }
                 TextField {
                     id: epoqueInput
-                    text: costumeSelected.epoque
+                    text: costumeSelected.epoque ? costumeSelected.epoque : "Undefined"
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
                         costumeSelected.epoque = text
-                        console.debug(costumeSelected.epoque)
                     }
                 }
             }
@@ -215,7 +222,6 @@ Rectangle {
                     model: filter.couleur
                     onCurrentIndexChanged: {
                         costumeSelected.couleur = filter.couleur[currentIndex]
-                        console.debug(filter.couleur[currentIndex])
                     }
                 }
             }
@@ -238,7 +244,6 @@ Rectangle {
                     model: filter.taille
                     onCurrentIndexChanged: {
                         costumeSelected.taille = filter.taille[currentIndex]
-                        console.debug(filter.taille[currentIndex])
                     }
                 }
             }
@@ -261,7 +266,6 @@ Rectangle {
                     model: filter.etat
                     onCurrentIndexChanged: {
                         costumeSelected.etat = filter.etat[currentIndex]
-                        console.debug(filter.etat[currentIndex])
                     }
                 }
             }
@@ -270,19 +274,18 @@ Rectangle {
                 Text {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Emplacement: " + costumeSelected.placement : "Emplacement: "
+                    text: !demoDetail.editMode ? "Emplacement: " + costumeSelected.emplacement : "Emplacement: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
                 TextField {
                     id: placementInput
-                    text: costumeSelected.placement
+                    text: costumeSelected.emplacement ? costumeSelected.emplacement : "Undefined"
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
-                        costumeSelected.placement = text
-                        console.debug(costumeSelected.placement)
+                        costumeSelected.emplacement = text
                     }
                 }
             }

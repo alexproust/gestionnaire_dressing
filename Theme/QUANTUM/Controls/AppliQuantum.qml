@@ -5,6 +5,7 @@ import Theme.QUANTUM 1.0
 Window {
     minimumWidth: 1440
     minimumHeight: 900
+    visible: true
     property alias headtitle: appli.headtitle
     property alias headerContainer: appli.headerContainer
     Rectangle {

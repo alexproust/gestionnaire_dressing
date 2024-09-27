@@ -60,7 +60,7 @@ Rectangle {
 
             Text {
                 Layout.fillWidth: true
-                text: costume.type
+                text: costume.type ?  costume.type : ""
                 font: Fonts.body1
                 wrapMode: Text.WordWrap
             }
@@ -72,7 +72,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.leftMargin: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
-            source: costume.photos ? "./Data/Appli/Costumes/" + costume.id + "/" + costume.photos[0].path : "./Data/Appli/Costumes/1234/robe-vintage-pour-ado-365.webp"
+            source: costume.photos ? "./Data/Photos/" + costume.id + "/" + costume.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         RowLayout{
@@ -80,14 +80,14 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: costume.genre
+                text: costume.genre ? costume.genre : ""
                 font: Fonts.body1
                 wrapMode: Text.WordWrap
             }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: costume.taille
+                text: costume.taille ? costume.taille : ""
                 font: Fonts.body1
                 wrapMode: Text.WordWrap
             }

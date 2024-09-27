@@ -9,11 +9,12 @@ import Theme.QUANTUM 1.0
 AppliQuantum {
     id: root
     title: "Gestionnaire dressing"
+    visible: true
     property var model: ({})
     property var filterTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
-        source: "Data/Appli/Costumes/filter.json"
+        source: "Data/filter.json"
 
         onJsonObjectChanged: {
             var filters = jsonObject.filter
@@ -58,12 +59,26 @@ AppliQuantum {
                     model[key].type =listModel.get(i).type
                     model[key].description =listModel.get(i).description
                     model[key].genre =listModel.get(i).genre
+                    model[key].mode =listModel.get(i).mode
+                    model[key].epoque =listModel.get(i).epoque
                     model[key].couleur =listModel.get(i).couleur
                     model[key].taille =listModel.get(i).taille
+                    model[key].etat =listModel.get(i).etat
+                    model[key].emprunteur =listModel.get(i).emprunteur
+                    model[key].emplacement =listModel.get(i).emplacement
+                    model[key].date_versement_caution =listModel.get(i).date_versement_caution
+                    model[key].date_emprunt =listModel.get(i).date_emprunt
+                    model[key].date_retour =listModel.get(i).date_retour
+                    model[key].date_remboursement_caution =listModel.get(i).date_remboursement_caution
+                    model[key].commentaires =listModel.get(i).commentaires
                 }
                 modelChanged();
                 demoDetail.costumeSelected = Object.values(model)[0]
                 demoDetail.visible = true
+            }
+
+            onFilteredModelChanged: {
+                itemRepeter.update()
             }
         }
 
@@ -106,8 +121,18 @@ AppliQuantum {
                 model[key].type =listModel.get(i).type
                 model[key].description =listModel.get(i).description
                 model[key].genre =listModel.get(i).genre
+                model[key].mode =listModel.get(i).mode
+                model[key].epoque =listModel.get(i).epoque
                 model[key].couleur =listModel.get(i).couleur
                 model[key].taille =listModel.get(i).taille
+                model[key].etat =listModel.get(i).etat
+                model[key].emprunteur =listModel.get(i).emprunteur
+                model[key].emplacement =listModel.get(i).emplacement
+                model[key].date_versement_caution =listModel.get(i).date_versement_caution
+                model[key].date_emprunt =listModel.get(i).date_emprunt
+                model[key].date_retour =listModel.get(i).date_retour
+                model[key].date_remboursement_caution =listModel.get(i).date_remboursement_caution
+                model[key].commentaires =listModel.get(i).commentaires
             }
             modelChanged();
         }
@@ -131,6 +156,12 @@ AppliQuantum {
                         costumeSelected.emprunteur
                         )
             modelChanged();
+        }
+        onDeleteCostume: {
+            JS.dbDeleteRow(costumeSelected.id)
+            delete model[costumeSelected.id];
+            modelChanged();
+            demoDetail.visible = false
         }
     }
 

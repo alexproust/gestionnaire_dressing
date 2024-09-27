@@ -11,34 +11,31 @@ ColumnLayout {
     property var filter: ({})
     property var locale: Qt.locale()
     property date currentDate: new Date()
-    onRawModelChanged: customFilter();
+    onRawModelChanged: {
+        customFilter();
+    }
 
     signal addSelect()
 
     onFilterChanged: {
         if (filter.type)
         {
-            console.log(filter.type)
             filterRepeaterType.model = filter.type.length;
         }
         if (filter.genre)
         {
-            console.log(filter.genre)
             filterRepeaterGenre.model = filter.genre.length;
         }
         if (filter.couleur)
         {
-            console.log(filter.couleur)
             filterRepeaterCouleur.model = filter.couleur.length;
         }
         if (filter.taille)
         {
-            console.log(filter.taille)
             filterRepeaterTaille.model = filter.taille.length;
         }
         if (filter.etat)
         {
-            console.log(filter.etat)
             filterRepeaterEtat.model = filter.etat.length;
         }
     }
@@ -47,73 +44,73 @@ ColumnLayout {
         filteredModel = rawModel;
         filteredModel = Object.values(filteredModel).filter(function(obj) {
             if (inStockSwitch.isSelected) {
-                console.info("show in stock articles")
+                //console.debug("show in stock articles")
                 var date_emprunt = Date.fromLocaleDateString(Qt.locale(), obj.date_emprunt,Locale.ShortFormat)
-                print("Date emprunt : " + date_emprunt)
+                //console.debug("Date emprunt : " + date_emprunt)
                 var date_retour = Date.fromLocaleDateString(Qt.locale(), obj.date_retour,Locale.ShortFormat)
-                print("Date retour : " + date_retour)
+                //console.debug("Date retour : " + date_retour)
                 // if (obj.date_emprunt === undefined && Date.fromLocaleDateString(obj.date_emprunt) !== filterRepeaterType.itemAt(i).text) {
-                //         console.info("pas de " + filterRepeaterType.itemAt(i).text + " sur " + obj.id)
+                //         //console.debug("pas de " + filterRepeaterType.itemAt(i).text + " sur " + obj.id)
                 //         return false;
                 // }
-                print("Current date : " + currentDate)
-                print(date_emprunt<currentDate)
-                print(date_emprunt>currentDate)
+                //console.debug("Current date : " + currentDate)
+                //console.debug(date_emprunt<currentDate)
+                //console.debug(date_emprunt>currentDate)
                 if (currentDate<date_retour) {
                     return false;
                 }
             }
             else {
-                // console.info("show all articles")
+                //console.debug("show all articles")
             }
             for(var i = 0; i < filterRepeaterType.count; i++ ) {
                 if(filterRepeaterType.itemAt(i).isSelected) {
-                    console.info(filterRepeaterType.itemAt(i).text + " selected")
+                    //console.debug(filterRepeaterType.itemAt(i).text + " selected")
                     if( obj.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
-                        console.info(obj.id + "(" + obj.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                        //console.debug(obj.id + "(" + obj.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
                         return false;
                     }
                     else {
-                        console.info(obj.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                        //console.debug(obj.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
                     }
                 }
             }
             for(var i = 0; i < filterRepeaterGenre.count; i++ ) {
                 if(filterRepeaterGenre.itemAt(i).isSelected) {
-                    console.info(filterRepeaterGenre.itemAt(i).text + " selected")
-                    console.info(obj.genre)
+                    //console.debug(filterRepeaterGenre.itemAt(i).text + " selected")
+                    //console.debug(obj.genre)
                     if (obj.genre === undefined || obj.genre !== filterRepeaterGenre.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterGenre.itemAt(i).text + " sur " + obj.id)
+                        //console.debug("pas de " + filterRepeaterGenre.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
             }
             for(var i = 0; i < filterRepeaterCouleur.count; i++ ) {
                 if(filterRepeaterCouleur.itemAt(i).isSelected) {
-                    console.info(filterRepeaterCouleur.itemAt(i).text + " selected")
-                    console.info(obj.genre)
+                    //console.debug(filterRepeaterCouleur.itemAt(i).text + " selected")
+                    //console.debug(obj.genre)
                     if (obj.color === undefined || obj.color !== filterRepeaterCouleur.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterCouleur.itemAt(i).text + " sur " + obj.id)
+                        //console.debug("pas de " + filterRepeaterCouleur.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
             }
             for(var i = 0; i < filterRepeaterTaille.count; i++ ) {
                 if(filterRepeaterTaille.itemAt(i).isSelected) {
-                    console.info(filterRepeaterTaille.itemAt(i).text + " selected")
-                    console.info(obj.genre)
+                    //console.debug(filterRepeaterTaille.itemAt(i).text + " selected")
+                    //console.debug(obj.genre)
                     if (obj.taille === undefined || obj.taille !== filterRepeaterTaille.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterTaille.itemAt(i).text + " sur " + obj.id)
+                        //console.debug("pas de " + filterRepeaterTaille.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
             }
             for(var i = 0; i < filterRepeaterEtat.count; i++ ) {
                 if(filterRepeaterEtat.itemAt(i).isSelected) {
-                    console.info(filterRepeaterEtat.itemAt(i).text + " selected")
-                    console.info(obj.genre)
+                    //console.debug(filterRepeaterEtat.itemAt(i).text + " selected")
+                    //console.debug(obj.genre)
                     if (obj.etat === undefined || obj.etat !== filterRepeaterEtat.itemAt(i).text) {
-                        console.info("pas de " + filterRepeaterEtat.itemAt(i).text + " sur " + obj.id)
+                        //console.debug("pas de " + filterRepeaterEtat.itemAt(i).text + " sur " + obj.id)
                         return false;
                     }
                 }
