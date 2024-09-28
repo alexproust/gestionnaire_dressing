@@ -19,12 +19,13 @@ RowLayout {
     }
 
     /* LOGO */
-    // Image {
-    //     Layout.alignment: Qt.AlignVCenter
-    //     Layout.preferredHeight: 15
-    //     Layout.preferredWidth: 117
-    //     source: "../Images/Thales.svg"
-    // }
+    Image {
+        Layout.alignment: Qt.AlignVCenter
+        Layout.fillHeight: true
+        fillMode: Image.PreserveAspectFit
+        Layout.preferredWidth: 100
+        source: "../../../Data/Photos/logo.png"
+    }
 
     Text {
         Layout.alignment: Qt.AlignVCenter

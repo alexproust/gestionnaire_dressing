@@ -20,12 +20,13 @@ Rectangle {
 
     Tag {
         id: modificationButton
-        text: isSelected ? "Annuler" : "Modifier"
+        text: demoDetail.editMode ? "Annuler" : "Modifier"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
-        onClicked: {
-            demoDetail.editMode = !demoDetail.editMode
+        isSelected: demoDetail.editMode
+        onIsSelectedChanged: {
+            demoDetail.editMode = isSelected
         }
     }
     Tag {
@@ -96,7 +97,7 @@ Rectangle {
             spacing: 12
             Text {
                 Layout.fillWidth: true
-                text: "Id: " + costumeSelected.id
+                text: "Identifiant: " + costumeSelected.id
                 font: Fonts.subtitle1
             }
 
@@ -109,7 +110,6 @@ Rectangle {
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
-
                 ComboBox {
                     id: typeSelected
                     Layout.fillWidth: true
@@ -117,7 +117,15 @@ Rectangle {
                     visible: demoDetail.editMode
                     model: filter.type
                     onCurrentIndexChanged: {
+                        console.log("onCurrentIndexChanged " +  filter.type[currentIndex])
                         costumeSelected.type = filter.type[currentIndex]
+                    }
+                    onActivated: {
+                        console.log("onActivated " +  filter.type[currentIndex])
+                        costumeSelected.type = filter.type[currentIndex]
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.type)
                     }
                 }
             }
@@ -132,7 +140,7 @@ Rectangle {
                 }
                 TextArea {
                     id: descriptionInput
-                    text: costumeSelected.description ? costumeSelected.description : "Undefined"
+                    text: costumeSelected.description ? costumeSelected.description : ""
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
@@ -161,6 +169,13 @@ Rectangle {
                     onCurrentIndexChanged: {
                         costumeSelected.genre = filter.genre[currentIndex]
                     }
+                    onActivated: {
+                        console.log("onActivated " +  filter.genre[currentIndex])
+                        costumeSelected.genre = filter.genre[currentIndex]
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.genre)
+                    }
                 }
             }
 
@@ -174,7 +189,7 @@ Rectangle {
                 }
                 TextField {
                     id: modeInput
-                    text: costumeSelected.mode ? costumeSelected.mode : "Undefined"
+                    text: costumeSelected.mode ? costumeSelected.mode : ""
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
@@ -194,7 +209,7 @@ Rectangle {
                 }
                 TextField {
                     id: epoqueInput
-                    text: costumeSelected.epoque ? costumeSelected.epoque : "Undefined"
+                    text: costumeSelected.epoque ? costumeSelected.epoque : ""
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
@@ -223,6 +238,13 @@ Rectangle {
                     onCurrentIndexChanged: {
                         costumeSelected.couleur = filter.couleur[currentIndex]
                     }
+                    onActivated: {
+                        console.log("onActivated " +  filter.couleur[currentIndex])
+                        costumeSelected.couleur = filter.couleur[currentIndex]
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.couleur)
+                    }
                 }
             }
 
@@ -244,6 +266,13 @@ Rectangle {
                     model: filter.taille
                     onCurrentIndexChanged: {
                         costumeSelected.taille = filter.taille[currentIndex]
+                    }
+                    onActivated: {
+                        console.log("onActivated " +  filter.taille[currentIndex])
+                        costumeSelected.taille = filter.taille[currentIndex]
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.taille)
                     }
                 }
             }
@@ -267,6 +296,13 @@ Rectangle {
                     onCurrentIndexChanged: {
                         costumeSelected.etat = filter.etat[currentIndex]
                     }
+                    onActivated: {
+                        console.log("onActivated " +  filter.etat[currentIndex])
+                        costumeSelected.etat = filter.etat[currentIndex]
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.etat)
+                    }
                 }
             }
 
@@ -280,7 +316,7 @@ Rectangle {
                 }
                 TextField {
                     id: placementInput
-                    text: costumeSelected.emplacement ? costumeSelected.emplacement : "Undefined"
+                    text: costumeSelected.emplacement ? costumeSelected.emplacement : ""
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode

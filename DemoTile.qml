@@ -70,7 +70,8 @@ Rectangle {
             Layout.preferredHeight: 2* tile.height / 3
             Layout.maximumWidth: tile.width
             Layout.fillWidth: true
-            Layout.leftMargin: -col.anchors.leftMargin
+            // Layout.leftMargin: -col.anchors.leftMargin
+            Layout.alignment: verticalAlignment
             fillMode: Image.PreserveAspectFit
             source: costume.photos ? "./Data/Photos/" + costume.id + "/" + costume.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
         }

@@ -1,14 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls 2.15
-import QtQuick.LocalStorage
+import QtQuick.LocalStorage 2.0
 import "Database.js" as JS
 
 import Theme.QUANTUM 1.0
 
 AppliQuantum {
     id: root
-    title: "Gestionnaire dressing"
+    title: qsTr("Gestionnaire dressing")
     visible: true
     property var model: ({})
     property var filterTemplate: ({})
@@ -51,30 +51,10 @@ AppliQuantum {
             onAddSelect: {
                 let rowid = JS.dbInsert()
                 JS.dbUpdate(rowid,"","","","","","","","","","");
-                JS.dbReadAll()
-                for (var i = 0; i < listModel.count; i++ ) {
-                    var key = i;
-                    model[key] = {};
-                    model[key].id =listModel.get(i).id
-                    model[key].type =listModel.get(i).type
-                    model[key].description =listModel.get(i).description
-                    model[key].genre =listModel.get(i).genre
-                    model[key].mode =listModel.get(i).mode
-                    model[key].epoque =listModel.get(i).epoque
-                    model[key].couleur =listModel.get(i).couleur
-                    model[key].taille =listModel.get(i).taille
-                    model[key].etat =listModel.get(i).etat
-                    model[key].emprunteur =listModel.get(i).emprunteur
-                    model[key].emplacement =listModel.get(i).emplacement
-                    model[key].date_versement_caution =listModel.get(i).date_versement_caution
-                    model[key].date_emprunt =listModel.get(i).date_emprunt
-                    model[key].date_retour =listModel.get(i).date_retour
-                    model[key].date_remboursement_caution =listModel.get(i).date_remboursement_caution
-                    model[key].commentaires =listModel.get(i).commentaires
-                }
-                modelChanged();
+                listModel.update()
                 demoDetail.costumeSelected = Object.values(model)[0]
                 demoDetail.visible = true
+                demoDetail.editMode = true
             }
 
             onFilteredModelChanged: {
@@ -113,7 +93,13 @@ AppliQuantum {
     ListModel {
         id: listModel
         Component.onCompleted: {
+            listModel.update()
+        }
+
+        function update(){
             JS.dbReadAll()
+            console.log("Udpate database : nb items found : " + listModel.count)
+            model = ({})
             for (var i = 0; i < listModel.count; i++ ) {
                 var key = i;
                 model[key] = {};
@@ -159,9 +145,8 @@ AppliQuantum {
         }
         onDeleteCostume: {
             JS.dbDeleteRow(costumeSelected.id)
-            delete model[costumeSelected.id];
-            modelChanged();
             demoDetail.visible = false
+            listModel.update()
         }
     }
 
