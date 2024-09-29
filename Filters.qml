@@ -131,11 +131,10 @@ ColumnLayout {
         }
     }
 
-        Tag {
+        Button {
             id : addButton
             text: qsTr("Ajouter")
             onClicked: {
-                addButton.isSelected = false
                 addSelect();
             }
         }

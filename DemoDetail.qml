@@ -18,49 +18,6 @@ Rectangle {
     signal recordModification()
     signal deleteCostume()
 
-    Tag {
-        id: modificationButton
-        text: demoDetail.editMode ? "Annuler" : "Modifier"
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.margins: 16
-        isSelected: demoDetail.editMode
-        onIsSelectedChanged: {
-            demoDetail.editMode = isSelected
-        }
-    }
-    Tag {
-        id: suppressionButton
-        text: "Supprimer"
-        anchors.left: modificationButton.right
-        anchors.top: parent.top
-        anchors.margins: 16
-        onClicked: {
-            isSelected = false
-            demoDetail.deleteCostume()
-        }
-    }
-
-
-    Tag {
-        text: demoDetail.editMode ? "Sauvegarder" : "Fermer"
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 16
-        onClicked: {
-            if (demoDetail.editMode){
-                demoDetail.editMode = !demoDetail.editMode
-                modificationButton.isSelected = false
-                isSelected = false
-                demoDetail.recordModification()
-            }
-            else {
-                isSelected = false
-                parent.visible = false
-            }
-        }
-    }
-
     MouseArea {
         width: parent.width + 100
         height: parent.height + 100
@@ -74,6 +31,42 @@ Rectangle {
         z: z-1
     }
 
+    Button {
+        id: modificationButton
+        text: demoDetail.editMode ? "Annuler" : "Modifier"
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: demoDetail.editMode = !demoDetail.editMode
+    }
+
+    Button {
+        id: suppressionButton
+        text: "Supprimer"
+        anchors.left: modificationButton.right
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: {
+            demoDetail.deleteCostume()
+        }
+    }
+
+    Button {
+        text: demoDetail.editMode ? "Sauvegarder" : "Fermer"
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: {
+            if (demoDetail.editMode){
+                demoDetail.editMode = !demoDetail.editMode
+                demoDetail.recordModification()
+            }
+            else {
+                parent.visible = false
+            }
+        }
+    }
+
     RowLayout {
         id: row
         anchors.fill: parent
@@ -81,11 +74,18 @@ Rectangle {
         spacing: 12
 
         Image {
-            Layout.preferredHeight: row.height
+            id: itemImage
+            Layout.preferredHeight: 0.75 * row.height
             Layout.preferredWidth: row.width / 2
-            Layout.leftMargin: -col.anchors.leftMargin
+            Layout.margins: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
             source: costumeSelected.photos ? "./Data/Photos/" + costumeSelected.id + "/" + costumeSelected.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
+            Button{
+                visible: demoDetail.editMode
+                text: "Ajouter une photo"
+                anchors.left: itemImage.left
+                anchors.top: itemImage.top
+            }
         }
 
         ColumnLayout {

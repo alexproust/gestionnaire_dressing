@@ -1,6 +1,7 @@
 {
     "filter": {
         "type" : [
+            "chale",
             "gilet",
             "pantalon",
             "jupe",
@@ -11,7 +12,6 @@
             "caraco",
             "tablier",
             "tablier à bavette",
-            "chale",
             "faux-culs",
             "foulard",
             "mouchoir",
