@@ -1,7 +1,6 @@
 {
     "filter": {
         "type" : [
-            "chale",
             "gilet",
             "pantalon",
             "jupe",
@@ -12,6 +11,7 @@
             "caraco",
             "tablier",
             "tablier à bavette",
+            "chale",
             "faux-culs",
             "foulard",
             "mouchoir",
@@ -23,6 +23,13 @@
             "sabots",
             "bijoux",
             "livres",
+            "cavate",
+            "noeud",
+            "guêtres",
+            "corselet",
+            "blouse",
+            "vareuse",
+            "bonnet",
             "autres"
         ],
         "genre": [
@@ -71,7 +78,8 @@
             "neuf",
             "bon état",
             "état moyen",
-            "usagé"
+            "usagé",
+            "détruit"
         ]
     }
 }

@@ -14,7 +14,7 @@ AppliQuantum {
     property var filterTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
-        source: "Data/filter.json"
+        source: "file:Data/filter.json"
 
         onJsonObjectChanged: {
             var filters = jsonObject.filter
@@ -36,8 +36,9 @@ AppliQuantum {
         Filters { ///< Filters
             id: filters
             height: parent.height
-            Layout.minimumWidth: 300
-            Layout.preferredWidth: 550
+            Layout.minimumWidth: parent.width*0.25
+            Layout.preferredWidth: parent.width*0.25
+            Layout.maximumWidth: parent.width * 0.3
             Layout.preferredHeight: parent.height
             Layout.alignment: Qt.AlignVCenter
             Layout.fillHeight: true
@@ -56,14 +57,11 @@ AppliQuantum {
                 demoDetail.visible = true
                 demoDetail.editMode = true
             }
-
-            onFilteredModelChanged: {
-                itemRepeter.update()
-            }
         }
 
         ScrollView {
-            Layout.preferredWidth: parent.width
+            Layout.minimumWidth: parent.width*0.5
+            Layout.preferredWidth: parent.width*0.6
             Layout.maximumWidth: parent.width
             Layout.preferredHeight: parent.height
             Layout.fillWidth: true
@@ -77,7 +75,7 @@ AppliQuantum {
 
                 Repeater {
                     id: itemRepeter
-                    model: Object.keys(filters.filteredModel).length;
+                    model: filters.filteredModel ? Object.keys(filters.filteredModel).length : 0
                     delegate: DemoTile {
                         costume: Object.values(filters.filteredModel)[index]
                         onTileSelect: {

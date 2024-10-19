@@ -66,12 +66,12 @@ ColumnLayout {
             for(var i = 0; i < filterRepeaterType.count; i++ ) {
                 if(filterRepeaterType.itemAt(i).isSelected) {
                     //console.debug(filterRepeaterType.itemAt(i).text + " selected")
-                    if( obj.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
+                    if( obj.type === undefined || obj.type.toUpperCase().trim() !== filterRepeaterType.itemAt(i).text.toUpperCase()) {
                         //console.debug(obj.id + "(" + obj.type.toUpperCase().trim() + " pas de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
                         return false;
                     }
                     else {
-                        //console.debug(obj.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
+                        // console.debug(obj.id + " de type " + filterRepeaterType.itemAt(i).text.toUpperCase())
                     }
                 }
             }
@@ -124,12 +124,12 @@ ColumnLayout {
 
     RowLayout{
         Tag {
-        id : inStockSwitch
-        text: qsTr("Produit en stock")
-        onClicked: {
-            customFilter();
+            id : inStockSwitch
+            text: qsTr("Produit en stock")
+            onClicked: {
+                customFilter();
+            }
         }
-    }
 
         Button {
             id : addButton
@@ -142,23 +142,27 @@ ColumnLayout {
 
     Text {
         text: "Type"
-        font: Fonts.body1
+        font: Fonts.subtitle2
         color: Colors.blue600
     }
 
-    Flow {
+    ScrollView {
         Layout.minimumHeight: 200
         Layout.preferredHeight: 270
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: 3
-        Repeater{
-            id: filterRepeaterType
-            model: 0
-            delegate: Tag {
-                text: filter.type[index]
-                onClicked: {
-                    customFilter();   
+        contentWidth: availableWidth
+        Flow {
+            anchors.fill: parent
+            spacing: 3
+            Repeater{
+                id: filterRepeaterType
+                model: 0
+                delegate: Tag {
+                    text: filter.type[index]
+                    onClicked: {
+                        customFilter();
+                    }
                 }
             }
         }
@@ -166,47 +170,56 @@ ColumnLayout {
 
     Text {
         text: "Genre"
-        font: Fonts.body1
+        font: Fonts.subtitle2
         color: Colors.blue600
     }
 
-    Flow {
-        Layout.minimumHeight: 65
+    ScrollView {
+        Layout.minimumHeight: 70
         Layout.preferredHeight: 80
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: 3
-        Repeater{
-            id: filterRepeaterGenre
-            model: 0
-            delegate: Tag {
-                text: filter.genre[index]
-                onClicked: {
-                    customFilter();   
+        contentWidth: availableWidth
+        Flow {
+            anchors.fill: parent
+            spacing: 3
+            Repeater{
+                id: filterRepeaterGenre
+                model: 0
+                delegate: Tag {
+                    text: filter.genre[index]
+                    onClicked: {
+                        customFilter();
+                    }
                 }
             }
         }
     }
 
+
     Text {
         text: "Couleur"
-        font: Fonts.body1
+        font: Fonts.subtitle2
         color: Colors.blue600
     }
 
-    Flow {
-        Layout.minimumHeight: 170
+    ScrollView {
+        Layout.minimumHeight: 90
         Layout.preferredHeight: 210
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: 3
-        Repeater{
-            id: filterRepeaterCouleur
-            model: 0
-            delegate: Tag {
-                text: filter.couleur[index]
-                onClicked: {
-                    customFilter();
+        contentWidth: availableWidth
+        Flow {
+            anchors.fill: parent
+            spacing: 3
+            Repeater{
+                id: filterRepeaterCouleur
+                model: 0
+                delegate: Tag {
+                    text: filter.couleur[index]
+                    onClicked: {
+                        customFilter();
+                    }
                 }
             }
         }
@@ -214,23 +227,27 @@ ColumnLayout {
 
     Text {
         text: "Taille"
-        font: Fonts.body1
+        font: Fonts.subtitle2
         color: Colors.blue600
     }
 
-    Flow {
+    ScrollView {
         Layout.minimumHeight: 100
         Layout.preferredHeight: 140
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: 3
-        Repeater{
-            id: filterRepeaterTaille
-            model: 0
-            delegate: Tag {
-                text: filter.taille[index]
-                onClicked: {
-                    customFilter();
+        contentWidth: availableWidth
+        Flow {
+            anchors.fill: parent
+            spacing: 3
+            Repeater{
+                id: filterRepeaterTaille
+                model: 0
+                delegate: Tag {
+                    text: filter.taille[index]
+                    onClicked: {
+                        customFilter();
+                    }
                 }
             }
         }
@@ -238,23 +255,27 @@ ColumnLayout {
 
     Text {
         text: "Etat"
-        font: Fonts.body1
+        font: Fonts.subtitle2
         color: Colors.blue600
     }
 
-    Flow {
+    ScrollView {
         Layout.minimumHeight: 50
         Layout.preferredHeight: 150
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: 3
-        Repeater{
-            id: filterRepeaterEtat
-            model: 0
-            delegate: Tag {
-                text: filter.etat[index]
-                onClicked: {
-                    customFilter();
+        contentWidth: availableWidth
+        Flow {
+            anchors.fill: parent
+            spacing: 3
+            Repeater{
+                id: filterRepeaterEtat
+                model: 0
+                delegate: Tag {
+                    text: filter.etat[index]
+                    onClicked: {
+                        customFilter();
+                    }
                 }
             }
         }

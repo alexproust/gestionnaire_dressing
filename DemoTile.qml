@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 // import QtGraphicalEffects 1.15
 import Theme.QUANTUM 1.0
+import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: tile
@@ -61,9 +62,15 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: costume.type ?  costume.type : ""
-                font: Fonts.body1
+                font: Fonts.subtitle1
                 wrapMode: Text.WordWrap
             }
+        }
+
+        FileValidator {
+            id: validator
+            url: "file:Data/Photos/" + costume.id + ".png"
+            treatAsImage: true
         }
 
         Image {
@@ -73,7 +80,7 @@ Rectangle {
             // Layout.leftMargin: -col.anchors.leftMargin
             Layout.alignment: verticalAlignment
             fillMode: Image.PreserveAspectFit
-            source: costume.photos ? "./Data/Photos/" + costume.id + "/" + costume.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
+            source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         RowLayout{
@@ -82,14 +89,21 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
                 text: costume.genre ? costume.genre : ""
-                font: Fonts.body1
+                font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
                 text: costume.taille ? costume.taille : ""
-                font: Fonts.body1
+                font: Fonts.body2
+                wrapMode: Text.WordWrap
+            }
+            Text {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 64
+                text: costume.couleur ? costume.couleur : ""
+                font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
         }
