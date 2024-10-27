@@ -46,31 +46,37 @@ function dbReadAll()
         listModel.clear()
         for (let i = 0; i < results.rows.length; i++) {
             listModel.append({
-                                 id: results.rows.item(i).rowid,
-                                 type:results.rows.item(i).type,
-                                 description:results.rows.item(i).description,
-                                 genre:results.rows.item(i).genre,
-                                 mode:results.rows.item(i).mode,
-                                 epoque:results.rows.item(i).epoque,
-                                 couleur:results.rows.item(i).couleur,
-                                 taille:results.rows.item(i).taille,
-                                 etat:results.rows.item(i).etat,
-                                 emplacement:results.rows.item(i).emplacement,
-                                 emprunteur:results.rows.item(i).emprunteur
+                            "id": results.rows.item(i).rowid,
+                            "type":results.rows.item(i).type,
+                            "description":results.rows.item(i).description,
+                            "genre":results.rows.item(i).genre,
+                            "mode":results.rows.item(i).mode,
+                            "epoque":results.rows.item(i).epoque,
+                            "couleur":results.rows.item(i).couleur,
+                            "taille":results.rows.item(i).taille,
+                            "etat":results.rows.item(i).etat,
+                            "emplacement":results.rows.item(i).emplacement,
+                            "emprunteur":results.rows.item(i).emprunteur,
+                            "date_versement_caution": results.rows.item(i).date_versement_caution,
+                            "date_emprunt": results.rows.item(i).date_emprunt,
+                            "date_retour": results.rows.item(i).date_retour,
+                            "date_remboursement_caution": results.rows.item(i).date_remoursement_caution,
+                            "commentaires": results.rows.item(i).commentaires
                              })
             console.log("Find in db: " + listModel.get(listModel.count-1).type)
         }
+        console.log("db size after update: " + listModel.count)
     })
 }
 
-function dbUpdate(id, type, description, genre, mode, epoque, couleur, taille, etat, emplacement, emprunteur)
+function dbUpdate(costume)
 {
     let db = dbGetHandle()
-    console.log("Change in db the id  " + id)
+    console.log("Change in db the id  " + costume.id + " type : " + costume.type)
     db.transaction(function (tx) {
         tx.executeSql(
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',
-                    [id, type, description, genre, mode, epoque, couleur, taille, etat, emplacement, emprunteur, "", "", "", "", "", id])
+                    [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, "", "", "", "", "", costume.id])
     })
 }
 

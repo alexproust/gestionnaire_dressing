@@ -29,7 +29,7 @@ Rectangle {
         onClicked: {
             // parent.visible = false
         }
-        z: z-1
+        z: demoDetail.z-1
     }
 
     FileValidator {
