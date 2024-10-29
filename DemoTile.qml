@@ -2,19 +2,20 @@ import QtQuick
 
 import QtQuick.Layouts
 
-// import QtGraphicalEffects 1.15
 import Theme.QUANTUM 1.0
+import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: tile
     width: 260
     height: 280
-
     signal tileSelect()
 
-    property var costume: ({})
-
     layer.enabled: true
+
+    Component.onCompleted: {
+        console.log(couleur, genre, id, taille, type, etat )
+    }
 
     MouseArea {
         id: ma
@@ -54,16 +55,22 @@ Rectangle {
         RowLayout{
             Text {
                 Layout.fillWidth: true
-                text: costume.id
+                text: id
                 font: Fonts.subtitle1
             }
 
             Text {
                 Layout.fillWidth: true
-                text: costume.type ?  costume.type : ""
-                font: Fonts.body1
+                text: type ?  type : ""
+                font: Fonts.subtitle1
                 wrapMode: Text.WordWrap
             }
+        }
+
+        FileValidator {
+            id: validator
+            url: "file:Data/Photos/" + id + ".png"
+            treatAsImage: true
         }
 
         Image {
@@ -73,7 +80,7 @@ Rectangle {
             // Layout.leftMargin: -col.anchors.leftMargin
             Layout.alignment: verticalAlignment
             fillMode: Image.PreserveAspectFit
-            source: costume.photos ? "./Data/Photos/" + costume.id + "/" + costume.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
+            source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         RowLayout{
@@ -81,15 +88,22 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: costume.genre ? costume.genre : ""
-                font: Fonts.body1
+                text: genre ? genre : ""
+                font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: costume.taille ? costume.taille : ""
-                font: Fonts.body1
+                text: taille ? taille : ""
+                font: Fonts.body2
+                wrapMode: Text.WordWrap
+            }
+            Text {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 64
+                text: couleur ? couleur : ""
+                font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
         }

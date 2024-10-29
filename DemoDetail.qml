@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Theme.QUANTUM 1.0
+import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: demoDetail
@@ -28,7 +29,13 @@ Rectangle {
         onClicked: {
             // parent.visible = false
         }
-        z: z-1
+        z: demoDetail.z-1
+    }
+
+    FileValidator {
+        id: validator
+        url: "file:Data/Photos/" + costumeSelected.id + ".png"
+        treatAsImage: true
     }
 
     Button {
@@ -79,13 +86,7 @@ Rectangle {
             Layout.preferredWidth: row.width / 2
             Layout.margins: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
-            source: costumeSelected.photos ? "./Data/Photos/" + costumeSelected.id + "/" + costumeSelected.photos[0].path : "./Data/Photos/Pas-dimage-disponible.jpg"
-            Button{
-                visible: demoDetail.editMode
-                text: "Ajouter une photo"
-                anchors.left: itemImage.left
-                anchors.top: itemImage.top
-            }
+            source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         ColumnLayout {

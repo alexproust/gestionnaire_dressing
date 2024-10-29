@@ -10,11 +10,10 @@ AppliQuantum {
     id: root
     title: qsTr("Gestionnaire dressing")
     visible: true
-    property var model: ({})
     property var filterTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
-        source: "Data/filter.json"
+        source: "file:Data/filter.json"
 
         onJsonObjectChanged: {
             var filters = jsonObject.filter
@@ -36,8 +35,9 @@ AppliQuantum {
         Filters { ///< Filters
             id: filters
             height: parent.height
-            Layout.minimumWidth: 300
-            Layout.preferredWidth: 550
+            Layout.minimumWidth: parent.width*0.25
+            Layout.preferredWidth: parent.width*0.25
+            Layout.maximumWidth: parent.width * 0.3
             Layout.preferredHeight: parent.height
             Layout.alignment: Qt.AlignVCenter
             Layout.fillHeight: true
@@ -45,103 +45,50 @@ AppliQuantum {
 
             spacing: 8
 
-            rawModel: root.model
             filter: root.filterTemplate
 
             onAddSelect: {
                 let rowid = JS.dbInsert()
-                JS.dbUpdate(rowid,"","","","","","","","","","");
-                listModel.update()
-                demoDetail.costumeSelected = Object.values(model)[0]
+                JS.dbUpdate(({}));
+                visualModel.listModel.update()
+                demoDetail.costumeSelected = visualModel.listModel.get(0)
                 demoDetail.visible = true
                 demoDetail.editMode = true
             }
 
-            onFilteredModelChanged: {
-                itemRepeter.update()
-            }
+            onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
+            onTypeSelectedChanged:      visualModel.typeSelected =      filters.typeSelected
+            onGenreSelectedChanged:     visualModel.genreSelected =     filters.genreSelected
+            onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
+            onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
+            onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
         }
 
         ScrollView {
-            Layout.preferredWidth: parent.width
+            Layout.minimumWidth: parent.width*0.5
+            Layout.preferredWidth: parent.width*0.6
             Layout.maximumWidth: parent.width
             Layout.preferredHeight: parent.height
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentWidth: availableWidth
-            Flow {
-                id: itemFlow
+            GridView {
                 anchors.fill: parent
-                spacing: 24
-                clip: true
-
-                Repeater {
-                    id: itemRepeter
-                    model: Object.keys(filters.filteredModel).length;
-                    delegate: DemoTile {
-                        costume: Object.values(filters.filteredModel)[index]
-                        onTileSelect: {
-                            demoDetail.costumeSelected = costume
-                            demoDetail.visible = true
-                        }
-                    }
-                }
+                model: visualModel
+                cellWidth: 260; cellHeight: 280
             }
         }
     }
 
-    ListModel {
-        id: listModel
-        Component.onCompleted: {
-            listModel.update()
-        }
-
-        function update(){
-            JS.dbReadAll()
-            console.log("Udpate database : nb items found : " + listModel.count)
-            model = ({})
-            for (var i = 0; i < listModel.count; i++ ) {
-                var key = i;
-                model[key] = {};
-                model[key].id =listModel.get(i).id
-                model[key].type =listModel.get(i).type
-                model[key].description =listModel.get(i).description
-                model[key].genre =listModel.get(i).genre
-                model[key].mode =listModel.get(i).mode
-                model[key].epoque =listModel.get(i).epoque
-                model[key].couleur =listModel.get(i).couleur
-                model[key].taille =listModel.get(i).taille
-                model[key].etat =listModel.get(i).etat
-                model[key].emprunteur =listModel.get(i).emprunteur
-                model[key].emplacement =listModel.get(i).emplacement
-                model[key].date_versement_caution =listModel.get(i).date_versement_caution
-                model[key].date_emprunt =listModel.get(i).date_emprunt
-                model[key].date_retour =listModel.get(i).date_retour
-                model[key].date_remboursement_caution =listModel.get(i).date_remboursement_caution
-                model[key].commentaires =listModel.get(i).commentaires
-            }
-            modelChanged();
-        }
+    SortFilterModel {
+        id: visualModel
     }
 
     DemoDetail{
         id: demoDetail
         filter: root.filterTemplate
         onRecordModification: {
-            JS.dbUpdate(
-                        costumeSelected.id,
-                        costumeSelected.type,
-                        costumeSelected.description,
-                        costumeSelected.genre,
-                        costumeSelected.mode,
-                        costumeSelected.epoque,
-                        costumeSelected.couleur,
-                        costumeSelected.taille,
-                        costumeSelected.etat,
-                        costumeSelected.emplacement,
-                        costumeSelected.emprunteur
-                        )
-            modelChanged();
+            JS.dbUpdate(costumeSelected);
         }
         onDeleteCostume: {
             JS.dbDeleteRow(costumeSelected.id)
