@@ -87,12 +87,6 @@ Rectangle {
             Layout.margins: -col.anchors.leftMargin
             fillMode: Image.PreserveAspectFit
             source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
-            Button{
-                visible: demoDetail.editMode
-                text: "Ajouter une photo"
-                anchors.left: itemImage.left
-                anchors.top: itemImage.top
-            }
         }
 
         ColumnLayout {
