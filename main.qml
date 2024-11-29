@@ -49,7 +49,6 @@ AppliQuantum {
 
             onAddSelect: {
                 let rowid = JS.dbInsert()
-                JS.dbUpdate(({}));
                 visualModel.listModel.update()
                 demoDetail.costumeSelected = visualModel.listModel.get(0)
                 demoDetail.visible = true
@@ -93,7 +92,15 @@ AppliQuantum {
         onDeleteCostume: {
             JS.dbDeleteRow(costumeSelected.id)
             demoDetail.visible = false
-            listModel.update()
+            visualModel.listModel.update()
+        }
+        onDuplicateCostume: {
+            let rowid = JS.dbInsert();
+            JS.dbSet(rowid, demoDetail.costumeSelected);
+            visualModel.listModel.update()
+            demoDetail.costumeSelected = visualModel.listModel.get(0)
+            demoDetail.visible = true
+            demoDetail.editMode = true
         }
     }
 
