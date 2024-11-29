@@ -25,7 +25,7 @@ function dbGetHandle()
     return db
 }
 
-function dbInsert(Id, Type, Description)
+function dbInsert()
 {
     let db = dbGetHandle()
     let rowid = 0;
@@ -66,6 +66,18 @@ function dbReadAll()
             console.log("Find in db: " + listModel.get(listModel.count-1).type)
         }
         console.log("db size after update: " + listModel.count)
+    })
+}
+
+
+function dbSet(id, costume)
+{
+    let db = dbGetHandle()
+    console.log("Change in db the id  " + id + " type : " + costume.type)
+    db.transaction(function (tx) {
+        tx.executeSql(
+                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',
+                    [id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", "", "", id])
     })
 }
 

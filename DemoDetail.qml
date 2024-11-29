@@ -18,6 +18,7 @@ Rectangle {
     color: Colors.bluegrey25
     signal recordModification()
     signal deleteCostume()
+    signal duplicateCostume()
 
     MouseArea {
         width: parent.width + 100
@@ -55,6 +56,17 @@ Rectangle {
         anchors.margins: 16
         onClicked: {
             demoDetail.deleteCostume()
+        }
+    }
+
+    Button {
+        id: duplicateButton
+        text: "Dupliquer"
+        anchors.left: suppressionButton.right
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: {
+            demoDetail.duplicateCostume()
         }
     }
 
