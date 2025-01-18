@@ -11,6 +11,7 @@ AppliQuantum {
     title: qsTr("Gestionnaire dressing")
     visible: true
     property var filterTemplate: ({})
+    property var aderentTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
         source: "file:Data/filter.json"
@@ -23,6 +24,16 @@ AppliQuantum {
             filterTemplate.taille = filters.taille
             filterTemplate.etat = filters.etat
             filterTemplateChanged()
+        }
+    }
+
+    property JSONLoader aderents: JSONLoader {
+        source: "file:Data/aderents.json"
+
+        onJsonObjectChanged: {
+            var aderents = jsonObject.aderents
+            aderentTemplate = aderents
+            aderentTemplateChanged()
         }
     }
 
@@ -83,7 +94,7 @@ AppliQuantum {
         id: visualModel
     }
 
-    DemoDetail{
+    DetailCostume{
         id: demoDetail
         filter: root.filterTemplate
         onRecordModification: {
@@ -101,6 +112,18 @@ AppliQuantum {
             demoDetail.costumeSelected = visualModel.listModel.get(0)
             demoDetail.visible = true
             demoDetail.editMode = true
+        }
+        onEmprunterCostume: {
+            empruntMenu.costumeSelected = demoDetail.costumeSelected
+            empruntMenu.visible = true
+        }
+    }
+
+    EmpruntMenu{
+        id: empruntMenu
+        aderents: root.aderentTemplate
+        onRecordModification: {
+            JS.dbUpdate(costumeSelected);
         }
     }
 

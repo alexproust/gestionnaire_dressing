@@ -88,7 +88,7 @@ function dbUpdate(costume)
     db.transaction(function (tx) {
         tx.executeSql(
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',
-                    [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, "", "", "", "", "", costume.id])
+                    [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, costume.date_emprunt, "", costume.date_retour, "", "", costume.id])
     })
 }
 

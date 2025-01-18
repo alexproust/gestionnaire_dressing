@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    QString customPath = "Database";
+    QString customPath = "Data";
     QDir dir;
     if(dir.mkpath(QString(customPath))){
         qInfo() << "Default path >> "+engine.offlineStoragePath();
