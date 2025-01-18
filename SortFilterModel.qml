@@ -98,7 +98,7 @@ DelegateModel {
         }
     ]
 
-    delegate: DemoTile {
+    delegate: TileCostume {
         id: tile
         onTileSelect: {
             demoDetail.costumeSelected = listModel.get(index)
