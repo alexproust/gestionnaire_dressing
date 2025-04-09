@@ -84,7 +84,7 @@ function dbSet(id, costume)
 function dbUpdate(costume)
 {
     let db = dbGetHandle()
-    console.log("Change in db the id  " + costume.id + " type : " + costume.type)
+    console.log("Change in db the id  " + costume.id + " type : " + costume.type + " description : " + costume.description)
     db.transaction(function (tx) {
         tx.executeSql(
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',

@@ -14,7 +14,7 @@ Rectangle {
     layer.enabled: true
 
     Component.onCompleted: {
-        console.log(couleur, genre, id, taille, type, etat )
+        console.log(couleur, genre, id, taille, type, etat, description )
     }
 
     MouseArea {

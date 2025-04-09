@@ -65,6 +65,7 @@ AppliQuantum {
                 demoDetail.costumeSelected = visualModel.listModel.get(0)
                 demoDetail.visible = true
                 demoDetail.editMode = true
+                demoDetail.description = ""
             }
 
             onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
@@ -114,6 +115,7 @@ AppliQuantum {
             demoDetail.costumeSelected = visualModel.listModel.get(0)
             demoDetail.visible = true
             demoDetail.editMode = true
+            demoDetail.description = demoDetail.costumeSelected.description
         }
         onEmprunterCostume: {
             empruntMenu.costumeSelected = demoDetail.costumeSelected

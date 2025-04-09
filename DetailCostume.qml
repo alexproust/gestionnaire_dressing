@@ -63,7 +63,12 @@ Rectangle {
                 demoDetail.etat = costumeSelected.etat
                 demoDetail.mode = costumeSelected.mode
                 demoDetail.taille = costumeSelected.taille
-                demoDetail.description = costumeSelected.description
+                if (costumeSelected.description){
+                    demoDetail.description = costumeSelected.description
+                }
+                else {
+                    demoDetail.description = ""
+                }
             }
             demoDetail.editMode = !demoDetail.editMode
         }
@@ -114,7 +119,8 @@ Rectangle {
                 costumeSelected.couleur = demoDetail.couleur
                 costumeSelected.etat = demoDetail.etat
                 costumeSelected.taille = demoDetail.taille
-                costumeSelected.description = demoDetail.description
+                var desc = demoDetail.description
+                costumeSelected.description = desc
                 costumeSelected.epoque = demoDetail.epoque
                 costumeSelected.mode = demoDetail.mode
                 demoDetail.recordModification()
@@ -193,12 +199,14 @@ Rectangle {
                 }
                 TextArea {
                     id: descriptionInput
-                    text: description
+                    text: demoDetail.description
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
-                        description = text
+                        if (demoDetail.editMode) {
+                            demoDetail.description = text
+                        }
                     }
                 }
             }
