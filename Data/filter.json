@@ -39,6 +39,14 @@
             "fille",
             "bébé"
         ],
+        "mode": [
+            "Esclave",
+            "Artisan",
+            "Bourgeois",
+            "Paysan",
+            "Contemporain",
+            "Autres"
+        ],
         "couleur": [
             "blanc",
             "noir",

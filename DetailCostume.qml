@@ -61,6 +61,7 @@ Rectangle {
                 demoDetail.genre = costumeSelected.genre
                 demoDetail.couleur = costumeSelected.couleur
                 demoDetail.etat = costumeSelected.etat
+                demoDetail.mode = costumeSelected.mode
                 demoDetail.taille = costumeSelected.taille
                 demoDetail.description = costumeSelected.description
             }
@@ -114,6 +115,8 @@ Rectangle {
                 costumeSelected.etat = demoDetail.etat
                 costumeSelected.taille = demoDetail.taille
                 costumeSelected.description = demoDetail.description
+                costumeSelected.epoque = demoDetail.epoque
+                costumeSelected.mode = demoDetail.mode
                 demoDetail.recordModification()
                 demoDetail.editMode = !demoDetail.editMode
             }
@@ -237,14 +240,21 @@ Rectangle {
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
-                TextField {
-                    id: modeInput
-                    text: costumeSelected.mode ? costumeSelected.mode : ""
+                ComboBox {
+                    id: modeSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
-                    onTextChanged: {
-                        costumeSelected.mode = text
+                    model: filter.mode
+                    // onCurrentIndexChanged: {
+                    //     costumeSelected.mode = filter.mode[currentIndex]
+                    // }
+                    onActivated: {
+                        mode = filter.mode[currentIndex]
+                        console.log("onActivated " +  mode)
+                    }
+                    onVisibleChanged: {
+                        currentIndex = indexOfValue(costumeSelected.mode)
                     }
                 }
             }
@@ -264,7 +274,7 @@ Rectangle {
                     Layout.preferredHeight: 64
                     visible: demoDetail.editMode
                     onTextChanged: {
-                        costumeSelected.epoque = text
+                        demoDetail.epoque = text
                     }
                 }
             }
