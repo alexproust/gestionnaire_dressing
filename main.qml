@@ -23,6 +23,7 @@ AppliQuantum {
             filterTemplate.couleur = filters.couleur
             filterTemplate.taille = filters.taille
             filterTemplate.etat = filters.etat
+            filterTemplate.mode = filters.mode
             filterTemplateChanged()
         }
     }
@@ -72,6 +73,7 @@ AppliQuantum {
             onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
             onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
             onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
+            onModeSelectedChanged:      visualModel.modeSelected =      filters.modeSelected
         }
 
         ScrollView {

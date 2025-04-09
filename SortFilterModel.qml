@@ -24,33 +24,27 @@ DelegateModel {
     onInStockSelectedChanged: update()
 
     property var filterAcceptsItem: function(item){
+        var returnValue = true ;
         if (inStockSelected) {
-            console.debug("show in stock articles")
-            var date_emprunt = Date.fromLocaleDateString(Qt.locale(), item.date_emprunt,Locale.ShortFormat)
-            console.debug("Date emprunt : " + date_emprunt)
-            var date_retour = Date.fromLocaleDateString(Qt.locale(), item.date_retour,Locale.ShortFormat)
-            console.debug("Date retour : " + date_retour)
-            if (currentDate<date_retour) {
-                return false;
-            }
+            returnValue = item.emprunteur === "";
         }
         if (typeSelected !== ""){
-            return item.type.toUpperCase() === typeSelected;
+            returnValue = item.type.toUpperCase() === typeSelected;
         }
         if (genreSelected !== ""){
-            return item.genre.toUpperCase() === genreSelected;
+            returnValue = returnValue & (item.genre.toUpperCase() === genreSelected);
         }
         if (couleurSelected !== ""){
-            return item.couleur.toUpperCase() === couleurSelected;
+            returnValue = returnValue & (item.couleur.toUpperCase() === couleurSelected);
         }
         if (tailleSelected !== ""){
-            return item.taille.toUpperCase() === tailleSelected;
+            returnValue = returnValue & (item.taille.toUpperCase() === tailleSelected);
         }
         if (etatSelected !== ""){
-            return item.etat.toUpperCase() === etatSelected;
+            returnValue = returnValue & (item.etat.toUpperCase() === etatSelected);
         }
 
-        return true
+        return returnValue
     }
 
     function update() {

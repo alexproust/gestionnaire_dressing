@@ -15,6 +15,7 @@ ColumnLayout {
     property string couleurSelected: ""
     property string tailleSelected: ""
     property string etatSelected: ""
+    property string modeSelected: ""
     property bool inStockSelect: false
 
     signal addSelect()
@@ -25,6 +26,7 @@ ColumnLayout {
         if (filter.couleur) filterRepeaterCouleur.model = filter.couleur.length
         if (filter.taille)  filterRepeaterTaille.model = filter.taille.length
         if (filter.etat)    filterRepeaterEtat.model = filter.etat.length
+        if (filter.mode)    filterRepeaterMode.model = filter.mode.length
     }
 
     function customFilter() {
@@ -61,6 +63,13 @@ ColumnLayout {
             if(filterRepeaterEtat.itemAt(i).isSelected) {
                 etatSelected = filterRepeaterEtat.itemAt(i).text.toUpperCase()
                 console.debug(etatSelected + " selected")
+            }
+        }
+        modeSelected = ""
+        for(i = 0; i < filterRepeaterMode.count; i++ ) {
+            if(filterRepeaterMode.itemAt(i).isSelected) {
+                modeSelected = filterRepeaterMode.itemAt(i).text.toUpperCase()
+                console.debug(modeSelected + " selected")
             }
         }
     }
