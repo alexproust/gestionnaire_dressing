@@ -100,3 +100,15 @@ function dbDeleteRow(Prowid)
         tx.executeSql('delete from costume where rowid = ?', [Prowid])
     })
 }
+
+function jsUpdate(adherents)
+{
+    listEmprunterModel.clear()
+    for (let i = 0; i < adherents.length; i++) {
+        listEmprunterModel.append({
+                        "name": adherents[i]
+                         })
+        console.log("Find in adherent list: " + listEmprunterModel.get(listEmprunterModel.count-1).name)
+    }
+    console.log("Adherent model size after update: " + listEmprunterModel.count)
+}

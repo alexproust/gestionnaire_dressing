@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-
+import QtQuick.Controls
 import ".."
 
 RowLayout {
@@ -10,7 +10,7 @@ RowLayout {
     property string title
 
     default property alias contentItem: content
-
+    property alias tabbar: bar
     spacing: 24
 
     Item {
@@ -45,5 +45,19 @@ RowLayout {
         id: content
         Layout.fillHeight: true
         Layout.fillWidth: true
+    }
+
+    TabBar {
+        id: bar
+        Layout.alignment: Qt.AlignVCenter
+        Layout.fillHeight: true
+        Layout.preferredWidth: 300
+        Layout.preferredHeight: 50
+        TabButton {
+            text: qsTr("Costumes")
+        }
+        TabButton {
+            text: qsTr("Emprunteurs")
+        }
     }
 }
