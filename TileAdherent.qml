@@ -14,7 +14,7 @@ Rectangle {
     layer.enabled: true
 
     Component.onCompleted: {
-        console.log("---------->> Tile Costume completed : " + couleur, genre, id, taille, type, etat )
+        console.log("---------->> Tile Adherent completed : " + name )
     }
 
     MouseArea {
@@ -55,21 +55,21 @@ Rectangle {
         RowLayout{
             Text {
                 Layout.fillWidth: true
-                text: id
+                text: name
                 font: Fonts.subtitle1
             }
 
-            Text {
-                Layout.fillWidth: true
-                text: type ?  type : ""
-                font: Fonts.subtitle1
-                wrapMode: Text.WordWrap
-            }
+            // Text {
+            //     Layout.fillWidth: true
+            //     text: type ?  type : ""
+            //     font: Fonts.subtitle1
+            //     wrapMode: Text.WordWrap
+            // }
         }
 
         FileValidator {
             id: validator
-            url: "file:Data/Photos/" + id + ".png"
+            url: "file:Data/Photos/" + name + ".png"
             treatAsImage: true
         }
 
@@ -83,29 +83,29 @@ Rectangle {
             source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
         }
 
-        RowLayout{
-            Layout.fillWidth: true
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: genre ? genre : ""
-                font: Fonts.body2
-                wrapMode: Text.WordWrap
-            }
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: taille ? taille : ""
-                font: Fonts.body2
-                wrapMode: Text.WordWrap
-            }
-            Text {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                text: couleur ? couleur : ""
-                font: Fonts.body2
-                wrapMode: Text.WordWrap
-            }
-        }
+        // RowLayout{
+        //     Layout.fillWidth: true
+        //     Text {
+        //         Layout.fillWidth: true
+        //         Layout.preferredHeight: 64
+        //         text: genre ? genre : ""
+        //         font: Fonts.body2
+        //         wrapMode: Text.WordWrap
+        //     }
+        //     Text {
+        //         Layout.fillWidth: true
+        //         Layout.preferredHeight: 64
+        //         text: taille ? taille : ""
+        //         font: Fonts.body2
+        //         wrapMode: Text.WordWrap
+        //     }
+        //     Text {
+        //         Layout.fillWidth: true
+        //         Layout.preferredHeight: 64
+        //         text: couleur ? couleur : ""
+        //         font: Fonts.body2
+        //         wrapMode: Text.WordWrap
+        //     }
+        // }
     }
 }

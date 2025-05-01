@@ -22,6 +22,7 @@ Window {
             anchors.left: appli.left
             anchors.right: appli.right
             height: 64
+            property alias header: header
             Header {
                 id: header
                 anchors.fill: parent

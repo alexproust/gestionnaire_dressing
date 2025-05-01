@@ -38,63 +38,81 @@ AppliQuantum {
         }
     }
 
-    RowLayout {
+    StackLayout {
+        id: content
         anchors.fill: parent
         anchors.topMargin: 85
         anchors.margins: 24
-        spacing: 12
+        currentIndex: root.headerContainer.header.tabbar.currentIndex
 
-        Filters { ///< Filters
-            id: filters
-            height: parent.height
-            Layout.minimumWidth: parent.width*0.25
-            Layout.preferredWidth: parent.width*0.25
-            Layout.maximumWidth: parent.width * 0.3
-            Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+        RowLayout {
+            spacing: 12
 
-            spacing: 8
+            Filters { ///< Filters
+                id: filters
+                height: parent.height
+                Layout.minimumWidth: parent.width*0.25
+                Layout.preferredWidth: parent.width*0.25
+                Layout.maximumWidth: parent.width * 0.3
+                Layout.preferredHeight: parent.height
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillHeight: true
+                Layout.fillWidth: true
 
-            filter: root.filterTemplate
+                spacing: 8
 
-            onAddSelect: {
-                let rowid = JS.dbInsert()
-                visualModel.listModel.update()
-                demoDetail.costumeSelected = visualModel.listModel.get(0)
-                demoDetail.visible = true
-                demoDetail.editMode = true
-                demoDetail.description = ""
+                filter: root.filterTemplate
+
+                onAddSelect: {
+                    let rowid = JS.dbInsert()
+                    visualModel.listModel.update()
+                    demoDetail.costumeSelected = visualModel.listModel.get(0)
+                    demoDetail.visible = true
+                    demoDetail.editMode = true
+                }
+
+                onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
+                onTypeSelectedChanged:      visualModel.typeSelected =      filters.typeSelected
+                onGenreSelectedChanged:     visualModel.genreSelected =     filters.genreSelected
+                onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
+                onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
+                onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
             }
 
-            onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
-            onTypeSelectedChanged:      visualModel.typeSelected =      filters.typeSelected
-            onGenreSelectedChanged:     visualModel.genreSelected =     filters.genreSelected
-            onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
-            onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
-            onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
-            onModeSelectedChanged:      visualModel.modeSelected =      filters.modeSelected
+            ScrollView {
+                Layout.minimumWidth: parent.width*0.5
+                Layout.preferredWidth: parent.width*0.6
+                Layout.maximumWidth: parent.width
+                Layout.preferredHeight: parent.height
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                contentWidth: availableWidth
+                GridView {
+                    anchors.fill: parent
+                    model: visualModel
+                    cellWidth: 260; cellHeight: 280
+                }
+            }
         }
 
         ScrollView {
-            Layout.minimumWidth: parent.width*0.5
-            Layout.preferredWidth: parent.width*0.6
-            Layout.maximumWidth: parent.width
-            Layout.preferredHeight: parent.height
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            contentWidth: availableWidth
+            anchors.fill: parent
             GridView {
                 anchors.fill: parent
-                model: visualModel
+                model: emprunteurModel
                 cellWidth: 260; cellHeight: 280
             }
         }
     }
 
+
     SortFilterModel {
         id: visualModel
+    }
+
+    EmprunteurModel {
+        id: emprunteurModel
+        adherents: root.aderentTemplate
     }
 
     DetailCostume{
@@ -122,6 +140,10 @@ AppliQuantum {
             empruntMenu.visible = true
         }
     }
+
+    // DetailAdherent{
+    //     id: detailAdherent
+    // }
 
     EmpruntMenu{
         id: empruntMenu
