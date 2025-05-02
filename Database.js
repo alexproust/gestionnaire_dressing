@@ -156,3 +156,20 @@ function jsUpdate(adherents)
     }
     console.log("Adherent model size after update: " + listEmprunterModel.count)
 }
+
+function dbReadAllAdherents()
+{
+    let db = dbGetHandle()
+    db.transaction(function (tx) {
+        let results = tx.executeSql(
+                'SELECT rowid, name FROM adherent order by rowid desc')
+        listEmprunterModel.clear()
+        console.log("Find in db: " + results.rows.length + " adherents")
+        for (let i = 0; i < results.rows.length; i++) {
+            listEmprunterModel.append({
+                            "name": results.rows.item(i).name,
+                             })
+        }
+        console.log("Adherent model size after update: " + listEmprunterModel.count)
+    })
+}

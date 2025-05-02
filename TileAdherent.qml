@@ -6,8 +6,8 @@ import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: tile
-    width: 260
-    height: 100
+    width: 300
+    height: 80
     signal tileSelect()
 
     layer.enabled: true

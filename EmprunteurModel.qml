@@ -4,15 +4,10 @@ import "Database.js" as JS
 
 DelegateModel {
     id: emprunteurModel
-    property var adherents: ({})
 
     property alias listModel: listEmprunterModel
 
     items.onChanged: update()
-
-    onAdherentsChanged: {
-        listEmprunterModel.update()
-    }
 
     function update() {
         if (items.count > 0) {
@@ -43,7 +38,7 @@ DelegateModel {
         }
 
         function update(){
-            JS.jsUpdate(adherents)
+            JS.dbReadAllAdherents()
         }
     }
 

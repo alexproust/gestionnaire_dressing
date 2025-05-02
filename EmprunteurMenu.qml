@@ -16,7 +16,6 @@ Rectangle {
     property string emprunteur: ""
     property var adherentSelected: ({})
     property bool editMode: false
-    property var aderents: ({})
     width: parent.width - 400
     height: parent.height - 400
     anchors.centerIn: parent
@@ -96,19 +95,14 @@ Rectangle {
         }
 
         ScrollView {
-            // Layout.minimumWidth: parent.width*0.5
-            // Layout.preferredWidth: parent.width*0.6
-            // Layout.maximumWidth: parent.width
-            // Layout.preferredHeight: parent.height
             Layout.fillWidth: true
             Layout.fillHeight: true
-
-            // contentWidth: availableWidth
+            clip: true
             GridView {
                 anchors.fill: parent
                 snapMode: GridView.SnapOneRow
                 model: listCostumeEmpruntModel
-                cellWidth: 260; cellHeight: 80
+                cellWidth: 310; cellHeight: 90
             }
         }
     }

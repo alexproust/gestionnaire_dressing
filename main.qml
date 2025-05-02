@@ -13,7 +13,6 @@ AppliQuantum {
     visible: true
     visibility: Window.Maximized
     property var filterTemplate: ({})
-    property var aderentTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
         source: "file:Data/filter.json"
@@ -27,16 +26,6 @@ AppliQuantum {
             filterTemplate.etat = filters.etat
             filterTemplate.mode = filters.mode
             filterTemplateChanged()
-        }
-    }
-
-    property JSONLoader aderents: JSONLoader {
-        source: "file:Data/aderents.json"
-
-        onJsonObjectChanged: {
-            var aderents = jsonObject.aderents
-            aderentTemplate = aderents
-            aderentTemplateChanged()
         }
     }
 
@@ -90,6 +79,7 @@ AppliQuantum {
                 Layout.preferredHeight: parent.height
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                clip: true
                 GridView {
                     anchors.fill: parent
                     model: visualModel
@@ -100,11 +90,12 @@ AppliQuantum {
 
         ScrollView {
             Layout.alignment: Qt.AlignVCenter
-            // anchors.fill: parent
+            contentWidth: availableWidth
+            clip: true
             GridView {
                 anchors.fill: parent
                 model: emprunteurModel
-                cellWidth: 300; cellHeight: 80
+                cellWidth: 310; cellHeight: 90
             }
         }
     }
@@ -116,7 +107,6 @@ AppliQuantum {
 
     EmprunteurModel {
         id: emprunteurModel
-        adherents: root.aderentTemplate
     }
 
     DetailCostume{
@@ -145,13 +135,9 @@ AppliQuantum {
         }
     }
 
-    // DetailAdherent{
-    //     id: detailAdherent
-    // }
-
     EmpruntMenu{
         id: empruntMenu
-        aderents: root.aderentTemplate
+        aderents: emprunteurModel.listModel
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
         }
@@ -159,7 +145,6 @@ AppliQuantum {
 
     EmprunteurMenu{
         id: emprunteurMenu
-        aderents: root.aderentTemplate
     }
 
     Component.onCompleted: {
