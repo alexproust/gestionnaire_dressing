@@ -107,15 +107,16 @@ Rectangle {
             visible: empruntMenu.editMode
             model: aderents
             onCurrentIndexChanged: {
-                console.log("onCurrentIndexChanged " +  aderents[currentIndex])
-                emprunteur = aderents[currentIndex]
+                console.log("onCurrentIndexChanged " + currentText)
+                emprunteur = currentText
             }
             onActivated: {
-                console.log("onActivated " +  aderents[currentIndex])
-                emprunteur = aderents[currentIndex]
+                console.log("onActivated " +  currentText)
+                emprunteur = currentText
             }
             onVisibleChanged: {
-                currentIndex = indexOfValue(emprunteur)
+                console.log("onVisibleChanged " + costumeSelected.emprunteur)
+                currentIndex = indexOfValue(costumeSelected.emprunteur)
             }
         }
 

@@ -31,7 +31,7 @@ function dbInsert()
     let db = dbGetHandle()
     let rowid = 0;
     db.transaction(function (tx) {
-        tx.executeSql('INSERT INTO costume VALUES("","","","","","","","","","","","","","","","")')
+        tx.executeSql('INSERT INTO costume VALUES("","","","","","","","","","","","","","")')
         let result = tx.executeSql('SELECT last_insert_rowid()')
         rowid = result.insertId
         console.log("Insert in database with id : " + rowid)
@@ -100,7 +100,18 @@ function dbSet(rowid, costume)
     db.transaction(function (tx) {
         tx.executeSql(
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
-                    [rowid, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", id])
+                    [rowid, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", rowid])
+    })
+}
+
+function dbSetId(rowid)
+{
+    let db = dbGetHandle()
+    console.log("Set in db Id of costume line  " + rowid)
+    db.transaction(function (tx) {
+        tx.executeSql(
+                    'update costume set id=? where rowid = ?',
+                    [rowid, rowid])
     })
 }
 

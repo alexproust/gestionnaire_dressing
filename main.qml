@@ -56,6 +56,7 @@ AppliQuantum {
 
                 onAddSelect: {
                     let rowid = JS.dbInsert()
+                    JS.dbSetId(rowid)
                     visualModel.listModel.update()
                     demoDetail.costumeSelected = visualModel.listModel.get(0)
                     demoDetail.visible = true
