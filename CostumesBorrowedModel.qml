@@ -3,15 +3,19 @@ import QtQuick.LocalStorage 2.0
 import "Database.js" as JS
 
 DelegateModel {
-    id: emprunteurModel
-    property var adherents: ({})
+    id: listCostumesBorrowedModel
 
-    property alias listModel: listEmprunterModel
+    property date currentDate: new Date()
+    property string adherentName: ""
+
+    property alias listModel: listCostumeEmpruntModel
 
     items.onChanged: update()
+    onAdherentNameChanged: listCostumeEmpruntModel.update()
 
-    onAdherentsChanged: {
-        listEmprunterModel.update()
+    property var filterAcceptsItem: function(item){
+        var returnValue = true ;
+        return returnValue
     }
 
     function update() {
@@ -23,8 +27,9 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (item.model.name !== "")
+            if (filterAcceptsItem(item.model)) {
                 visible.push(item);
+            }
         }
 
         // Step 2: Add all items to the visible group:
@@ -36,14 +41,16 @@ DelegateModel {
             }
         }
     }
+
+
     model : ListModel {
-        id: listEmprunterModel
-        Component.onCompleted: {
-            listEmprunterModel.update()
-        }
+        id: listCostumeEmpruntModel
+        // Component.onCompleted: {
+        //     listCostumeEmpruntModel.update()
+        // }
 
         function update(){
-            JS.jsUpdate(adherents)
+            JS.getListOfCostumeOfAdherent(adherentName)
         }
     }
 
@@ -56,11 +63,11 @@ DelegateModel {
         }
     ]
 
-    delegate: TileAdherent {
+    delegate: TileCostume {
         id: tile
-        onTileSelect: {
-            emprunteurMenu.adherentSelected = listEmprunterModel.get(index)
-            emprunteurMenu.visible = true
-        }
+        // onTileSelect: {
+        //     demoDetail.costumeSelected = listModel.get(index)
+        //     demoDetail.visible = true
+        // }
     }
 }

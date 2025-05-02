@@ -69,6 +69,7 @@ AppliQuantum {
                     demoDetail.costumeSelected = visualModel.listModel.get(0)
                     demoDetail.visible = true
                     demoDetail.editMode = true
+                    demoDetail.description = ""
                 }
 
                 onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
@@ -77,6 +78,7 @@ AppliQuantum {
                 onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
                 onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
                 onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
+                onModeSelectedChanged:      visualModel.modeSelected =      filters.modeSelected
             }
 
             ScrollView {
@@ -86,21 +88,21 @@ AppliQuantum {
                 Layout.preferredHeight: parent.height
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                contentWidth: availableWidth
                 GridView {
                     anchors.fill: parent
                     model: visualModel
-                    cellWidth: 260; cellHeight: 280
+                    cellWidth: 260; cellHeight: 100
                 }
             }
         }
 
         ScrollView {
-            anchors.fill: parent
+            Layout.alignment: Qt.AlignVCenter
+            // anchors.fill: parent
             GridView {
                 anchors.fill: parent
                 model: emprunteurModel
-                cellWidth: 260; cellHeight: 280
+                cellWidth: 260; cellHeight: 80
             }
         }
     }
@@ -151,6 +153,11 @@ AppliQuantum {
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
         }
+    }
+
+    EmprunteurMenu{
+        id: emprunteurMenu
+        aderents: root.aderentTemplate
     }
 
     Component.onCompleted: {

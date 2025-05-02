@@ -25,6 +25,8 @@ QML_FILES SortFilterModel.qml
 QML_FILES EmpruntMenu.qml
 QML_FILES EmprunteurModel.qml
 QML_FILES TileAdherent.qml
+QML_FILES EmprunteurMenu.qml
+QML_FILES CostumesBorrowedModel.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

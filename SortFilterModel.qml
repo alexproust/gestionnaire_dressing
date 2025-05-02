@@ -13,7 +13,7 @@ DelegateModel {
 
     property date currentDate: new Date()
 
-    property alias listModel: listModel
+    property alias listModel: listModelTile
 
     items.onChanged: update()
     onTypeSelectedChanged: update()
@@ -29,7 +29,7 @@ DelegateModel {
             returnValue = item.emprunteur === "";
         }
         if (typeSelected !== ""){
-            returnValue = item.type.toUpperCase() === typeSelected;
+            returnValue = returnValue & (item.type.toUpperCase() === typeSelected);
         }
         if (genreSelected !== ""){
             returnValue = returnValue & (item.genre.toUpperCase() === genreSelected);
@@ -73,9 +73,9 @@ DelegateModel {
 
 
     model : ListModel {
-        id: listModel
+        id: listModelTile
         Component.onCompleted: {
-            listModel.update()
+            listModelTile.update()
         }
 
         function update(){

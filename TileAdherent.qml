@@ -1,5 +1,4 @@
 import QtQuick
-
 import QtQuick.Layouts
 
 import Theme.QUANTUM 1.0
@@ -8,7 +7,7 @@ import Gestionnaire_dressing 1.0
 Rectangle {
     id: tile
     width: 260
-    height: 280
+    height: 100
     signal tileSelect()
 
     layer.enabled: true
@@ -56,56 +55,8 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: name
-                font: Fonts.subtitle1
+                font: Fonts.subtitle2
             }
-
-            // Text {
-            //     Layout.fillWidth: true
-            //     text: type ?  type : ""
-            //     font: Fonts.subtitle1
-            //     wrapMode: Text.WordWrap
-            // }
         }
-
-        FileValidator {
-            id: validator
-            url: "file:Data/Photos/" + name + ".png"
-            treatAsImage: true
-        }
-
-        Image {
-            Layout.preferredHeight: 2* tile.height / 3
-            Layout.maximumWidth: tile.width
-            Layout.fillWidth: true
-            // Layout.leftMargin: -col.anchors.leftMargin
-            Layout.alignment: verticalAlignment
-            fillMode: Image.PreserveAspectFit
-            source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
-        }
-
-        // RowLayout{
-        //     Layout.fillWidth: true
-        //     Text {
-        //         Layout.fillWidth: true
-        //         Layout.preferredHeight: 64
-        //         text: genre ? genre : ""
-        //         font: Fonts.body2
-        //         wrapMode: Text.WordWrap
-        //     }
-        //     Text {
-        //         Layout.fillWidth: true
-        //         Layout.preferredHeight: 64
-        //         text: taille ? taille : ""
-        //         font: Fonts.body2
-        //         wrapMode: Text.WordWrap
-        //     }
-        //     Text {
-        //         Layout.fillWidth: true
-        //         Layout.preferredHeight: 64
-        //         text: couleur ? couleur : ""
-        //         font: Fonts.body2
-        //         wrapMode: Text.WordWrap
-        //     }
-        // }
     }
 }
