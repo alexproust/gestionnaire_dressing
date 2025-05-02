@@ -7,7 +7,7 @@ import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: tile
-    width: 260
+    width: 300
     height: 80
     signal tileSelect()
 
@@ -65,24 +65,6 @@ Rectangle {
                 font: Fonts.subtitle1
                 wrapMode: Text.WordWrap
             }
-        }
-
-        FileValidator {
-            id: validator
-            url: "file:Data/Photos/" + id + ".png"
-            treatAsImage: true
-        }
-
-        Image {
-            enabled: validator.fileValid
-            visible: validator.fileValid
-            Layout.preferredHeight: 2* tile.height / 3
-            Layout.maximumWidth: tile.width
-            Layout.fillWidth: true
-            // Layout.leftMargin: -col.anchors.leftMargin
-            Layout.alignment: verticalAlignment
-            fillMode: Image.PreserveAspectFit
-            source: validator.fileValid ? validator.url : ""
         }
 
         RowLayout{

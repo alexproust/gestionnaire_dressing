@@ -20,7 +20,7 @@ Window {
             id: headerContainer
             anchors.top: appli.top
             anchors.left: appli.left
-            anchors.right: appli.right
+            width: appli.width / 3
             height: 64
             property alias header: header
             Header {

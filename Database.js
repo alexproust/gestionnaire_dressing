@@ -49,7 +49,7 @@ function dbReadAllForList()
         console.log("Find in db: " + results.rows.length + " costumes")
         for (let i = 0; i < results.rows.length; i++) {
             listModelTile.append({
-                            "id": results.rows.item(i).rowid,
+                            "id": Math.round(results.rows.item(i).id),
                             "type":results.rows.item(i).type,
                             "genre":results.rows.item(i).genre != null ? results.rows.item(i).genre : "",
                             "couleur":results.rows.item(i).couleur != null ? results.rows.item(i).couleur : "",
@@ -71,7 +71,7 @@ function dbReadAll()
         console.log("Find in db: " + results.rows.length + " costumes")
         for (let i = 0; i < results.rows.length; i++) {
             listModel.append({
-                            "id": results.rows.item(i).id,
+                            "id": Math.round(results.rows.item(i).id),
                             "type":results.rows.item(i).type,
                             "description":results.rows.item(i).description != null ? results.rows.item(i).description : "",
                             "genre":results.rows.item(i).genre != null ? results.rows.item(i).genre : "",
@@ -93,34 +93,34 @@ function dbReadAll()
 }
 
 
-function dbSet(id, costume)
+function dbSet(rowid, costume)
 {
     let db = dbGetHandle()
-    console.log("Set in db the id  " + id + " type : " + costume.type)
+    console.log("Set in db the line  " + rowid + " type : " + costume.type)
     db.transaction(function (tx) {
         tx.executeSql(
-                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',
-                    [id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", "", "", id])
+                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
+                    [rowid, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", id])
     })
 }
 
 function dbUpdate(costume)
 {
     let db = dbGetHandle()
-    console.log("Update in db the id  " + costume.id + " type : " + costume.type + " description : " + costume.description)
+    console.log("Update in db the id  " + costume.id + " type : " + costume.type + " description : " + costume.description + " emprunteur : " + costume.emprunteur)
     db.transaction(function (tx) {
         tx.executeSql(
-                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_versement_caution=?, date_retour=?, date_remoursement_caution=?, commentaires=? where rowid = ?',
-                    [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, costume.date_emprunt, "", costume.date_retour, "", "", costume.id])
+                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
+                    [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, costume.date_emprunt, costume.date_retour, costume.commentaire, costume.id])
     })
 }
 
-function dbDeleteRow(Prowid)
+function dbDeleteRow(Pid)
 {
     let db = dbGetHandle()
     db.transaction(function (tx) {
-        console.log("Delete in db the id  " + Prowid)
-        tx.executeSql('delete from costume where rowid = ?', [Prowid])
+        console.log("Delete in db the id  " + Pid)
+        tx.executeSql('delete from costume where id = ?', [Pid])
     })
 }
 
@@ -133,7 +133,7 @@ function getListOfCostumeOfAdherent(adherentName)
             listCostumeEmpruntModel.clear()
         for (let i = 0; i < results.rows.length; i++) {
             listCostumeEmpruntModel.append({
-                            "id": results.rows.item(i).rowid,
+                            "id": Math.round(results.rows.item(i).id),
                             "type":results.rows.item(i).type,
                             "couleur":results.rows.item(i).couleur != null ? results.rows.item(i).couleur : "",
                             "taille":results.rows.item(i).taille != null ? results.rows.item(i).taille : "",

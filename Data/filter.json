@@ -55,8 +55,11 @@
             "Artisan",
             "Bourgeois",
             "Paysan",
+			"Saulnier",
             "Contemporain",
-            "Autres"
+			"Folklore",
+			"Ouvrier",
+            "Autre"
         ],
         "couleur": [
             "autres",

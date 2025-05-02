@@ -8,8 +8,10 @@ import Theme.QUANTUM 1.0
 
 AppliQuantum {
     id: root
+    headtitle: qsTr("Gestionnaire dressing")
     title: qsTr("Gestionnaire dressing")
     visible: true
+    visibility: Window.Maximized
     property var filterTemplate: ({})
     property var aderentTemplate: ({})
 
@@ -91,7 +93,7 @@ AppliQuantum {
                 GridView {
                     anchors.fill: parent
                     model: visualModel
-                    cellWidth: 260; cellHeight: 100
+                    cellWidth: 310; cellHeight: 90
                 }
             }
         }
@@ -102,7 +104,7 @@ AppliQuantum {
             GridView {
                 anchors.fill: parent
                 model: emprunteurModel
-                cellWidth: 260; cellHeight: 80
+                cellWidth: 300; cellHeight: 80
             }
         }
     }
