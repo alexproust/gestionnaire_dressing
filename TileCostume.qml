@@ -7,14 +7,14 @@ import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: tile
-    width: 260
-    height: 280
+    width: 300
+    height: 80
     signal tileSelect()
 
     layer.enabled: true
 
     Component.onCompleted: {
-        console.log("---------->> Tile Costume completed : " + couleur, genre, id, taille, type, etat )
+        console.log("---------->> Tile Costume completed : " + couleur, genre, id, taille, type )
     }
 
     MouseArea {
@@ -65,22 +65,6 @@ Rectangle {
                 font: Fonts.subtitle1
                 wrapMode: Text.WordWrap
             }
-        }
-
-        FileValidator {
-            id: validator
-            url: "file:Data/Photos/" + id + ".png"
-            treatAsImage: true
-        }
-
-        Image {
-            Layout.preferredHeight: 2* tile.height / 3
-            Layout.maximumWidth: tile.width
-            Layout.fillWidth: true
-            // Layout.leftMargin: -col.anchors.leftMargin
-            Layout.alignment: verticalAlignment
-            fillMode: Image.PreserveAspectFit
-            source: validator.fileValid ? validator.url : "file:Data/Photos/Pas-dimage-disponible.jpg"
         }
 
         RowLayout{

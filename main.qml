@@ -8,10 +8,11 @@ import Theme.QUANTUM 1.0
 
 AppliQuantum {
     id: root
+    headtitle: qsTr("Gestionnaire dressing")
     title: qsTr("Gestionnaire dressing")
     visible: true
+    visibility: Window.Maximized
     property var filterTemplate: ({})
-    property var aderentTemplate: ({})
 
     property JSONLoader filter: JSONLoader {
         source: "file:Data/filter.json"
@@ -25,16 +26,6 @@ AppliQuantum {
             filterTemplate.etat = filters.etat
             filterTemplate.mode = filters.mode
             filterTemplateChanged()
-        }
-    }
-
-    property JSONLoader aderents: JSONLoader {
-        source: "file:Data/aderents.json"
-
-        onJsonObjectChanged: {
-            var aderents = jsonObject.aderents
-            aderentTemplate = aderents
-            aderentTemplateChanged()
         }
     }
 
@@ -65,10 +56,12 @@ AppliQuantum {
 
                 onAddSelect: {
                     let rowid = JS.dbInsert()
+                    JS.dbSetId(rowid)
                     visualModel.listModel.update()
                     demoDetail.costumeSelected = visualModel.listModel.get(0)
                     demoDetail.visible = true
                     demoDetail.editMode = true
+                    demoDetail.description = ""
                 }
 
                 onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
@@ -77,6 +70,7 @@ AppliQuantum {
                 onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
                 onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
                 onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
+                onModeSelectedChanged:      visualModel.modeSelected =      filters.modeSelected
             }
 
             ScrollView {
@@ -86,21 +80,23 @@ AppliQuantum {
                 Layout.preferredHeight: parent.height
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                contentWidth: availableWidth
+                clip: true
                 GridView {
                     anchors.fill: parent
                     model: visualModel
-                    cellWidth: 260; cellHeight: 280
+                    cellWidth: 310; cellHeight: 90
                 }
             }
         }
 
         ScrollView {
-            anchors.fill: parent
+            Layout.alignment: Qt.AlignVCenter
+            contentWidth: availableWidth
+            clip: true
             GridView {
                 anchors.fill: parent
                 model: emprunteurModel
-                cellWidth: 260; cellHeight: 280
+                cellWidth: 310; cellHeight: 90
             }
         }
     }
@@ -112,7 +108,6 @@ AppliQuantum {
 
     EmprunteurModel {
         id: emprunteurModel
-        adherents: root.aderentTemplate
     }
 
     DetailCostume{
@@ -141,16 +136,16 @@ AppliQuantum {
         }
     }
 
-    // DetailAdherent{
-    //     id: detailAdherent
-    // }
-
     EmpruntMenu{
         id: empruntMenu
-        aderents: root.aderentTemplate
+        aderents: emprunteurModel.listModel
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
         }
+    }
+
+    EmprunteurMenu{
+        id: emprunteurMenu
     }
 
     Component.onCompleted: {
