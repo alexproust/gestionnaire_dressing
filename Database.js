@@ -164,7 +164,7 @@ function dbUpdate(costume)
     console.log("Update in db the id  " + costume.id + " type : " + costume.type + " description : " + costume.description + " emprunteur : " + costume.emprunteur)
     db.transaction(function (tx) {
         tx.executeSql(
-                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
+                    'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where id = ?',
                     [costume.id, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, costume.etat, costume.emplacement, costume.emprunteur, costume.date_emprunt, costume.date_retour, costume.commentaire, costume.id])
     })
 }
