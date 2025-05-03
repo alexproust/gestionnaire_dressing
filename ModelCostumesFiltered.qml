@@ -3,7 +3,7 @@ import QtQuick.LocalStorage 2.0
 import "Database.js" as JS
 
 DelegateModel {
-    id: visualModel
+    id: modelCostumesFiltered
     property string typeSelected: ""
     property string genreSelected: ""
     property string couleurSelected: ""
@@ -15,7 +15,6 @@ DelegateModel {
 
     property alias listModel: listModelTile
 
-    items.onChanged: update()
     onTypeSelectedChanged: update()
     onGenreSelectedChanged: update()
     onCouleurSelectedChanged: update()
@@ -76,10 +75,12 @@ DelegateModel {
         id: listModelTile
         Component.onCompleted: {
             listModelTile.update()
+            modelCostumesFiltered.update()
         }
 
         function update(){
             JS.dbReadAll()
+            modelCostumesFiltered.update()
         }
     }
 
@@ -95,7 +96,7 @@ DelegateModel {
     delegate: TileCostume {
         id: tile
         onTileSelect: {
-            windowDetailsCostume.costumeSelected = listModel.get(index)
+            windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(listModel.get(index).id)
             windowDetailsCostume.visible = true
         }
     }

@@ -56,21 +56,21 @@ AppliQuantum {
 
                 onAddSelect: {
                     let rowid = JS.dbInsert()
-                    JS.dbSetId(rowid)
-                    visualModel.listModel.update()
-                    windowDetailsCostume.costumeSelected = visualModel.listModel.get(0)
+                    let newId = JS.dbSetId(rowid)
+                    windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
                     windowDetailsCostume.visible = true
                     windowDetailsCostume.editMode = true
                     windowDetailsCostume.description = ""
+                    modelCostumesFiltered.listModel.update()
                 }
 
-                onInStockSelectChanged:     visualModel.inStockSelected =   filtersSidebar.inStockSelect
-                onTypeSelectedChanged:      visualModel.typeSelected =      filtersSidebar.typeSelected
-                onGenreSelectedChanged:     visualModel.genreSelected =     filtersSidebar.genreSelected
-                onCouleurSelectedChanged:   visualModel.couleurSelected =   filtersSidebar.couleurSelected
-                onTailleSelectedChanged:    visualModel.tailleSelected =    filtersSidebar.tailleSelected
-                onEtatSelectedChanged:      visualModel.etatSelected =      filtersSidebar.etatSelected
-                onModeSelectedChanged:      visualModel.modeSelected =      filtersSidebar.modeSelected
+                onInStockSelectChanged:     modelCostumesFiltered.inStockSelected =   filtersSidebar.inStockSelect
+                onTypeSelectedChanged:      modelCostumesFiltered.typeSelected =      filtersSidebar.typeSelected
+                onGenreSelectedChanged:     modelCostumesFiltered.genreSelected =     filtersSidebar.genreSelected
+                onCouleurSelectedChanged:   modelCostumesFiltered.couleurSelected =   filtersSidebar.couleurSelected
+                onTailleSelectedChanged:    modelCostumesFiltered.tailleSelected =    filtersSidebar.tailleSelected
+                onEtatSelectedChanged:      modelCostumesFiltered.etatSelected =      filtersSidebar.etatSelected
+                onModeSelectedChanged:      modelCostumesFiltered.modeSelected =      filtersSidebar.modeSelected
             }
 
             ScrollView {
@@ -83,7 +83,7 @@ AppliQuantum {
                 clip: true
                 GridView {
                     anchors.fill: parent
-                    model: visualModel
+                    model: modelCostumesFiltered
                     cellWidth: 310; cellHeight: 90
                 }
             }
@@ -102,8 +102,8 @@ AppliQuantum {
     }
 
 
-    SortFilterModel {
-        id: visualModel
+    ModelCostumesFiltered {
+        id: modelCostumesFiltered
     }
 
     ModelAdherents {
@@ -114,21 +114,29 @@ AppliQuantum {
         id: windowDetailsCostume
         filter: root.filterTemplate
         onRecordModification: {
-            JS.dbUpdate(costumeSelected);
+            JS.dbUpdate(windowDetailsCostume.costumeSelected);
+            modelCostumesFiltered.listModel.update()
         }
         onDeleteCostume: {
             JS.dbDeleteRow(costumeSelected.id)
             windowDetailsCostume.visible = false
-            visualModel.listModel.update()
+            modelCostumesFiltered.listModel.update()
         }
         onDuplicateCostume: {
             let rowid = JS.dbInsert();
-            JS.dbSet(rowid, windowDetailsCostume.costumeSelected);
-            visualModel.listModel.update()
-            windowDetailsCostume.costumeSelected = visualModel.listModel.get(0)
+            let newId = JS.dbSetCostumeAtRowId(rowid, JS.dbGetCostumeWithId(costumeSelected.id));
+            modelCostumesFiltered.listModel.update()
+            windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
             windowDetailsCostume.visible = true
             windowDetailsCostume.editMode = true
+            windowDetailsCostume.type =  windowDetailsCostume.costumeSelected.type
             windowDetailsCostume.description = windowDetailsCostume.costumeSelected.description
+            windowDetailsCostume.genre =  windowDetailsCostume.costumeSelected.genre
+            windowDetailsCostume.mode =  windowDetailsCostume.costumeSelected.mode
+            windowDetailsCostume.epoque = windowDetailsCostume.costumeSelected.epoque
+            windowDetailsCostume.couleur =  windowDetailsCostume.costumeSelected.couleur
+            windowDetailsCostume.taille =  windowDetailsCostume.costumeSelected.taille
+            windowDetailsCostume.etat =  windowDetailsCostume.costumeSelected.etat
         }
         onEmprunterCostume: {
             windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
@@ -141,6 +149,7 @@ AppliQuantum {
         aderents: modelAdherents.listModel
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
+            modelCostumesFiltered.listModel.update()
         }
     }
 

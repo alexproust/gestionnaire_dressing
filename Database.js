@@ -93,7 +93,7 @@ function dbReadAll()
 }
 
 
-function dbSet(rowid, costume)
+function dbSetCostumeAtRowId(rowid, costume)
 {
     let db = dbGetHandle()
     let newId = parseFloat(rowid)
@@ -115,6 +115,7 @@ function dbSet(rowid, costume)
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
                     [newId, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", rowid])
     })
+    return newId
 }
 
 function dbSetId(rowid)
@@ -140,6 +141,7 @@ function dbSetId(rowid)
                     'update costume set id=? where rowid = ?',
                     [newId, rowid])
     })
+    return newId
 }
 
 function dbGetRawId(rowid)
@@ -156,6 +158,24 @@ function dbGetRawId(rowid)
                 [newIdString])
         console.log("Id found : " + newId)
     })
+}
+
+function dbGetCostumeWithId(id)
+{
+    let db = dbGetHandle()
+    let newId = parseFloat(id)
+    let results = 0
+    console.log("Find costume with id  " + newId)
+    db.transaction(function (tx) {
+        let newIdString = newId + ".0"
+        console.log("Check if Id : " + newIdString + " exist?")
+        results = tx.executeSql(
+                'SELECT rowid,id,type,description, genre, mode, epoque, couleur, taille, etat, emplacement, emprunteur, date_emprunt, date_retour, commentaires FROM costume WHERE id is ? order by rowid desc',
+                [newIdString])
+    })
+    if (results.rows.length > 0)
+        console.log("Costume found : " + results.rows.item(0).type)
+    return results.rows.item(0)
 }
 
 function dbUpdate(costume)
@@ -193,7 +213,6 @@ function getListOfCostumeOfAdherent(adherentName)
                             "taille":results.rows.item(i).taille != null ? results.rows.item(i).taille : "",
                             "genre":results.rows.item(i).genre != null ? results.rows.item(i).genre : "",
                             })
-            // console.log("Find in db: " + listModel.get(listModel.count-1).type)
         }
         console.log("number of borrowed costumes of " + adherentName + " : " + listCostumeEmpruntModel.count)
     })
