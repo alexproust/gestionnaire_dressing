@@ -34,7 +34,7 @@ function dbInsert()
         tx.executeSql('INSERT INTO costume VALUES("","","","","","","","","","","","","","")')
         let result = tx.executeSql('SELECT last_insert_rowid()')
         rowid = result.insertId
-        console.log("Insert in database with id : " + rowid)
+        console.log("Insert in database at the rowid : " + rowid)
     })
     return rowid;
 }
@@ -86,7 +86,7 @@ function dbReadAll()
                             "date_retour": results.rows.item(i).date_retour != null ? results.rows.item(i).date_retour : "",
                             "commentaires": results.rows.item(i).commentaires != null ? results.rows.item(i).commentaires : ""
                              })
-            console.log("Cache memoring : " + Math.round((i / results.rows.length)*100) + "%")
+            // console.log("Cache memoring : " + Math.round((i / results.rows.length)*100) + "%")
         }
         console.log("db size after update: " + listModel.count)
     })
@@ -96,22 +96,65 @@ function dbReadAll()
 function dbSet(rowid, costume)
 {
     let db = dbGetHandle()
-    console.log("Set in db the line  " + rowid + " type : " + costume.type)
+    let newId = parseFloat(rowid)
+    console.log("Find unique Id in db since the rowid  " + rowid)
+    console.log("Set in db the rowid  " + rowid + " type : " + costume.type)
     db.transaction(function (tx) {
+        let results = 0
+        do {
+            newId = newId + 1
+            let newIdString = newId + ".0"
+            console.log("Check if Id : " + newIdString + " is available?")
+            results = tx.executeSql('SELECT 1 FROM costume WHERE id is ? order by rowid desc',
+                    [newIdString])
+            console.log("Result = " + results.rows.length)
+        } while (results.rows.length > 0);
+        console.log("New id available found : " + newId)
+
         tx.executeSql(
                     'update costume set id=?, type=?, description=?, genre=?, mode=?, epoque=?, couleur=?, taille=?, etat=?, emplacement=?, emprunteur=?, date_emprunt=?, date_retour=?, commentaires=? where rowid = ?',
-                    [rowid, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", rowid])
+                    [newId, costume.type, costume.description, costume.genre, costume.mode, costume.epoque, costume.couleur, costume.taille, "", "", "", "", "", "", rowid])
     })
 }
 
 function dbSetId(rowid)
 {
     let db = dbGetHandle()
-    console.log("Set in db Id of costume line  " + rowid)
+    let newId = parseFloat(rowid)
+    console.log("Find unique Id in db since the rowid  " + rowid)
+    db.transaction(function (tx) {
+        let results = 0
+        do {
+            newId = newId + 1
+            let newIdString = newId + ".0"
+            console.log("Check if Id : " + newIdString + " is available?")
+            results = tx.executeSql('SELECT 1 FROM costume WHERE id is ? order by rowid desc',
+                    [newIdString])
+            console.log("Result = " + results.rows.length)
+        } while (results.rows.length > 0);
+        console.log("New id available found : " + newId)
+    })
+
     db.transaction(function (tx) {
         tx.executeSql(
                     'update costume set id=? where rowid = ?',
-                    [rowid, rowid])
+                    [newId, rowid])
+    })
+}
+
+function dbGetRawId(rowid)
+{
+    let db = dbGetHandle()
+    let newId = parseFloat(rowid)
+    console.log("Find unique Id in db since the rowid  " + rowid)
+    db.transaction(function (tx) {
+        let results = 0
+        let newIdString = newId + ".0"
+        console.log("Check if Id : " + newIdString + " exist?")
+        results = tx.executeSql(
+                'SELECT rowid,id,type,description, genre, mode, epoque, couleur, taille, etat, emplacement, emprunteur, date_emprunt, date_retour, commentaires FROM costume WHERE rowid is ? order by rowid desc',
+                [newIdString])
+        console.log("Id found : " + newId)
     })
 }
 
