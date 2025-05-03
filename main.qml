@@ -39,8 +39,8 @@ AppliQuantum {
         RowLayout {
             spacing: 12
 
-            Filters { ///< Filters
-                id: filters
+            FiltersSidebar {
+                id: filtersSidebar
                 height: parent.height
                 Layout.minimumWidth: parent.width*0.25
                 Layout.preferredWidth: parent.width*0.25
@@ -58,19 +58,19 @@ AppliQuantum {
                     let rowid = JS.dbInsert()
                     JS.dbSetId(rowid)
                     visualModel.listModel.update()
-                    demoDetail.costumeSelected = visualModel.listModel.get(0)
-                    demoDetail.visible = true
-                    demoDetail.editMode = true
-                    demoDetail.description = ""
+                    windowDetailsCostume.costumeSelected = visualModel.listModel.get(0)
+                    windowDetailsCostume.visible = true
+                    windowDetailsCostume.editMode = true
+                    windowDetailsCostume.description = ""
                 }
 
-                onInStockSelectChanged:     visualModel.inStockSelected =   filters.inStockSelect
-                onTypeSelectedChanged:      visualModel.typeSelected =      filters.typeSelected
-                onGenreSelectedChanged:     visualModel.genreSelected =     filters.genreSelected
-                onCouleurSelectedChanged:   visualModel.couleurSelected =   filters.couleurSelected
-                onTailleSelectedChanged:    visualModel.tailleSelected =    filters.tailleSelected
-                onEtatSelectedChanged:      visualModel.etatSelected =      filters.etatSelected
-                onModeSelectedChanged:      visualModel.modeSelected =      filters.modeSelected
+                onInStockSelectChanged:     visualModel.inStockSelected =   filtersSidebar.inStockSelect
+                onTypeSelectedChanged:      visualModel.typeSelected =      filtersSidebar.typeSelected
+                onGenreSelectedChanged:     visualModel.genreSelected =     filtersSidebar.genreSelected
+                onCouleurSelectedChanged:   visualModel.couleurSelected =   filtersSidebar.couleurSelected
+                onTailleSelectedChanged:    visualModel.tailleSelected =    filtersSidebar.tailleSelected
+                onEtatSelectedChanged:      visualModel.etatSelected =      filtersSidebar.etatSelected
+                onModeSelectedChanged:      visualModel.modeSelected =      filtersSidebar.modeSelected
             }
 
             ScrollView {
@@ -95,7 +95,7 @@ AppliQuantum {
             clip: true
             GridView {
                 anchors.fill: parent
-                model: emprunteurModel
+                model: modelAdherents
                 cellWidth: 310; cellHeight: 90
             }
         }
@@ -106,46 +106,46 @@ AppliQuantum {
         id: visualModel
     }
 
-    EmprunteurModel {
-        id: emprunteurModel
+    ModelAdherents {
+        id: modelAdherents
     }
 
-    DetailCostume{
-        id: demoDetail
+    WindowDetailsCostume{
+        id: windowDetailsCostume
         filter: root.filterTemplate
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
         }
         onDeleteCostume: {
             JS.dbDeleteRow(costumeSelected.id)
-            demoDetail.visible = false
+            windowDetailsCostume.visible = false
             visualModel.listModel.update()
         }
         onDuplicateCostume: {
             let rowid = JS.dbInsert();
-            JS.dbSet(rowid, demoDetail.costumeSelected);
+            JS.dbSet(rowid, windowDetailsCostume.costumeSelected);
             visualModel.listModel.update()
-            demoDetail.costumeSelected = visualModel.listModel.get(0)
-            demoDetail.visible = true
-            demoDetail.editMode = true
-            demoDetail.description = demoDetail.costumeSelected.description
+            windowDetailsCostume.costumeSelected = visualModel.listModel.get(0)
+            windowDetailsCostume.visible = true
+            windowDetailsCostume.editMode = true
+            windowDetailsCostume.description = windowDetailsCostume.costumeSelected.description
         }
         onEmprunterCostume: {
-            empruntMenu.costumeSelected = demoDetail.costumeSelected
-            empruntMenu.visible = true
+            windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
+            windowEmpruntCostume.visible = true
         }
     }
 
-    EmpruntMenu{
-        id: empruntMenu
-        aderents: emprunteurModel.listModel
+    WindowEmpruntCostume{
+        id: windowEmpruntCostume
+        aderents: modelAdherents.listModel
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
         }
     }
 
-    EmprunteurMenu{
-        id: emprunteurMenu
+    WindowDetailsAdherent{
+        id: windowDetailsAdherent
     }
 
     Component.onCompleted: {

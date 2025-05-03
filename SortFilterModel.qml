@@ -95,8 +95,8 @@ DelegateModel {
     delegate: TileCostume {
         id: tile
         onTileSelect: {
-            demoDetail.costumeSelected = listModel.get(index)
-            demoDetail.visible = true
+            windowDetailsCostume.costumeSelected = listModel.get(index)
+            windowDetailsCostume.visible = true
         }
     }
 }

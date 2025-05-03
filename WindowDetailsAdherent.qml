@@ -6,7 +6,7 @@ import Theme.QUANTUM 1.0
 import Gestionnaire_dressing 1.0
 
 Rectangle {
-    id: emprunteurMenu
+    id: windowDetailsAdherent
     property string jourEmprunt: ""
     property string moisEmprunt: ""
     property string anneeEmprunt: ""
@@ -37,26 +37,26 @@ Rectangle {
         onClicked: {
             // parent.visible = false
         }
-        z: emprunteurMenu.z-1
+        z: windowDetailsAdherent.z-1
     }
 
     Button {
         id: modificationButton
-        text: emprunteurMenu.editMode ? "Annuler" : "Modifier"
+        text: windowDetailsAdherent.editMode ? "Annuler" : "Modifier"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
-        onClicked: emprunteurMenu.editMode = !emprunteurMenu.editMode
+        onClicked: windowDetailsAdherent.editMode = !windowDetailsAdherent.editMode
     }
 
     Button {
-        text: emprunteurMenu.editMode ? "Sauvegarder" : "Fermer"
+        text: windowDetailsAdherent.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (emprunteurMenu.editMode){
-                emprunteurMenu.editMode = !emprunteurMenu.editMode
+            if (windowDetailsAdherent.editMode){
+                windowDetailsAdherent.editMode = !windowDetailsAdherent.editMode
                 adherentSelected.emprunteur = emprunteur
                 if (emprunteur){
                     adherentSelected.date_emprunt = jourEmprunt + "/" + moisEmprunt + "/" + anneeEmprunt
@@ -66,7 +66,7 @@ Rectangle {
                     adherentSelected.date_retour = jourRetour + "/" + moisRetour + "/" + anneeRetour
                     adherentSelected.date_emprunt = ""
                 }
-                emprunteurMenu.recordModification()
+                windowDetailsAdherent.recordModification()
             }
             else {
                 parent.visible = false
@@ -74,8 +74,8 @@ Rectangle {
         }
     }
 
-    CostumesBorrowedModel {
-        id: listCostumeEmpruntModel
+    ModelCostumesOfOneAdherent {
+        id: modelCostumesOfOneAdherent
         adherentName: adherentSelected.name !== undefined ? adherentSelected.name : ""
     }
 
@@ -101,7 +101,7 @@ Rectangle {
             GridView {
                 anchors.fill: parent
                 snapMode: GridView.SnapOneRow
-                model: listCostumeEmpruntModel
+                model: modelCostumesOfOneAdherent
                 cellWidth: 310; cellHeight: 90
             }
         }

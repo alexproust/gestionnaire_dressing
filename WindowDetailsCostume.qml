@@ -6,7 +6,7 @@ import Theme.QUANTUM 1.0
 import Gestionnaire_dressing 1.0
 
 Rectangle {
-    id: demoDetail
+    id: windowDetailsCostume
     property var costumeSelected: ({})
     property string type: ""
     property string description: ""
@@ -40,7 +40,7 @@ Rectangle {
         onClicked: {
             // parent.visible = false
         }
-        z: demoDetail.z-1
+        z: windowDetailsCostume.z-1
     }
 
     FileValidator {
@@ -51,26 +51,26 @@ Rectangle {
 
     Button {
         id: modificationButton
-        text: demoDetail.editMode ? "Annuler" : "Modifier"
+        text: windowDetailsCostume.editMode ? "Annuler" : "Modifier"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (!demoDetail.editMode){
-                demoDetail.type = costumeSelected.type
-                demoDetail.genre = costumeSelected.genre
-                demoDetail.couleur = costumeSelected.couleur
-                demoDetail.etat = costumeSelected.etat
-                demoDetail.mode = costumeSelected.mode
-                demoDetail.taille = costumeSelected.taille
+            if (!windowDetailsCostume.editMode){
+                windowDetailsCostume.type = costumeSelected.type
+                windowDetailsCostume.genre = costumeSelected.genre
+                windowDetailsCostume.couleur = costumeSelected.couleur
+                windowDetailsCostume.etat = costumeSelected.etat
+                windowDetailsCostume.mode = costumeSelected.mode
+                windowDetailsCostume.taille = costumeSelected.taille
                 if (costumeSelected.description){
-                    demoDetail.description = costumeSelected.description
+                    windowDetailsCostume.description = costumeSelected.description
                 }
                 else {
-                    demoDetail.description = ""
+                    windowDetailsCostume.description = ""
                 }
             }
-            demoDetail.editMode = !demoDetail.editMode
+            windowDetailsCostume.editMode = !windowDetailsCostume.editMode
         }
     }
 
@@ -81,7 +81,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            demoDetail.deleteCostume()
+            windowDetailsCostume.deleteCostume()
         }
     }
 
@@ -92,7 +92,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            demoDetail.duplicateCostume()
+            windowDetailsCostume.duplicateCostume()
         }
     }
 
@@ -103,28 +103,28 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            demoDetail.emprunterCostume()
+            windowDetailsCostume.emprunterCostume()
         }
     }
 
     Button {
-        text: demoDetail.editMode ? "Sauvegarder" : "Fermer"
+        text: windowDetailsCostume.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (demoDetail.editMode){
-                costumeSelected.type = demoDetail.type
-                costumeSelected.genre = demoDetail.genre
-                costumeSelected.couleur = demoDetail.couleur
-                costumeSelected.etat = demoDetail.etat
-                costumeSelected.taille = demoDetail.taille
-                var desc = demoDetail.description
+            if (windowDetailsCostume.editMode){
+                costumeSelected.type = windowDetailsCostume.type
+                costumeSelected.genre = windowDetailsCostume.genre
+                costumeSelected.couleur = windowDetailsCostume.couleur
+                costumeSelected.etat = windowDetailsCostume.etat
+                costumeSelected.taille = windowDetailsCostume.taille
+                var desc = windowDetailsCostume.description
                 costumeSelected.description = desc
-                costumeSelected.epoque = demoDetail.epoque
-                costumeSelected.mode = demoDetail.mode
-                demoDetail.recordModification()
-                demoDetail.editMode = !demoDetail.editMode
+                costumeSelected.epoque = windowDetailsCostume.epoque
+                costumeSelected.mode = windowDetailsCostume.mode
+                windowDetailsCostume.recordModification()
+                windowDetailsCostume.editMode = !windowDetailsCostume.editMode
             }
             else {
                 parent.visible = false
@@ -165,7 +165,7 @@ Rectangle {
                     id: typeText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Type: " + costumeSelected.type : "Type: "
+                    text: !windowDetailsCostume.editMode ? "Type: " + costumeSelected.type : "Type: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -173,15 +173,15 @@ Rectangle {
                     id: typeSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.type
                     // onCurrentIndexChanged: {
                     //     console.log("onCurrentIndexChanged " +  filter.type[currentIndex])
                     //     type = filter.type[currentIndex]
                     // }
                     onActivated: {
-                        demoDetail.type = filter.type[currentIndex]
-                        console.log("onActivated " +  demoDetail.type)
+                        windowDetailsCostume.type = filter.type[currentIndex]
+                        console.log("onActivated " +  windowDetailsCostume.type)
                     }
                     onVisibleChanged: {
                         currentIndex = indexOfValue(costumeSelected.type)
@@ -193,19 +193,19 @@ Rectangle {
                 Text {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Description: " + costumeSelected.description : "Description: "
+                    text: !windowDetailsCostume.editMode ? "Description: " + costumeSelected.description : "Description: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
                 TextArea {
                     id: descriptionInput
-                    text: demoDetail.description
+                    text: windowDetailsCostume.description
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     onTextChanged: {
-                        if (demoDetail.editMode) {
-                            demoDetail.description = text
+                        if (windowDetailsCostume.editMode) {
+                            windowDetailsCostume.description = text
                         }
                     }
                 }
@@ -216,7 +216,7 @@ Rectangle {
                     id: genreText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Genre: " + costumeSelected.genre : "Genre: "
+                    text: !windowDetailsCostume.editMode ? "Genre: " + costumeSelected.genre : "Genre: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -225,7 +225,7 @@ Rectangle {
                     id: genreSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.genre
                     // onCurrentIndexChanged: {
                     //     costumeSelected.genre = filter.genre[currentIndex]
@@ -244,7 +244,7 @@ Rectangle {
                 Text {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Mode: " + costumeSelected.mode : "Mode: "
+                    text: !windowDetailsCostume.editMode ? "Mode: " + costumeSelected.mode : "Mode: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -252,7 +252,7 @@ Rectangle {
                     id: modeSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.mode
                     // onCurrentIndexChanged: {
                     //     costumeSelected.mode = filter.mode[currentIndex]
@@ -271,7 +271,7 @@ Rectangle {
                 Text {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Epoque: " + costumeSelected.epoque : "Epoque: "
+                    text: !windowDetailsCostume.editMode ? "Epoque: " + costumeSelected.epoque : "Epoque: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -280,9 +280,9 @@ Rectangle {
                     text: costumeSelected.epoque ? costumeSelected.epoque : ""
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     onTextChanged: {
-                        demoDetail.epoque = text
+                        windowDetailsCostume.epoque = text
                     }
                 }
             }
@@ -292,7 +292,7 @@ Rectangle {
                     id: couleurText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Couleur: " + costumeSelected.couleur : "Couleur: "
+                    text: !windowDetailsCostume.editMode ? "Couleur: " + costumeSelected.couleur : "Couleur: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -301,7 +301,7 @@ Rectangle {
                     id: couleurSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.couleur
                     // onCurrentIndexChanged: {
                     //     costumeSelected.couleur = filter.couleur[currentIndex]
@@ -321,7 +321,7 @@ Rectangle {
                     id: tailleText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Taille: " + costumeSelected.taille : "Taille: "
+                    text: !windowDetailsCostume.editMode ? "Taille: " + costumeSelected.taille : "Taille: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -330,7 +330,7 @@ Rectangle {
                     id: tailleSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.taille
                     // onCurrentIndexChanged: {
                     //     costumeSelected.taille = filter.taille[currentIndex]
@@ -350,7 +350,7 @@ Rectangle {
                     id: etatText
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    text: !demoDetail.editMode ? "Etat: " + costumeSelected.etat : "Etat: "
+                    text: !windowDetailsCostume.editMode ? "Etat: " + costumeSelected.etat : "Etat: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -359,7 +359,7 @@ Rectangle {
                     id: etatSelected
                     Layout.fillWidth: true
                     Layout.preferredHeight: 64
-                    visible: demoDetail.editMode
+                    visible: windowDetailsCostume.editMode
                     model: filter.etat
                     // onCurrentIndexChanged: {
                     //     costumeSelected.etat = filter.etat[currentIndex]
@@ -378,7 +378,7 @@ Rectangle {
             //     Text {
             //         Layout.fillWidth: true
             //         Layout.preferredHeight: 64
-            //         text: !demoDetail.editMode ? "Emplacement: " + costumeSelected.emplacement : "Emplacement: "
+            //         text: !windowDetailsCostume.editMode ? "Emplacement: " + costumeSelected.emplacement : "Emplacement: "
             //         font: Fonts.body1
             //         wrapMode: Text.WordWrap
             //     }
@@ -387,7 +387,7 @@ Rectangle {
             //         text: costumeSelected.emplacement ? costumeSelected.emplacement : ""
             //         Layout.fillWidth: true
             //         Layout.preferredHeight: 64
-            //         visible: demoDetail.editMode
+            //         visible: windowDetailsCostume.editMode
             //         onTextChanged: {
             //             costumeSelected.emplacement = text
             //         }

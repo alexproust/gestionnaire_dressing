@@ -6,7 +6,7 @@ import Theme.QUANTUM 1.0
 import Gestionnaire_dressing 1.0
 
 Rectangle {
-    id: empruntMenu
+    id: windowEmpruntCostume
     property string jourEmprunt: ""
     property string moisEmprunt: ""
     property string anneeEmprunt: ""
@@ -38,26 +38,26 @@ Rectangle {
         onClicked: {
             // parent.visible = false
         }
-        z: empruntMenu.z-1
+        z: windowEmpruntCostume.z-1
     }
 
     Button {
         id: modificationButton
-        text: empruntMenu.editMode ? "Annuler" : "Modifier"
+        text: windowEmpruntCostume.editMode ? "Annuler" : "Modifier"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
-        onClicked: empruntMenu.editMode = !empruntMenu.editMode
+        onClicked: windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
     }
 
     Button {
-        text: empruntMenu.editMode ? "Sauvegarder" : "Fermer"
+        text: windowEmpruntCostume.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (empruntMenu.editMode){
-                empruntMenu.editMode = !empruntMenu.editMode
+            if (windowEmpruntCostume.editMode){
+                windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
                 costumeSelected.emprunteur = emprunteur
                 if (emprunteur){
                     costumeSelected.date_emprunt = jourEmprunt + "/" + moisEmprunt + "/" + anneeEmprunt
@@ -67,7 +67,7 @@ Rectangle {
                     costumeSelected.date_retour = jourRetour + "/" + moisRetour + "/" + anneeRetour
                     costumeSelected.date_emprunt = ""
                 }
-                empruntMenu.recordModification()
+                windowEmpruntCostume.recordModification()
             }
             else {
                 parent.visible = false
@@ -96,7 +96,7 @@ Rectangle {
             id: nameText
             Layout.fillWidth: true
             // Layout.preferredHeight: 64
-            text: !empruntMenu.editMode ? "Emprunteur: " + costumeSelected.emprunteur : "Emprunteur: "
+            text: !windowEmpruntCostume.editMode ? "Emprunteur: " + costumeSelected.emprunteur : "Emprunteur: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
         }
@@ -104,7 +104,7 @@ Rectangle {
             id: nameSelected
             Layout.fillWidth: true
             // Layout.preferredHeight: 64
-            visible: empruntMenu.editMode
+            visible: windowEmpruntCostume.editMode
             model: aderents
             onCurrentIndexChanged: {
                 console.log("onCurrentIndexChanged " + currentText)
@@ -124,7 +124,7 @@ Rectangle {
             id: dateEmpruntText
             Layout.fillWidth: true
             // Layout.preferredHeight: 64
-            text: !empruntMenu.editMode ? "Date Emprunt: " + costumeSelected.date_emprunt : "Date Emprunt: "
+            text: !windowEmpruntCostume.editMode ? "Date Emprunt: " + costumeSelected.date_emprunt : "Date Emprunt: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
         }
@@ -133,7 +133,7 @@ Rectangle {
                 id: daySelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && emprunteur
+                visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
                     "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
                 onActivated: {
@@ -148,7 +148,7 @@ Rectangle {
                 id: monthSelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && emprunteur
+                visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
@@ -162,7 +162,7 @@ Rectangle {
                 id: yearSelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && emprunteur
+                visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
@@ -177,7 +177,7 @@ Rectangle {
             id: dateRetourText
             Layout.fillWidth: true
             // Layout.preferredHeight: 64
-            text: !empruntMenu.editMode ? "Date Retour: " + costumeSelected.date_retour : "Date Retour: "
+            text: !windowEmpruntCostume.editMode ? "Date Retour: " + costumeSelected.date_retour : "Date Retour: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
         }
@@ -186,7 +186,7 @@ Rectangle {
                 id: dayReturnSelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && !emprunteur
+                visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
                     "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
                 onActivated: {
@@ -201,7 +201,7 @@ Rectangle {
                 id: monthReturnSelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && !emprunteur
+                visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
@@ -215,7 +215,7 @@ Rectangle {
                 id: yearReturnSelected
                 Layout.fillWidth: true
                 // Layout.preferredHeight: 64
-                visible: empruntMenu.editMode && !emprunteur
+                visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
