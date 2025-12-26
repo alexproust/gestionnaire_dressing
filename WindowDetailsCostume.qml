@@ -156,7 +156,7 @@ Rectangle {
             spacing: 12
             Text {
                 Layout.fillWidth: true
-                text: "Identifiant: " + costumeSelected.id
+                text: "Identifiant: " + parseInt(costumeSelected.id,10)
                 font: Fonts.subtitle1
             }
 

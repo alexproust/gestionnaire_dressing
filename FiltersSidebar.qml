@@ -3,7 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import Theme.QUANTUM 1.0
-    
+import Gestionnaire_dressing 1.0
+
 ColumnLayout {
     spacing: 12
     property var filter: ({})
@@ -16,6 +17,7 @@ ColumnLayout {
     property string tailleSelected: ""
     property string etatSelected: ""
     property string modeSelected: ""
+    property int idSearch: 0
     property bool inStockSelect: false
 
     signal addSelect()
@@ -26,7 +28,6 @@ ColumnLayout {
         if (filter.couleur) filterRepeaterCouleur.model = filter.couleur.length
         if (filter.taille)  filterRepeaterTaille.model = filter.taille.length
         if (filter.etat)    filterRepeaterEtat.model = filter.etat.length
-        if (filter.mode)    filterRepeaterMode.model = filter.mode.length
     }
 
     function customFilter() {
@@ -65,13 +66,6 @@ ColumnLayout {
                 console.debug(etatSelected + " selected")
             }
         }
-        modeSelected = ""
-        for(i = 0; i < filterRepeaterMode.count; i++ ) {
-            if(filterRepeaterMode.itemAt(i).isSelected) {
-                modeSelected = filterRepeaterMode.itemAt(i).text.toUpperCase()
-                console.debug(modeSelected + " selected")
-            }
-        }
     }
 
     RowLayout{
@@ -88,6 +82,26 @@ ColumnLayout {
             text: qsTr("Ajouter")
             onClicked: {
                 addSelect();
+            }
+        }
+
+        TextField {
+            id: searchBox
+            validator: IntValidator {
+                bottom: 0
+                top: 9999
+            }
+            placeholderText: "Recherche"
+            onTextChanged: {
+                idSearch = parseInt(searchBox.text, 10)
+            }
+            font: Fonts.subtitle2
+            horizontalAlignment: Text.AlignHCenter
+            background: Rectangle {
+                radius: height/2
+                color: Colors.transparent
+                border.color: Colors.primary200
+                border.width: 3
             }
         }
     }

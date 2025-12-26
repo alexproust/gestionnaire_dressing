@@ -13,7 +13,7 @@ Rectangle {
     layer.enabled: true
 
     Component.onCompleted: {
-        console.log("---------->> Tile Adherent completed : " + name )
+        // console.log("---------->> Tile Adherent completed : " + name )
     }
 
     MouseArea {

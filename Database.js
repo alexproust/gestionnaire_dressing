@@ -174,7 +174,7 @@ function dbGetCostumeWithId(id)
                 [newIdString])
     })
     if (results.rows.length > 0)
-        console.log("Costume found : " + results.rows.item(0).type)
+        console.log("Costume found : " + results.rows.item(0).id)
     return results.rows.item(0)
 }
 
@@ -203,18 +203,21 @@ function getListOfCostumeOfAdherent(adherentName)
     let db = dbGetHandle()
     db.transaction(function (tx) {
         let results = tx.executeSql(
-                'SELECT rowid,id,type, couleur, taille, date_emprunt, genre, etat FROM costume WHERE emprunteur is ? order by rowid desc', [adherentName])
-            listCostumeEmpruntModel.clear()
+                'SELECT rowid,id,type, couleur, taille, genre, emprunteur, date_emprunt, date_retour FROM costume WHERE emprunteur is ? order by rowid desc', [adherentName])
+            modelCostumesOfOneAdherent.clear()
         for (let i = 0; i < results.rows.length; i++) {
-            listCostumeEmpruntModel.append({
+            modelCostumesOfOneAdherent.append({
                             "id": Math.round(results.rows.item(i).id),
                             "type":results.rows.item(i).type,
                             "couleur":results.rows.item(i).couleur != null ? results.rows.item(i).couleur : "",
                             "taille":results.rows.item(i).taille != null ? results.rows.item(i).taille : "",
                             "genre":results.rows.item(i).genre != null ? results.rows.item(i).genre : "",
+                            "emprunteur":results.rows.item(i).emprunteur != null ? results.rows.item(i).emprunteur : "",
+                            "date_emprunt": results.rows.item(i).date_emprunt != null ? results.rows.item(i).date_emprunt : "",
+                            "date_retour": results.rows.item(i).date_retour != null ? results.rows.item(i).date_retour : "",
                             })
         }
-        console.log("number of borrowed costumes of " + adherentName + " : " + listCostumeEmpruntModel.count)
+        console.log("number of borrowed costumes of " + adherentName + " : " + modelCostumesOfOneAdherent.count)
     })
 }
 

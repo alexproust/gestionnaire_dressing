@@ -17,16 +17,35 @@ Rectangle {
     property var costumeSelected: ({})
     property bool editMode: false
     property var aderents: ({})
-    width: parent.width - 400
-    height: parent.height - 400
+    property var aujourdHui: new Date()
+    property string jourNowStr : Qt.formatDate(new Date(), "dd")
+    property int jourNow : parseInt(jourNowStr, 10)
+    property string moisNowStr : Qt.formatDate(new Date(), "MM")
+    property int moisNow : parseInt(moisNowStr, 10)
+    property string anneeNowStr : Qt.formatDate(new Date(), "yyyy")
+    property int anneeNow : parseInt(anneeNowStr, 10)
+    width: parent.width - 800
+    height: parent.height - 600
     anchors.centerIn: parent
     radius: 50
     visible: false
     color: Colors.bluegrey100
     signal recordModification()
-    signal deleteCostume()
-    signal duplicateCostume()
-    signal emprunterCostume()
+
+    Component.onCompleted:
+    {
+        console.log("jourNow : " + jourNow)
+        console.log("moisNow : " + moisNow)
+        console.log("anneeNow : " + anneeNow)
+    }
+
+    onCostumeSelectedChanged:
+    {
+        if (costumeSelected.id === undefined)
+        {
+            windowEmpruntCostume.visible = false
+        }
+    }
 
     MouseArea {
         width: parent.width + 400
@@ -47,7 +66,38 @@ Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 16
-        onClicked: windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
+        onClicked: {
+            if (!windowEmpruntCostume.editMode)
+            {
+                emprunteur = costumeSelected.emprunteur
+            }
+            windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
+        }
+    }
+
+    Button {
+        id: empruntButton
+        text: costumeSelected.emprunteur ? "Rendre" : "Emprunter"
+        anchors.left: modificationButton.right
+        anchors.top: parent.top
+        anchors.margins: 16
+        onClicked: {
+            if (costumeSelected.emprunteur)
+            {
+                nameSelected.currentIndex = 0
+                dayReturnSelected.currentIndex = jourNow - 1
+                monthReturnSelected.currentIndex = moisNow - 1
+                yearReturnSelected.currentIndex = anneeNow - 2024
+            }
+            else
+            {
+                nameSelected.currentIndex = 1
+                daySelected.currentIndex = jourNow - 1
+                monthSelected.currentIndex = moisNow - 1
+                yearSelected.currentIndex = anneeNow - 2024
+            }
+            windowEmpruntCostume.editMode = true
+        }
     }
 
     Button {
@@ -88,7 +138,7 @@ Rectangle {
 
         Text {
             Layout.fillWidth: true
-            text: "Identifiant: " + costumeSelected.id
+            text: "Identifiant: " + parseInt(costumeSelected.id,10)
             font: Fonts.subtitle1
         }
 
@@ -107,16 +157,16 @@ Rectangle {
             visible: windowEmpruntCostume.editMode
             model: aderents
             onCurrentIndexChanged: {
-                console.log("onCurrentIndexChanged " + currentText)
-                emprunteur = currentText
+                emprunteur =  valueAt(currentIndex)
+                console.log("onCurrentIndexChanged emprunteur = " + emprunteur)
             }
             onActivated: {
-                console.log("onActivated " +  currentText)
                 emprunteur = currentText
+                console.log("onActivated emprunteur = " +  currentText)
             }
             onVisibleChanged: {
-                console.log("onVisibleChanged " + costumeSelected.emprunteur)
-                currentIndex = indexOfValue(costumeSelected.emprunteur)
+                currentIndex = indexOfValue(emprunteur)
+                console.log("onVisibleChanged emprunteur index = " + currentIndex)
             }
         }
 
@@ -143,6 +193,10 @@ Rectangle {
                 onVisibleChanged: {
                     currentIndex = indexOfValue(jourEmprunt)
                 }
+                onCurrentIndexChanged: {
+                    jourEmprunt =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  jourEmprunt)
+                }
             }
             ComboBox {
                 id: monthSelected
@@ -157,6 +211,10 @@ Rectangle {
                 onVisibleChanged: {
                     currentIndex = indexOfValue(moisEmprunt)
                 }
+                onCurrentIndexChanged: {
+                    moisEmprunt =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  moisEmprunt)
+                }
             }
             ComboBox {
                 id: yearSelected
@@ -170,6 +228,10 @@ Rectangle {
                 }
                 onVisibleChanged: {
                     currentIndex = indexOfValue(anneeEmprunt)
+                }
+                onCurrentIndexChanged: {
+                    anneeEmprunt =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  anneeEmprunt)
                 }
             }
         }
@@ -196,6 +258,10 @@ Rectangle {
                 onVisibleChanged: {
                     currentIndex = indexOfValue(jourRetour)
                 }
+                onCurrentIndexChanged: {
+                    jourRetour =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  jourRetour)
+                }
             }
             ComboBox {
                 id: monthReturnSelected
@@ -210,6 +276,10 @@ Rectangle {
                 onVisibleChanged: {
                     currentIndex = indexOfValue(moisRetour)
                 }
+                onCurrentIndexChanged: {
+                    moisRetour =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  moisRetour)
+                }
             }
             ComboBox {
                 id: yearReturnSelected
@@ -223,6 +293,10 @@ Rectangle {
                 }
                 onVisibleChanged: {
                     currentIndex = indexOfValue(anneeRetour)
+                }
+                onCurrentIndexChanged: {
+                    anneeRetour =  valueAt(currentIndex)
+                    console.log("onCurrentIndexChanged " +  anneeRetour)
                 }
             }
         }

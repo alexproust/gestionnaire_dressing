@@ -71,6 +71,10 @@ AppliQuantum {
                 onTailleSelectedChanged:    modelCostumesFiltered.tailleSelected =    filtersSidebar.tailleSelected
                 onEtatSelectedChanged:      modelCostumesFiltered.etatSelected =      filtersSidebar.etatSelected
                 onModeSelectedChanged:      modelCostumesFiltered.modeSelected =      filtersSidebar.modeSelected
+                onIdSearchChanged:
+                {
+                    modelCostumesFiltered.idSearch =          filtersSidebar.idSearch
+                }
             }
 
             ScrollView {
@@ -144,17 +148,25 @@ AppliQuantum {
         }
     }
 
+
+    WindowDetailsAdherent{
+        id: windowDetailsAdherent
+        onEmprunterCostume: {
+            windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
+            windowEmpruntCostume.visible = true
+        }
+    }
+
     WindowEmpruntCostume{
         id: windowEmpruntCostume
         aderents: modelAdherents.listModel
         onRecordModification: {
             JS.dbUpdate(costumeSelected);
             modelCostumesFiltered.listModel.update()
+            costumeSelected = windowDetailsCostume.costumeSelected
+            windowDetailsCostume.costumeSelected = costumeSelected
+            windowDetailsAdherent.modelCostumesOfOneAdherent.listModel.update()
         }
-    }
-
-    WindowDetailsAdherent{
-        id: windowDetailsAdherent
     }
 
     Component.onCompleted: {

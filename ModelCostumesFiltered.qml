@@ -9,6 +9,7 @@ DelegateModel {
     property string couleurSelected: ""
     property string tailleSelected: ""
     property string etatSelected: ""
+    property int idSearch: 0
     property bool inStockSelected: false
 
     property date currentDate: new Date()
@@ -20,6 +21,7 @@ DelegateModel {
     onCouleurSelectedChanged: update()
     onTailleSelectedChanged: update()
     onEtatSelectedChanged: update()
+    onIdSearchChanged: update()
     onInStockSelectedChanged: update()
 
     property var filterAcceptsItem: function(item){
@@ -42,7 +44,9 @@ DelegateModel {
         if (etatSelected !== ""){
             returnValue = returnValue & (item.etat.toUpperCase() === etatSelected);
         }
-
+        if (idSearch != 0){
+            returnValue = returnValue & (item.id === idSearch);
+        }
         return returnValue
     }
 

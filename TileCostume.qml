@@ -14,7 +14,7 @@ Rectangle {
     layer.enabled: true
 
     Component.onCompleted: {
-        console.log("---------->> Tile Costume completed : " + couleur, genre, id, taille, type )
+        // console.log("---------->> Tile Costume completed : " + couleur, genre, id, taille, type )
     }
 
     MouseArea {

@@ -7,6 +7,8 @@ import Gestionnaire_dressing 1.0
 
 Rectangle {
     id: windowDetailsAdherent
+    property var costumeSelected: ({})
+    property alias modelCostumesOfOneAdherent: modelCostumesOfOneAdherent
     property string jourEmprunt: ""
     property string moisEmprunt: ""
     property string anneeEmprunt: ""
@@ -16,12 +18,12 @@ Rectangle {
     property string emprunteur: ""
     property var adherentSelected: ({})
     property bool editMode: false
-    width: parent.width - 400
-    height: parent.height - 400
+    width: parent.width - 100
+    height: parent.height - 100
     anchors.centerIn: parent
     radius: 50
     visible: false
-    color: Colors.bluegrey100
+    color: Colors.bluegrey50
     signal recordModification()
     signal deleteCostume()
     signal duplicateCostume()
