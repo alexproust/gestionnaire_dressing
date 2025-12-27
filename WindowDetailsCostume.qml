@@ -19,8 +19,8 @@ Rectangle {
     property string emplacement: ""
     property bool editMode: false
     property var filter: ({})
-    width: parent.width - 100
-    height: parent.height - 100
+    width: parent.width - 200
+    height: parent.height - 200
     anchors.centerIn: parent
     radius: 50
     visible: false
@@ -31,8 +31,8 @@ Rectangle {
     signal emprunterCostume()
 
     MouseArea {
-        width: parent.width + 100
-        height: parent.height + 100
+        width: parent.width + 200
+        height: parent.height + 200
         anchors.centerIn: parent
         propagateComposedEvents: false
         hoverEnabled: true

@@ -32,13 +32,6 @@ Rectangle {
     color: Colors.bluegrey100
     signal recordModification()
 
-    Component.onCompleted:
-    {
-        console.log("jourNow : " + jourNow)
-        console.log("moisNow : " + moisNow)
-        console.log("anneeNow : " + anneeNow)
-    }
-
     onCostumeSelectedChanged:
     {
         if (costumeSelected.id === undefined)
@@ -48,8 +41,8 @@ Rectangle {
     }
 
     MouseArea {
-        width: parent.width + 400
-        height: parent.height + 400
+        width: parent.width + 800
+        height: parent.height + 600
         anchors.centerIn: parent
         propagateComposedEvents: false
         hoverEnabled: true
