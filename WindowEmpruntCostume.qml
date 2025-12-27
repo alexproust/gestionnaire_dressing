@@ -93,6 +93,16 @@ Rectangle {
         }
     }
 
+    Text {
+        Layout.fillWidth: true
+        text: parseInt(costumeSelected.id,10)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.margins: 16
+        font: Fonts.title3
+    }
+
     Button {
         text: windowEmpruntCostume.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
@@ -121,19 +131,12 @@ Rectangle {
     ColumnLayout {
         id: row
         Layout.preferredHeight: parent.height
-        Layout.alignment: Qt.AlignVCenter
+        Layout.alignment: Qt.AlignHCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        anchors.top: modificationButton.bottom
-        anchors.left: parent.left
-        anchors.margins: 60
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 12
-
-        Text {
-            Layout.fillWidth: true
-            text: "Identifiant: " + parseInt(costumeSelected.id,10)
-            font: Fonts.subtitle1
-        }
 
         Text {
             id: nameText

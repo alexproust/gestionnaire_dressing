@@ -107,6 +107,16 @@ Rectangle {
         }
     }
 
+    Text {
+        Layout.fillWidth: true
+        text: parseInt(costumeSelected.id,10)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.margins: 16
+        font: Fonts.title3
+    }
+
     Button {
         text: windowDetailsCostume.editMode ? "Sauvegarder" : "Fermer"
         anchors.right: parent.right
@@ -154,25 +164,21 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 12
-            Text {
-                Layout.fillWidth: true
-                text: "Identifiant: " + parseInt(costumeSelected.id,10)
-                font: Fonts.subtitle1
-            }
+            Layout.topMargin: 40
 
             RowLayout {
                 Text {
                     id: typeText
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Type: " + costumeSelected.type : "Type: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.type ? "Type: " + costumeSelected.type : "Type: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
                 ComboBox {
                     id: typeSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.type
                     // onCurrentIndexChanged: {
@@ -192,8 +198,8 @@ Rectangle {
             RowLayout {
                 Text {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Description: " + costumeSelected.description : "Description: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.description ? "Description: " + costumeSelected.description : "Description: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -201,7 +207,7 @@ Rectangle {
                     id: descriptionInput
                     text: windowDetailsCostume.description
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     onTextChanged: {
                         if (windowDetailsCostume.editMode) {
@@ -215,8 +221,8 @@ Rectangle {
                 Text {
                     id: genreText
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Genre: " + costumeSelected.genre : "Genre: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.genre ? "Genre: " + costumeSelected.genre : "Genre: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -224,7 +230,7 @@ Rectangle {
                 ComboBox {
                     id: genreSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.genre
                     // onCurrentIndexChanged: {
@@ -243,15 +249,15 @@ Rectangle {
             RowLayout {
                 Text {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Mode: " + costumeSelected.mode : "Mode: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.mode ? "Mode: " + costumeSelected.mode : "Mode: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
                 ComboBox {
                     id: modeSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.mode
                     // onCurrentIndexChanged: {
@@ -270,8 +276,8 @@ Rectangle {
             RowLayout {
                 Text {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Epoque: " + costumeSelected.epoque : "Epoque: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.epoque ? "Epoque: " + costumeSelected.epoque : "Epoque: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -279,7 +285,7 @@ Rectangle {
                     id: epoqueInput
                     text: costumeSelected.epoque ? costumeSelected.epoque : ""
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     onTextChanged: {
                         windowDetailsCostume.epoque = text
@@ -291,8 +297,8 @@ Rectangle {
                 Text {
                     id: couleurText
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Couleur: " + costumeSelected.couleur : "Couleur: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.couleur ? "Couleur: " + costumeSelected.couleur : "Couleur: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -300,7 +306,7 @@ Rectangle {
                 ComboBox {
                     id: couleurSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.couleur
                     // onCurrentIndexChanged: {
@@ -320,8 +326,8 @@ Rectangle {
                 Text {
                     id: tailleText
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Taille: " + costumeSelected.taille : "Taille: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.taille ? "Taille: " + costumeSelected.taille : "Taille: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -329,7 +335,7 @@ Rectangle {
                 ComboBox {
                     id: tailleSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.taille
                     // onCurrentIndexChanged: {
@@ -349,8 +355,8 @@ Rectangle {
                 Text {
                     id: etatText
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
-                    text: !windowDetailsCostume.editMode ? "Etat: " + costumeSelected.etat : "Etat: "
+                    // Layout.preferredHeight: 64
+                    text: !windowDetailsCostume.editMode && costumeSelected.etat ? "Etat: " + costumeSelected.etat : "Etat: "
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
                 }
@@ -358,7 +364,7 @@ Rectangle {
                 ComboBox {
                     id: etatSelected
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     visible: windowDetailsCostume.editMode
                     model: filter.etat
                     // onCurrentIndexChanged: {
@@ -397,7 +403,7 @@ Rectangle {
             RowLayout {
                 Text {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 64
+                    // Layout.preferredHeight: 64
                     text: costumeSelected.emprunteur ? "Emprunteur: " + costumeSelected.emprunteur : "Disponible à l'emprunt"
                     font: Fonts.body1
                     wrapMode: Text.WordWrap
