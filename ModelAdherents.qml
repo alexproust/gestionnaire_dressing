@@ -5,10 +5,6 @@ import "Database.js" as JS
 DelegateModel {
     id: modelAdherents
 
-    property alias listModel: listEmprunterModel
-
-    items.onChanged: update()
-
     function update() {
         if (items.count > 0) {
             items.setGroups(0, items.count, "items");
@@ -31,30 +27,22 @@ DelegateModel {
             }
         }
     }
-    model : ListModel {
-        id: listEmprunterModel
-        Component.onCompleted: {
-            listEmprunterModel.update()
-        }
 
-        function update(){
-            JS.dbReadAllAdherents()
-        }
-    }
+    model: api.adherents
 
     filterOnGroup: "visible"
 
     groups : [
         DelegateModelGroup {
             name: "visible"
-            includeByDefault: false
+            includeByDefault: true
         }
     ]
 
     delegate: TileAdherent {
         id: tile
         onTileSelect: {
-            windowDetailsAdherent.adherentSelected = listEmprunterModel.get(index)
+            windowDetailsAdherent.adherentSelected = items.get(index).model.modelData
             windowDetailsAdherent.visible = true
         }
     }

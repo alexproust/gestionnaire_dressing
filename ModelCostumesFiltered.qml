@@ -14,8 +14,6 @@ DelegateModel {
 
     property date currentDate: new Date()
 
-    property alias listModel: listModelTile
-
     onTypeSelectedChanged: update()
     onGenreSelectedChanged: update()
     onCouleurSelectedChanged: update()
@@ -45,7 +43,7 @@ DelegateModel {
             returnValue = returnValue & (item.etat.toUpperCase() === etatSelected);
         }
         if (idSearch != 0){
-            returnValue = returnValue & (item.id === idSearch);
+            returnValue = returnValue & (parseInt(item.id,10) === idSearch);
         }
         return returnValue
     }
@@ -59,7 +57,7 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (filterAcceptsItem(item.model)) {
+            if (filterAcceptsItem(item.model.modelData)) {
                 visible.push(item);
             }
         }
@@ -74,19 +72,7 @@ DelegateModel {
         }
     }
 
-
-    model : ListModel {
-        id: listModelTile
-        Component.onCompleted: {
-            listModelTile.update()
-            modelCostumesFiltered.update()
-        }
-
-        function update(){
-            JS.dbReadAll()
-            modelCostumesFiltered.update()
-        }
-    }
+    model : api.items
 
     filterOnGroup: "visible"
 
@@ -100,7 +86,7 @@ DelegateModel {
     delegate: TileCostume {
         id: tile
         onTileSelect: {
-            windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(listModel.get(index).id)
+            windowDetailsCostume.costumeSelected = items.get(index).model.modelData
             windowDetailsCostume.visible = true
         }
     }

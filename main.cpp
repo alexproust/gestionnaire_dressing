@@ -1,12 +1,18 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QDir>
+#include "apiclient.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    ApiClient api;
+    engine.rootContext()->setContextProperty("api", &api);
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

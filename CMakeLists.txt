@@ -27,6 +27,8 @@ QML_FILES ModelAdherents.qml
 QML_FILES TileAdherent.qml
 QML_FILES WindowDetailsAdherent.qml
 QML_FILES ModelCostumesOfOneAdherent.qml
+QML_FILES
+SOURCES apiclient.h apiclient.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

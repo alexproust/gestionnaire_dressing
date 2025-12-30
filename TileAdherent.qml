@@ -54,7 +54,7 @@ Rectangle {
         RowLayout{
             Text {
                 Layout.fillWidth: true
-                text: name
+                text: modelData.name
                 font: Fonts.subtitle2
             }
         }

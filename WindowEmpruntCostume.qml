@@ -25,7 +25,7 @@ Rectangle {
     property string anneeNowStr : Qt.formatDate(new Date(), "yyyy")
     property int anneeNow : parseInt(anneeNowStr, 10)
     width: parent.width - 800
-    height: parent.height - 600
+    height: parent.height - 500
     anchors.centerIn: parent
     radius: 50
     visible: false

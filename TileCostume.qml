@@ -55,13 +55,13 @@ Rectangle {
         RowLayout{
             Text {
                 Layout.fillWidth: true
-                text: id
+                text: parseInt(modelData.id,10)
                 font: Fonts.subtitle1
             }
 
             Text {
                 Layout.fillWidth: true
-                text: type ?  type : ""
+                text: modelData.type ? modelData.type : ""
                 font: Fonts.subtitle1
                 wrapMode: Text.WordWrap
             }
@@ -72,21 +72,21 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: genre ? genre : ""
+                text: modelData.genre ? modelData.genre : ""
                 font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: taille ? taille : ""
+                text: modelData.taille ? modelData.taille : ""
                 font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 64
-                text: couleur ? couleur : ""
+                text: modelData.couleur ? modelData.couleur : ""
                 font: Fonts.body2
                 wrapMode: Text.WordWrap
             }
