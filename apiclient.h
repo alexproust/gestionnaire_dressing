@@ -17,18 +17,22 @@ public:
     explicit ApiClient(QObject *parent = nullptr);
 
     Q_INVOKABLE void loadItems();
-    Q_INVOKABLE void loadAdherents();
+    Q_INVOKABLE void loadItem(int id);
+    Q_INVOKABLE void addItem();
+    Q_INVOKABLE void deleteItem(QString id);
+    Q_INVOKABLE void loadAdherents();    
 
     QVariantList items() const { return m_items; }
     QVariantList adherents() const { return m_adherents; }
 
 signals:
     void itemsChanged();
+    void itemLoaded(const QVariantMap &item);
+    void itemAdded(int id);
     void adherentsChanged();
     void error(QString message);
 
 private slots:
-    void onReply(QNetworkReply *reply);
     void onReplyAdherents(QNetworkReply *reply);
 
 private:

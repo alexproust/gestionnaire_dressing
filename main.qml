@@ -40,6 +40,17 @@ AppliQuantum {
         function onAdherentsChanged() {
             modelAdherents.update()
         }
+        function onItemLoaded(item) {
+            console.log("Item loaded:", JSON.stringify(item))
+            windowDetailsCostume.costumeSelected = item
+        }
+        function onItemAdded(id) {
+            console.log("Nouvel item ajouté, id =", id)
+            api.loadItem(id)
+            windowDetailsCostume.visible = true
+            windowDetailsCostume.editMode = true
+            windowDetailsCostume.description = ""
+        }
     }
 
 
@@ -69,13 +80,7 @@ AppliQuantum {
                 filter: root.filterTemplate
 
                 onAddSelect: {
-                    let rowid = JS.dbInsert()
-                    let newId = JS.dbSetId(rowid)
-                    windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
-                    windowDetailsCostume.visible = true
-                    windowDetailsCostume.editMode = true
-                    windowDetailsCostume.description = ""
-                    // modelCostumesFiltered.listModel.update()
+                    api.addItem()
                 }
 
                 onInStockSelectChanged:     modelCostumesFiltered.inStockSelected =   filtersSidebar.inStockSelect
@@ -132,19 +137,18 @@ AppliQuantum {
         id: windowDetailsCostume
         filter: root.filterTemplate
         onRecordModification: {
-            JS.dbUpdate(windowDetailsCostume.costumeSelected);
+            // JS.dbUpdate(windowDetailsCostume.costumeSelected);
             // modelCostumesFiltered.listModel.update()
         }
         onDeleteCostume: {
-            JS.dbDeleteRow(costumeSelected.id)
+            api.deleteItem(costumeSelected.id)
             windowDetailsCostume.visible = false
-            // modelCostumesFiltered.listModel.update()
         }
         onDuplicateCostume: {
-            let rowid = JS.dbInsert();
-            let newId = JS.dbSetCostumeAtRowId(rowid, JS.dbGetCostumeWithId(costumeSelected.id));
+            // let rowid = JS.dbInsert();
+            // let newId = JS.dbSetCostumeAtRowId(rowid, JS.dbGetCostumeWithId(costumeSelected.id));
             // modelCostumesFiltered.listModel.update()
-            windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
+            // windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
             windowDetailsCostume.visible = true
             windowDetailsCostume.editMode = true
             windowDetailsCostume.type =  windowDetailsCostume.costumeSelected.type
@@ -175,7 +179,7 @@ AppliQuantum {
         id: windowEmpruntCostume
         aderents: modelAdherents.listModel
         onRecordModification: {
-            JS.dbUpdate(costumeSelected);
+            //JS.dbUpdate(costumeSelected);
             // modelCostumesFiltered.listModel.update()
             costumeSelected = windowDetailsCostume.costumeSelected
             windowDetailsCostume.costumeSelected = costumeSelected
@@ -184,7 +188,6 @@ AppliQuantum {
     }
 
     Component.onCompleted: {
-        // JS.dbInit()
         api.loadItems()
         api.loadAdherents()
     }

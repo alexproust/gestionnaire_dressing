@@ -31,16 +31,16 @@ DelegateModel {
             returnValue = returnValue & (item.type.toUpperCase() === typeSelected);
         }
         if (genreSelected !== ""){
-            returnValue = returnValue & (item.genre.toUpperCase() === genreSelected);
+            returnValue = returnValue & (item.genre && item.genre.toUpperCase() === genreSelected);
         }
         if (couleurSelected !== ""){
-            returnValue = returnValue & (item.couleur.toUpperCase() === couleurSelected);
+            returnValue = returnValue & (item.couleur && item.couleur.toUpperCase() === couleurSelected);
         }
         if (tailleSelected !== ""){
-            returnValue = returnValue & (item.taille.toUpperCase() === tailleSelected);
+            returnValue = returnValue & (item.taille && item.taille.toUpperCase() === tailleSelected);
         }
         if (etatSelected !== ""){
-            returnValue = returnValue & (item.etat.toUpperCase() === etatSelected);
+            returnValue = returnValue & (item.etat && item.etat.toUpperCase() === etatSelected);
         }
         if (idSearch != 0){
             returnValue = returnValue & (parseInt(item.id,10) === idSearch);
