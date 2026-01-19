@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE void loadItems();
     Q_INVOKABLE void loadItem(int id);
     Q_INVOKABLE void addItem();
+    Q_INVOKABLE void duplicateItem(QJsonObject item);
+    Q_INVOKABLE void updateItem(QJsonObject item);
     Q_INVOKABLE void deleteItem(QString id);
     Q_INVOKABLE void loadAdherents();    
 
@@ -27,6 +29,7 @@ public:
 
 signals:
     void itemsChanged();
+    void itemChanged(QJsonObject costume);
     void itemLoaded(const QVariantMap &item);
     void itemAdded(int id);
     void adherentsChanged();

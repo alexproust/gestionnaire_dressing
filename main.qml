@@ -37,6 +37,10 @@ AppliQuantum {
             console.log("update")
             modelCostumesFiltered.update()
         }
+        function onItemChanged(item) {
+            console.log("Item changed:", JSON.stringify(item))
+            windowDetailsCostume.costumeSelected = item
+        }
         function onAdherentsChanged() {
             modelAdherents.update()
         }
@@ -137,6 +141,7 @@ AppliQuantum {
         id: windowDetailsCostume
         filter: root.filterTemplate
         onRecordModification: {
+            api.updateItem(windowDetailsCostume.costumeSelected)
             // JS.dbUpdate(windowDetailsCostume.costumeSelected);
             // modelCostumesFiltered.listModel.update()
         }
@@ -145,20 +150,7 @@ AppliQuantum {
             windowDetailsCostume.visible = false
         }
         onDuplicateCostume: {
-            // let rowid = JS.dbInsert();
-            // let newId = JS.dbSetCostumeAtRowId(rowid, JS.dbGetCostumeWithId(costumeSelected.id));
-            // modelCostumesFiltered.listModel.update()
-            // windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(newId)
-            windowDetailsCostume.visible = true
-            windowDetailsCostume.editMode = true
-            windowDetailsCostume.type =  windowDetailsCostume.costumeSelected.type
-            windowDetailsCostume.description = windowDetailsCostume.costumeSelected.description
-            windowDetailsCostume.genre =  windowDetailsCostume.costumeSelected.genre
-            windowDetailsCostume.mode =  windowDetailsCostume.costumeSelected.mode
-            windowDetailsCostume.epoque = windowDetailsCostume.costumeSelected.epoque
-            windowDetailsCostume.couleur =  windowDetailsCostume.costumeSelected.couleur
-            windowDetailsCostume.taille =  windowDetailsCostume.costumeSelected.taille
-            windowDetailsCostume.etat =  windowDetailsCostume.costumeSelected.etat
+            api.duplicateItem(windowDetailsCostume.costumeSelected)
         }
         onEmprunterCostume: {
             windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
@@ -179,11 +171,10 @@ AppliQuantum {
         id: windowEmpruntCostume
         aderents: modelAdherents.listModel
         onRecordModification: {
-            //JS.dbUpdate(costumeSelected);
-            // modelCostumesFiltered.listModel.update()
+            api.updateItem(windowDetailsCostume.costumeSelected)
+
             costumeSelected = windowDetailsCostume.costumeSelected
             windowDetailsCostume.costumeSelected = costumeSelected
-            // windowDetailsAdherent.modelCostumesOfOneAdherent.listModel.update()
         }
     }
 

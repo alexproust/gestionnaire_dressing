@@ -1,6 +1,8 @@
 #include "apiclient.h"
 #include <QDebug>
 
+QString baseUrl = "https://qml-api.galetsjade.workers.dev";
+
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent)
 {
@@ -10,7 +12,7 @@ ApiClient::ApiClient(QObject *parent)
 
 void ApiClient::loadItems()
 {
-    QNetworkRequest req(QUrl("https://qml-api.galetsjade.workers.dev/costume"));
+    QNetworkRequest req(QUrl(baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply *reply = m_manager.get(req);
@@ -49,7 +51,7 @@ void ApiClient::addItem()
     QJsonObject obj;
 
     QNetworkReply *reply =
-        m_manager.post(req, QJsonDocument(obj).toJson());
+        m_manager.post(req, QJsonDocument(obj).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         QVariant status =
@@ -93,6 +95,106 @@ void ApiClient::addItem()
     });
 }
 
+void ApiClient::updateItem(QJsonObject item)
+{
+    qDebug() << "[ApiClient] updateItem" << item["id"].toString();
+
+    QNetworkRequest req(QUrl(baseUrl + "/costume/" + item["id"].toString()));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    // req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
+
+    QNetworkReply *reply =
+        m_manager.put(req, QJsonDocument(item).toJson(QJsonDocument::Compact));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        QVariant status =
+            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+        QByteArray data = reply->readAll();
+        qDebug() << "HTTP status =" << status.toInt();
+        qDebug() << "[PUT response]" << data;
+
+        if (data.isEmpty()) {
+            qWarning() << "Empty response body";
+            reply->deleteLater();
+            return;
+        }
+
+        if (reply->error() != QNetworkReply::NoError) {
+            emit error(reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (!doc.isObject()) {
+            qWarning() << "Invalid JSON response";
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonObject res = doc.object();
+
+        QJsonObject costume = res["costume"].toObject();
+
+        qDebug() << "Update item =" << costume;
+        emit itemChanged(costume);
+
+        loadItems();
+        reply->deleteLater();
+    });
+}
+
+void ApiClient::duplicateItem(QJsonObject item)
+{
+    qDebug() << "[ApiClient] duplicateItem" << item;
+
+    QNetworkRequest req(QUrl("https://qml-api.galetsjade.workers.dev/costume"));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply =
+        m_manager.post(req, QJsonDocument(item).toJson(QJsonDocument::Compact));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        QVariant status =
+            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+        QByteArray data = reply->readAll();
+        qDebug() << "HTTP status =" << status.toInt();
+        qDebug() << "[POST response]" << data;
+
+        if (data.isEmpty()) {
+            qWarning() << "Empty response body";
+            reply->deleteLater();
+            return;
+        }
+
+        if (reply->error() != QNetworkReply::NoError) {
+            emit error(reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (!doc.isObject()) {
+            qWarning() << "Invalid JSON response";
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonObject res = doc.object();
+
+        int id = res["id"].isString()
+                     ? res["id"].toString().toInt()
+                     : res["id"].toInt();
+
+        qDebug() << "New item id =" << id;
+        emit itemAdded(id);
+
+        loadItems();
+        reply->deleteLater();
+    });
+}
 
 void ApiClient::loadItem(int id)
 {
