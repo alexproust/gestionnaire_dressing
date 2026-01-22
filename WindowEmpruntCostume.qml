@@ -60,10 +60,10 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (!windowEmpruntCostume.editMode)
-            {
-                emprunteur = costumeSelected.emprunteur
-            }
+            // if (!windowEmpruntCostume.editMode)
+            // {
+            //     emprunteur = costumeSelected.emprunteur
+            // }
             windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
         }
     }
@@ -151,19 +151,24 @@ Rectangle {
             Layout.fillWidth: true
             // Layout.preferredHeight: 64
             visible: windowEmpruntCostume.editMode
-            model: aderents
-            onCurrentIndexChanged: {
-                emprunteur =  valueAt(currentIndex)
-                console.log("onCurrentIndexChanged emprunteur = " + emprunteur)
+            model: api.adherents
+            textRole: "name"
+            // onCurrentIndexChanged: (index) => {
+            //     const item = nameSelected.model[index]
+            //     emprunteur =  valueAt(index)
+            //     console.log("onCurrentIndexChanged emprunteur = " + emprunteur)
+            // }
+            onActivated: (index) => {
+                const item = nameSelected.model[index]
+                emprunteur = item.name
+                console.log("onActivated emprunteur = " + emprunteur)
             }
-            onActivated: {
-                emprunteur = currentText
-                console.log("onActivated emprunteur = " +  currentText)
-            }
-            onVisibleChanged: {
-                currentIndex = indexOfValue(emprunteur)
-                console.log("onVisibleChanged emprunteur index = " + currentIndex)
-            }
+
+            // onVisibleChanged: (index) => {
+            //     const item = nameSelected.model[index]
+            //     currentIndex = indexOfValue(item.name)
+            //     console.log("onVisibleChanged emprunteur index = " + currentIndex)
+            // }
         }
 
         Text {

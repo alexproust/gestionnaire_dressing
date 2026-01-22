@@ -33,24 +33,26 @@ AppliQuantum {
     Connections {
         target: api
         function onError(msg) { console.log("API error:", msg) }
-        function onItemsChanged() {
-            console.log("update")
+        function onCostumesChanged() {
+            console.log("Update all costumes")
             modelCostumesFiltered.update()
         }
-        function onItemChanged(item) {
-            console.log("Item changed:", JSON.stringify(item))
-            windowDetailsCostume.costumeSelected = item
+        function onCostumeChanged(costume) {
+            console.log("Costume changed:", JSON.stringify(costume))
+            windowDetailsCostume.costumeSelected = costume
+            windowEmpruntCostume.costumeSelected = costume
         }
         function onAdherentsChanged() {
+            console.log("Update all adherants")
             modelAdherents.update()
         }
-        function onItemLoaded(item) {
-            console.log("Item loaded:", JSON.stringify(item))
-            windowDetailsCostume.costumeSelected = item
+        function onCostumeLoaded(costume) {
+            console.log("Costume loaded:", JSON.stringify(costume))
+            windowDetailsCostume.costumeSelected = costume
         }
-        function onItemAdded(id) {
-            console.log("Nouvel item ajouté, id =", id)
-            api.loadItem(id)
+        function onCostumeAdded(id) {
+            console.log("New costume added, id =", id)
+            api.loadCostume(id)
             windowDetailsCostume.visible = true
             windowDetailsCostume.editMode = true
             windowDetailsCostume.description = ""
@@ -84,7 +86,7 @@ AppliQuantum {
                 filter: root.filterTemplate
 
                 onAddSelect: {
-                    api.addItem()
+                    api.addCostume()
                 }
 
                 onInStockSelectChanged:     modelCostumesFiltered.inStockSelected =   filtersSidebar.inStockSelect
@@ -141,16 +143,14 @@ AppliQuantum {
         id: windowDetailsCostume
         filter: root.filterTemplate
         onRecordModification: {
-            api.updateItem(windowDetailsCostume.costumeSelected)
-            // JS.dbUpdate(windowDetailsCostume.costumeSelected);
-            // modelCostumesFiltered.listModel.update()
+            api.updateCostume(windowDetailsCostume.costumeSelected)
         }
         onDeleteCostume: {
-            api.deleteItem(costumeSelected.id)
+            api.deleteCostume(costumeSelected.id)
             windowDetailsCostume.visible = false
         }
         onDuplicateCostume: {
-            api.duplicateItem(windowDetailsCostume.costumeSelected)
+            api.duplicateCostume(windowDetailsCostume.costumeSelected)
         }
         onEmprunterCostume: {
             windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
@@ -169,17 +169,14 @@ AppliQuantum {
 
     WindowEmpruntCostume{
         id: windowEmpruntCostume
-        aderents: modelAdherents.listModel
+        aderents: modelAdherents
         onRecordModification: {
-            api.updateItem(windowDetailsCostume.costumeSelected)
-
-            costumeSelected = windowDetailsCostume.costumeSelected
-            windowDetailsCostume.costumeSelected = costumeSelected
+            api.updateCostume(windowDetailsCostume.costumeSelected)
         }
     }
 
     Component.onCompleted: {
-        api.loadItems()
+        api.loadCostumes()
         api.loadAdherents()
     }
 }

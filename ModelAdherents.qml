@@ -14,7 +14,7 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (item.model.name !== "")
+            if (item.model.modelData.name !== "")
                 visible.push(item);
         }
 

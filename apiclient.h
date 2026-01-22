@@ -10,28 +10,28 @@
 class ApiClient : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
+    Q_PROPERTY(QVariantList costumes READ costumes NOTIFY costumesChanged)
     Q_PROPERTY(QVariantList adherents READ adherents NOTIFY adherentsChanged)
 
 public:
     explicit ApiClient(QObject *parent = nullptr);
 
-    Q_INVOKABLE void loadItems();
-    Q_INVOKABLE void loadItem(int id);
-    Q_INVOKABLE void addItem();
-    Q_INVOKABLE void duplicateItem(QJsonObject item);
-    Q_INVOKABLE void updateItem(QJsonObject item);
-    Q_INVOKABLE void deleteItem(QString id);
+    Q_INVOKABLE void loadCostumes();
+    Q_INVOKABLE void loadCostume(int id);
+    Q_INVOKABLE void addCostume();
+    Q_INVOKABLE void duplicateCostume(QJsonObject costume);
+    Q_INVOKABLE void updateCostume(QJsonObject costume);
+    Q_INVOKABLE void deleteCostume(QString id);
     Q_INVOKABLE void loadAdherents();    
 
-    QVariantList items() const { return m_items; }
+    QVariantList costumes() const { return m_costumes; }
     QVariantList adherents() const { return m_adherents; }
 
 signals:
-    void itemsChanged();
-    void itemChanged(QJsonObject costume);
-    void itemLoaded(const QVariantMap &item);
-    void itemAdded(int id);
+    void costumesChanged();
+    void costumeChanged(QJsonObject costume);
+    void costumeLoaded(const QVariantMap &costume);
+    void costumeAdded(int id);
     void adherentsChanged();
     void error(QString message);
 
@@ -41,6 +41,6 @@ private slots:
 private:
     QNetworkAccessManager m_manager;
     QNetworkAccessManager m_managerAdherent;
-    QVariantList m_items;
+    QVariantList m_costumes;
     QVariantList m_adherents;
 };

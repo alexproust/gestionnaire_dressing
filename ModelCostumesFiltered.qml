@@ -72,7 +72,7 @@ DelegateModel {
         }
     }
 
-    model : api.items
+    model : api.costumes
 
     filterOnGroup: "visible"
 

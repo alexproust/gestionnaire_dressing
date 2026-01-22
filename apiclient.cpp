@@ -10,7 +10,7 @@ ApiClient::ApiClient(QObject *parent)
             this, &ApiClient::onReplyAdherents);
 }
 
-void ApiClient::loadItems()
+void ApiClient::loadCostumes()
 {
     QNetworkRequest req(QUrl(baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -33,19 +33,19 @@ void ApiClient::loadItems()
             return;
         }
 
-        m_items.clear();
+        m_costumes.clear();
         for (const QJsonValue &v : doc.array())
-            m_items.append(v.toObject().toVariantMap());
+            m_costumes.append(v.toObject().toVariantMap());
 
-        emit itemsChanged();
+        emit costumesChanged();
         reply->deleteLater();
     });
 }
 
 
-void ApiClient::addItem()
+void ApiClient::addCostume()
 {
-    QNetworkRequest req(QUrl("https://qml-api.galetsjade.workers.dev/costume"));
+    QNetworkRequest req(QUrl(baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject obj;
@@ -87,24 +87,24 @@ void ApiClient::addItem()
                      ? res["id"].toString().toInt()
                      : res["id"].toInt();
 
-        qDebug() << "New item id =" << id;
-        emit itemAdded(id);
+        qDebug() << "New costume id =" << id;
+        emit costumeAdded(id);
 
-        loadItems();
+        loadCostumes();
         reply->deleteLater();
     });
 }
 
-void ApiClient::updateItem(QJsonObject item)
+void ApiClient::updateCostume(QJsonObject costume)
 {
-    qDebug() << "[ApiClient] updateItem" << item["id"].toString();
+    qDebug() << "[ApiClient] updateCostume" << costume["id"].toString();
 
-    QNetworkRequest req(QUrl(baseUrl + "/costume/" + item["id"].toString()));
+    QNetworkRequest req(QUrl(baseUrl + "/costume/" + costume["id"].toString()));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     // req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
 
     QNetworkReply *reply =
-        m_manager.put(req, QJsonDocument(item).toJson(QJsonDocument::Compact));
+        m_manager.put(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         QVariant status =
@@ -137,23 +137,23 @@ void ApiClient::updateItem(QJsonObject item)
 
         QJsonObject costume = res["costume"].toObject();
 
-        qDebug() << "Update item =" << costume;
-        emit itemChanged(costume);
+        qDebug() << "Update costume =" << costume;
+        emit costumeChanged(costume);
 
-        loadItems();
+        loadCostumes();
         reply->deleteLater();
     });
 }
 
-void ApiClient::duplicateItem(QJsonObject item)
+void ApiClient::duplicateCostume(QJsonObject costume)
 {
-    qDebug() << "[ApiClient] duplicateItem" << item;
+    qDebug() << "[ApiClient] duplicateCostume" << costume;
 
-    QNetworkRequest req(QUrl("https://qml-api.galetsjade.workers.dev/costume"));
+    QNetworkRequest req(QUrl(baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply *reply =
-        m_manager.post(req, QJsonDocument(item).toJson(QJsonDocument::Compact));
+        m_manager.post(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         QVariant status =
@@ -188,20 +188,20 @@ void ApiClient::duplicateItem(QJsonObject item)
                      ? res["id"].toString().toInt()
                      : res["id"].toInt();
 
-        qDebug() << "New item id =" << id;
-        emit itemAdded(id);
+        qDebug() << "New costume id =" << id;
+        emit costumeAdded(id);
 
-        loadItems();
+        loadCostumes();
         reply->deleteLater();
     });
 }
 
-void ApiClient::loadItem(int id)
+void ApiClient::loadCostume(int id)
 {
-    qDebug() << "[ApiClient] loadItem" << id;
+    qDebug() << "[ApiClient] loadCostume" << id;
 
     QNetworkRequest req(
-        QUrl(QString("https://qml-api.galetsjade.workers.dev/costume/%1").arg(id))
+        QUrl(QString(baseUrl + "/costume/%1").arg(id))
         );
 
     QNetworkReply *reply = m_manager.get(req);
@@ -216,18 +216,18 @@ void ApiClient::loadItem(int id)
         QJsonObject obj =
             QJsonDocument::fromJson(reply->readAll()).object();
 
-        QVariantMap item;
+        QVariantMap costume;
         for (auto it = obj.begin(); it != obj.end(); ++it)
-            item[it.key()] = it.value().toVariant();
+            costume[it.key()] = it.value().toVariant();
 
-        emit itemLoaded(item);
+        emit costumeLoaded(costume);
         reply->deleteLater();
     });
 }
 
-void ApiClient::deleteItem(QString id)
+void ApiClient::deleteCostume(QString id)
 {
-    QNetworkRequest req(QUrl(QString("https://qml-api.galetsjade.workers.dev/costume/"+id)));
+    QNetworkRequest req(QUrl(QString(baseUrl + "/costume/"+id)));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QNetworkReply *reply = m_manager.deleteResource(req);
 
@@ -236,7 +236,7 @@ void ApiClient::deleteItem(QString id)
             emit error(reply->errorString());
         } else {
             qDebug() << "[ApiClient] delete OK";
-            loadItems();   // recharge la liste
+            loadCostumes();   // recharge la liste
         }
         reply->deleteLater();
     });
@@ -244,7 +244,7 @@ void ApiClient::deleteItem(QString id)
 
 void ApiClient::loadAdherents()
 {
-    QNetworkRequest req(QUrl("https://qml-api.galetsjade.workers.dev/adherent"));
+    QNetworkRequest req(QUrl(baseUrl + "/adherent"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     m_managerAdherent.get(req);
 }
@@ -269,7 +269,7 @@ void ApiClient::onReplyAdherents(QNetworkReply *reply)
     m_adherents.clear();
     for (const QJsonValue &v : doc.array()) {
         m_adherents.append(v.toObject().toVariantMap());
-        // qDebug() << "[ApiClient] m_items:" << v.toObject().toVariantMap();
+        qDebug() << "[ApiClient] m_costumes:" << v.toObject().toVariantMap();
     }
 
     qDebug() << "[ApiClient] emit adherentsChanged";
