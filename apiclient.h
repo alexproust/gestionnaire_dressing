@@ -12,9 +12,17 @@ class ApiClient : public QObject
     Q_OBJECT
     Q_PROPERTY(QVariantList costumes READ costumes NOTIFY costumesChanged)
     Q_PROPERTY(QVariantList adherents READ adherents NOTIFY adherentsChanged)
+    Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
+    Q_PROPERTY(QString baseUrl READ baseUrl WRITE setBaseUrl NOTIFY baseUrlChanged)
 
 public:
     explicit ApiClient(QObject *parent = nullptr);
+
+    QString baseUrl() const;
+    void setBaseUrl(const QString& v);
+
+    QString token() const;
+    void setToken(const QString& v);
 
     Q_INVOKABLE void loadCostumes();
     Q_INVOKABLE void loadCostume(int id);
@@ -34,13 +42,21 @@ signals:
     void costumeAdded(int id);
     void adherentsChanged();
     void error(QString message);
+    void tokenChanged();
+    void baseUrlChanged();
+
+    void requestOk(int httpStatus, QVariantMap json);
+    void requestError(int httpStatus, QString message, QString rawBody);
 
 private slots:
     void onReplyAdherents(QNetworkReply *reply);
+    void addAuthHeader(QNetworkRequest& req) const;
 
 private:
     QNetworkAccessManager m_manager;
     QNetworkAccessManager m_managerAdherent;
     QVariantList m_costumes;
     QVariantList m_adherents;
+    QString m_token;
+    QString m_baseUrl;
 };

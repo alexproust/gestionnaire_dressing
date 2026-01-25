@@ -1,8 +1,6 @@
 #include "apiclient.h"
 #include <QDebug>
 
-QString baseUrl = "https://qml-api.galetsjade.workers.dev";
-
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent)
 {
@@ -10,15 +8,36 @@ ApiClient::ApiClient(QObject *parent)
             this, &ApiClient::onReplyAdherents);
 }
 
+QString ApiClient::baseUrl() const { return m_baseUrl; }
+void ApiClient::setBaseUrl(const QString& v) { m_baseUrl = v; emit baseUrlChanged(); }
+
+QString ApiClient::token() const { return m_token; }
+
+void ApiClient::setToken(const QString& v) {
+    m_token = v.trimmed();
+    emit tokenChanged();
+}
+
+void ApiClient::addAuthHeader(QNetworkRequest& req) const {
+    const auto t = m_token.trimmed();
+    qDebug() << "Token length =" << t.size();   // doit être 64 pour 32 bytes hex
+    req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+}
+
 void ApiClient::loadCostumes()
 {
-    QNetworkRequest req(QUrl(baseUrl + "/costume"));
+    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
 
     QNetworkReply *reply = m_manager.get(req);
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         const QByteArray data = reply->readAll();
+        // qDebug() << "HTTP" << http
+        //          << "QtError" << reply->error() << reply->errorString()
+        //          << "Body" << data;
 
         if (reply->error() != QNetworkReply::NoError) {
             emit error(reply->errorString());
@@ -45,8 +64,9 @@ void ApiClient::loadCostumes()
 
 void ApiClient::addCostume()
 {
-    QNetworkRequest req(QUrl(baseUrl + "/costume"));
+    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
 
     QJsonObject obj;
 
@@ -98,9 +118,9 @@ void ApiClient::updateCostume(QJsonObject costume)
 {
     qDebug() << "[ApiClient] updateCostume" << costume["id"].toString();
 
-    QNetworkRequest req(QUrl(baseUrl + "/costume/" + costume["id"].toString()));
+    QNetworkRequest req(QUrl(m_baseUrl + "/costume/" + costume["id"].toString()));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    // req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
+    addAuthHeader(req);
 
     QNetworkReply *reply =
         m_manager.put(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
@@ -136,7 +156,7 @@ void ApiClient::updateCostume(QJsonObject costume)
 
         QJsonObject costume = res["costume"].toObject();
 
-        qDebug() << "Update costume =" << costume;
+        // qDebug() << "Update costume =" << costume;
         emit costumeChanged(costume);
 
         loadCostumes();
@@ -148,8 +168,9 @@ void ApiClient::duplicateCostume(QJsonObject costume)
 {
     qDebug() << "[ApiClient] duplicateCostume" << costume;
 
-    QNetworkRequest req(QUrl(baseUrl + "/costume"));
+    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
 
     QNetworkReply *reply =
         m_manager.post(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
@@ -200,8 +221,9 @@ void ApiClient::loadCostume(int id)
     qDebug() << "[ApiClient] loadCostume" << id;
 
     QNetworkRequest req(
-        QUrl(QString(baseUrl + "/costume/%1").arg(id))
+        QUrl(QString(m_baseUrl + "/costume/%1").arg(id))
         );
+    addAuthHeader(req);
 
     QNetworkReply *reply = m_manager.get(req);
 
@@ -226,8 +248,9 @@ void ApiClient::loadCostume(int id)
 
 void ApiClient::deleteCostume(QString id)
 {
-    QNetworkRequest req(QUrl(QString(baseUrl + "/costume/"+id)));
+    QNetworkRequest req(QUrl(QString(m_baseUrl + "/costume/"+id)));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
     QNetworkReply *reply = m_manager.deleteResource(req);
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
@@ -243,8 +266,9 @@ void ApiClient::deleteCostume(QString id)
 
 void ApiClient::loadAdherents()
 {
-    QNetworkRequest req(QUrl(baseUrl + "/adherent"));
+    QNetworkRequest req(QUrl(m_baseUrl + "/adherent"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
     m_managerAdherent.get(req);
 }
 
@@ -268,7 +292,7 @@ void ApiClient::onReplyAdherents(QNetworkReply *reply)
     m_adherents.clear();
     for (const QJsonValue &v : doc.array()) {
         m_adherents.append(v.toObject().toVariantMap());
-        qDebug() << "[ApiClient] m_costumes:" << v.toObject().toVariantMap();
+        // qDebug() << "[ApiClient] m_costumes:" << v.toObject().toVariantMap();
     }
 
     qDebug() << "[ApiClient] emit adherentsChanged";
