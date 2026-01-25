@@ -54,12 +54,11 @@ void ApiClient::addCostume()
         m_manager.post(req, QJsonDocument(obj).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        QVariant status =
-            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+        QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 
         QByteArray data = reply->readAll();
         qDebug() << "HTTP status ="
-                 << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                 << status.toInt();
         qDebug() << "[POST response]" << data;
 
         if (data.isEmpty()) {

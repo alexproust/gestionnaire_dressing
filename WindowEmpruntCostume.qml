@@ -38,7 +38,60 @@ Rectangle {
         {
             windowEmpruntCostume.visible = false
         }
+        else
+        {
+            emprunteur = costumeSelected.emprunteur
+            const idx = nameSelected.model.findIndex(p => p && p.name === emprunteur)
+            if (idx >= 0) nameSelected.currentIndex = idx
+            if (costumeSelected.emprunteur)
+            {
+                let dateEmprunt = splitDate(costumeSelected.date_emprunt)
+                if (dateEmprunt)
+                {
+                    jourEmprunt = dateEmprunt.jour
+                    moisEmprunt = dateEmprunt.mois
+                    anneeEmprunt = dateEmprunt.annee
+                }
+            }
+            else
+            {
+                let dateRetour = splitDate(costumeSelected.date_retour)
+                if (dateRetour)
+                {
+                    jourRetour = dateRetour.jour
+                    moisRetour = dateRetour.mois
+                    anneeRetour = dateRetour.annee
+                }
+            }
+        }
     }
+
+    function splitDate(dateStr) {
+        const parts = (dateStr || "").trim().split("/")
+        if (parts.length !== 3) return null
+
+        const jour  = parseInt(parts[0], 10)
+        const mois  = parseInt(parts[1], 10)
+        const annee = parseInt(parts[2], 10)
+
+        if (!Number.isFinite(jour) || !Number.isFinite(mois) || !Number.isFinite(annee))
+            return null
+
+        return { jour: jour, mois: mois, annee: annee }
+    }
+
+    function formatDate(jourStr, moisStr, anneeStr) {
+        const dateStr =  jourStr + "/" + moisStr + "/" + anneeStr
+        return dateStr
+    }
+
+    onJourEmpruntChanged: { daySelected.currentIndex = jourEmprunt - 1      }
+    onMoisEmpruntChanged: { monthSelected.currentIndex = moisEmprunt - 1    }
+    onAnneeEmpruntChanged:{ yearSelected.currentIndex = anneeEmprunt - 2024 }
+
+    onJourRetourChanged: { dayReturnSelected.currentIndex = jourRetour - 1      }
+    onMoisRetourChanged: { monthReturnSelected.currentIndex = moisRetour - 1    }
+    onAnneeRetourChanged:{ yearReturnSelected.currentIndex = anneeRetour - 2024 }
 
     MouseArea {
         width: parent.width + 800
@@ -47,9 +100,6 @@ Rectangle {
         propagateComposedEvents: false
         hoverEnabled: true
         preventStealing: true
-        onClicked: {
-            // parent.visible = false
-        }
         z: windowEmpruntCostume.z-1
     }
 
@@ -60,10 +110,6 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            // if (!windowEmpruntCostume.editMode)
-            // {
-            //     emprunteur = costumeSelected.emprunteur
-            // }
             windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
         }
     }
@@ -77,17 +123,20 @@ Rectangle {
         onClicked: {
             if (costumeSelected.emprunteur)
             {
-                nameSelected.currentIndex = 0
-                dayReturnSelected.currentIndex = jourNow - 1
-                monthReturnSelected.currentIndex = moisNow - 1
-                yearReturnSelected.currentIndex = anneeNow - 2024
+                nameSelected.currentIndex = nameSelected.count - 1
+                nameSelected.popup.close()
+                emprunteur = ""
+                jourRetour = jourNow
+                moisRetour = moisNow
+                anneeRetour = anneeNow
             }
             else
             {
-                nameSelected.currentIndex = 1
-                daySelected.currentIndex = jourNow - 1
-                monthSelected.currentIndex = moisNow - 1
-                yearSelected.currentIndex = anneeNow - 2024
+                nameSelected.currentIndex = -1
+                jourEmprunt = jourNow
+                moisEmprunt = moisNow
+                anneeEmprunt = anneeNow
+                nameSelected.popup.open()
             }
             windowEmpruntCostume.editMode = true
         }
@@ -113,11 +162,11 @@ Rectangle {
                 windowEmpruntCostume.editMode = !windowEmpruntCostume.editMode
                 costumeSelected.emprunteur = emprunteur
                 if (emprunteur){
-                    costumeSelected.date_emprunt = jourEmprunt + "/" + moisEmprunt + "/" + anneeEmprunt
+                    costumeSelected.date_emprunt = formatDate(jourEmprunt, moisEmprunt, anneeEmprunt)
                     costumeSelected.date_retour = ""
                 }
                 else {
-                    costumeSelected.date_retour = jourRetour + "/" + moisRetour + "/" + anneeRetour
+                    costumeSelected.date_retour = formatDate(jourRetour, moisRetour, anneeRetour)
                     costumeSelected.date_emprunt = ""
                 }
                 windowEmpruntCostume.recordModification()
@@ -141,7 +190,6 @@ Rectangle {
         Text {
             id: nameText
             Layout.fillWidth: true
-            // Layout.preferredHeight: 64
             text: !windowEmpruntCostume.editMode ? "Emprunteur: " + costumeSelected.emprunteur : "Emprunteur: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
@@ -149,32 +197,19 @@ Rectangle {
         ComboBox {
             id: nameSelected
             Layout.fillWidth: true
-            // Layout.preferredHeight: 64
             visible: windowEmpruntCostume.editMode
             model: api.adherents
             textRole: "name"
-            // onCurrentIndexChanged: (index) => {
-            //     const item = nameSelected.model[index]
-            //     emprunteur =  valueAt(index)
-            //     console.log("onCurrentIndexChanged emprunteur = " + emprunteur)
-            // }
             onActivated: (index) => {
                 const item = nameSelected.model[index]
                 emprunteur = item.name
                 console.log("onActivated emprunteur = " + emprunteur)
             }
-
-            // onVisibleChanged: (index) => {
-            //     const item = nameSelected.model[index]
-            //     currentIndex = indexOfValue(item.name)
-            //     console.log("onVisibleChanged emprunteur index = " + currentIndex)
-            // }
         }
 
         Text {
             id: dateEmpruntText
             Layout.fillWidth: true
-            // Layout.preferredHeight: 64
             text: !windowEmpruntCostume.editMode ? "Date Emprunt: " + costumeSelected.date_emprunt : "Date Emprunt: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
@@ -183,7 +218,6 @@ Rectangle {
             ComboBox {
                 id: daySelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
                     "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
@@ -191,55 +225,31 @@ Rectangle {
                     console.log("onActivated " +  currentValue)
                     jourEmprunt = currentValue
                 }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(jourEmprunt)
-                }
-                onCurrentIndexChanged: {
-                    jourEmprunt =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  jourEmprunt)
-                }
             }
             ComboBox {
                 id: monthSelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
                     moisEmprunt = currentValue
                 }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(moisEmprunt)
-                }
-                onCurrentIndexChanged: {
-                    moisEmprunt =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  moisEmprunt)
-                }
             }
             ComboBox {
                 id: yearSelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && emprunteur
                 model: ["2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
                     anneeEmprunt = currentValue
                 }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(anneeEmprunt)
-                }
-                onCurrentIndexChanged: {
-                    anneeEmprunt =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  anneeEmprunt)
-                }
             }
         }
         Text {
             id: dateRetourText
             Layout.fillWidth: true
-            // Layout.preferredHeight: 64
             text: !windowEmpruntCostume.editMode ? "Date Retour: " + costumeSelected.date_retour : "Date Retour: "
             font: Fonts.body1
             wrapMode: Text.WordWrap
@@ -248,7 +258,6 @@ Rectangle {
             ComboBox {
                 id: dayReturnSelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
                     "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
@@ -256,48 +265,25 @@ Rectangle {
                     console.log("onActivated " +  currentValue)
                     jourRetour = currentValue
                 }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(jourRetour)
-                }
-                onCurrentIndexChanged: {
-                    jourRetour =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  jourRetour)
-                }
             }
             ComboBox {
                 id: monthReturnSelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
                     moisRetour = currentValue
                 }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(moisRetour)
-                }
-                onCurrentIndexChanged: {
-                    moisRetour =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  moisRetour)
-                }
             }
             ComboBox {
                 id: yearReturnSelected
                 Layout.fillWidth: true
-                // Layout.preferredHeight: 64
                 visible: windowEmpruntCostume.editMode && !emprunteur
                 model: ["2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033"]
                 onActivated: {
                     console.log("onActivated " +  currentValue)
                     anneeRetour = currentValue
-                }
-                onVisibleChanged: {
-                    currentIndex = indexOfValue(anneeRetour)
-                }
-                onCurrentIndexChanged: {
-                    anneeRetour =  valueAt(currentIndex)
-                    console.log("onCurrentIndexChanged " +  anneeRetour)
                 }
             }
         }
