@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.LocalStorage 2.0
-import "Database.js" as JS
 
 DelegateModel {
     id: modelAdherents

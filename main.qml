@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls 2.15
 import QtQuick.LocalStorage 2.0
-import "Database.js" as JS
 
 import Theme.QUANTUM 1.0
 
