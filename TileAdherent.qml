@@ -12,10 +12,6 @@ Rectangle {
 
     layer.enabled: true
 
-    Component.onCompleted: {
-        // console.log("---------->> Tile Adherent completed : " + name )
-    }
-
     MouseArea {
         id: ma
         anchors.fill: parent
@@ -54,7 +50,7 @@ Rectangle {
         RowLayout{
             Text {
                 Layout.fillWidth: true
-                text: name
+                text: modelData.name
                 font: Fonts.subtitle2
             }
         }

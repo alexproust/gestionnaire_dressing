@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.LocalStorage 2.0
-import "Database.js" as JS
 
 DelegateModel {
     id: listCostumesBorrowedModel
@@ -8,13 +7,14 @@ DelegateModel {
     property date currentDate: new Date()
     property string adherentName: ""
 
-    property alias listModel: modelCostumesOfOneAdherent
-
     items.onChanged: update()
-    onAdherentNameChanged: modelCostumesOfOneAdherent.update()
+    onAdherentNameChanged: update()
 
     property var filterAcceptsItem: function(item){
-        var returnValue = true ;
+        var returnValue = false ;
+        if (adherentName !== "" && item.emprunteur){
+            returnValue = item.emprunteur.toUpperCase() === adherentName.toUpperCase();
+        }
         return returnValue
     }
 
@@ -27,7 +27,7 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (filterAcceptsItem(item.model)) {
+            if (filterAcceptsItem(item.model.modelData)) {
                 visible.push(item);
             }
         }
@@ -42,17 +42,7 @@ DelegateModel {
         }
     }
 
-
-    model : ListModel {
-        id: modelCostumesOfOneAdherent
-        // Component.onCompleted: {
-        //     modelCostumesOfOneAdherent.update()
-        // }
-
-        function update(){
-            JS.getListOfCostumeOfAdherent(adherentName)
-        }
-    }
+    model : api.costumes
 
     filterOnGroup: "visible"
 
@@ -67,7 +57,7 @@ DelegateModel {
         id: tile
         onTileSelect: {
             console.log("onTileSelected")
-            windowEmpruntCostume.costumeSelected = modelCostumesOfOneAdherent.get(index)
+            windowEmpruntCostume.costumeSelected = items.get(index).model.modelData
             windowEmpruntCostume.visible = true
         }
     }

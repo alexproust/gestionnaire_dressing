@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.LocalStorage 2.0
-import "Database.js" as JS
 
 DelegateModel {
     id: modelCostumesFiltered
@@ -13,8 +12,6 @@ DelegateModel {
     property bool inStockSelected: false
 
     property date currentDate: new Date()
-
-    property alias listModel: listModelTile
 
     onTypeSelectedChanged: update()
     onGenreSelectedChanged: update()
@@ -33,19 +30,19 @@ DelegateModel {
             returnValue = returnValue & (item.type.toUpperCase() === typeSelected);
         }
         if (genreSelected !== ""){
-            returnValue = returnValue & (item.genre.toUpperCase() === genreSelected);
+            returnValue = returnValue & (item.genre && item.genre.toUpperCase() === genreSelected);
         }
         if (couleurSelected !== ""){
-            returnValue = returnValue & (item.couleur.toUpperCase() === couleurSelected);
+            returnValue = returnValue & (item.couleur && item.couleur.toUpperCase() === couleurSelected);
         }
         if (tailleSelected !== ""){
-            returnValue = returnValue & (item.taille.toUpperCase() === tailleSelected);
+            returnValue = returnValue & (item.taille && item.taille.toUpperCase() === tailleSelected);
         }
         if (etatSelected !== ""){
-            returnValue = returnValue & (item.etat.toUpperCase() === etatSelected);
+            returnValue = returnValue & (item.etat && item.etat.toUpperCase() === etatSelected);
         }
         if (idSearch != 0){
-            returnValue = returnValue & (item.id === idSearch);
+            returnValue = returnValue & (parseInt(item.id,10) === idSearch);
         }
         return returnValue
     }
@@ -59,7 +56,7 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (filterAcceptsItem(item.model)) {
+            if (filterAcceptsItem(item.model.modelData)) {
                 visible.push(item);
             }
         }
@@ -74,19 +71,7 @@ DelegateModel {
         }
     }
 
-
-    model : ListModel {
-        id: listModelTile
-        Component.onCompleted: {
-            listModelTile.update()
-            modelCostumesFiltered.update()
-        }
-
-        function update(){
-            JS.dbReadAll()
-            modelCostumesFiltered.update()
-        }
-    }
+    model : api.costumes
 
     filterOnGroup: "visible"
 
@@ -100,7 +85,7 @@ DelegateModel {
     delegate: TileCostume {
         id: tile
         onTileSelect: {
-            windowDetailsCostume.costumeSelected = JS.dbGetCostumeWithId(listModel.get(index).id)
+            windowDetailsCostume.costumeSelected = items.get(index).model.modelData
             windowDetailsCostume.visible = true
         }
     }

@@ -1,13 +1,8 @@
 import QtQuick
 import QtQuick.LocalStorage 2.0
-import "Database.js" as JS
 
 DelegateModel {
     id: modelAdherents
-
-    property alias listModel: listEmprunterModel
-
-    items.onChanged: update()
 
     function update() {
         if (items.count > 0) {
@@ -18,7 +13,7 @@ DelegateModel {
         var visible = [];
         for (var i = 0; i < items.count; ++i) {
             var item = items.get(i);
-            if (item.model.name !== "")
+            if (item.model.modelData.name !== "")
                 visible.push(item);
         }
 
@@ -31,30 +26,22 @@ DelegateModel {
             }
         }
     }
-    model : ListModel {
-        id: listEmprunterModel
-        Component.onCompleted: {
-            listEmprunterModel.update()
-        }
 
-        function update(){
-            JS.dbReadAllAdherents()
-        }
-    }
+    model: api.adherents
 
     filterOnGroup: "visible"
 
     groups : [
         DelegateModelGroup {
             name: "visible"
-            includeByDefault: false
+            includeByDefault: true
         }
     ]
 
     delegate: TileAdherent {
         id: tile
         onTileSelect: {
-            windowDetailsAdherent.adherentSelected = listEmprunterModel.get(index)
+            windowDetailsAdherent.adherentSelected = items.get(index).model.modelData
             windowDetailsAdherent.visible = true
         }
     }

@@ -1,3 +1,3 @@
 set QML_XHR_ALLOW_FILE_READ=1
 set QML_XHR_ALLOW_FILE_WRITE=1
-appGestionnaire_dressing.exe
+Gestionnaire_dressing.exe
