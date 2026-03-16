@@ -8,11 +8,11 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
-qt_add_executable(appGestionnaire_dressing
+qt_add_executable(Gestionnaire_dressing
     main.cpp
 )
 
-qt_add_qml_module(appGestionnaire_dressing
+qt_add_qml_module(Gestionnaire_dressing
     URI Gestionnaire_dressing
     VERSION 1.0
     QML_FILES
@@ -34,7 +34,7 @@ SOURCES apiclient.h apiclient.cpp
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-set_target_properties(appGestionnaire_dressing PROPERTIES
+set_target_properties(Gestionnaire_dressing PROPERTIES
 #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appGestionnaire_dressing
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -42,12 +42,12 @@ set_target_properties(appGestionnaire_dressing PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(appGestionnaire_dressing
+target_link_libraries(Gestionnaire_dressing
     PRIVATE Qt6::Quick
 )
 
 include(GNUInstallDirs)
-install(TARGETS appGestionnaire_dressing
+install(TARGETS Gestionnaire_dressing
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

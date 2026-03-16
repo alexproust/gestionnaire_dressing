@@ -1,1 +1,1 @@
-D:\Qt\6.7.2\msvc2019_64\bin\windeployqt.exe --qmldir C:\Users\Alex\Documents\gestionnaire_dressing .\appGestionnaire_dressing.exe
+D:\Qt\6.7.2\msvc2019_64\bin\windeployqt.exe --qmldir C:\Users\Alex\Documents\gestionnaire_dressing .\Gestionnaire_dressing.exe
