@@ -20,7 +20,7 @@ void ApiClient::setToken(const QString& v) {
 
 void ApiClient::addAuthHeader(QNetworkRequest& req) const {
     const auto t = m_token.trimmed();
-    qDebug() << "Token length =" << t.size();   // doit être 64 pour 32 bytes hex
+    qDebug() << "Token length =" << t.size() << "bytes";   // doit être 64 pour 32 bytes hex
     req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
 }
 
@@ -31,7 +31,11 @@ void ApiClient::loadCostumes()
     addAuthHeader(req);
 
     QNetworkReply *reply = m_manager.get(req);
-
+    qDebug() << "[ApiClient] GET URL:" << req.url().toString();
+    const auto headers = req.rawHeaderList();
+    for (const QByteArray &h : headers) {
+        qDebug() << "[ApiClient] Header:" << h << "->" << req.rawHeader(h);
+    }
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         const QByteArray data = reply->readAll();
@@ -56,6 +60,7 @@ void ApiClient::loadCostumes()
         for (const QJsonValue &v : doc.array())
             m_costumes.append(v.toObject().toVariantMap());
 
+        qDebug() << "[ApiClient] emit costumesChanged";
         emit costumesChanged();
         reply->deleteLater();
     });
@@ -226,6 +231,11 @@ void ApiClient::loadCostume(int id)
     addAuthHeader(req);
 
     QNetworkReply *reply = m_manager.get(req);
+    qDebug() << "[ApiClient] GET URL:" << req.url().toString();
+    const auto headers = req.rawHeaderList();
+    for (const QByteArray &h : headers) {
+        qDebug() << "[ApiClient] Header:" << h << "->" << req.rawHeader(h);
+    }
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() != QNetworkReply::NoError) {
@@ -270,6 +280,11 @@ void ApiClient::loadAdherents()
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
     m_managerAdherent.get(req);
+    qDebug() << "[ApiClient] GET URL:" << req.url().toString();
+    const auto headers = req.rawHeaderList();
+    for (const QByteArray &h : headers) {
+        qDebug() << "[ApiClient] Header:" << h << "->" << req.rawHeader(h);
+    }
 }
 
 void ApiClient::onReplyAdherents(QNetworkReply *reply)
@@ -292,7 +307,7 @@ void ApiClient::onReplyAdherents(QNetworkReply *reply)
     m_adherents.clear();
     for (const QJsonValue &v : doc.array()) {
         m_adherents.append(v.toObject().toVariantMap());
-        // qDebug() << "[ApiClient] m_costumes:" << v.toObject().toVariantMap();
+        // qDebug() << "[ApiClient] adherent:" << v.toObject().toVariantMap();
     }
 
     qDebug() << "[ApiClient] emit adherentsChanged";
