@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls
 import ".."
+import "."
 
 RowLayout {
     id: control
@@ -13,10 +14,6 @@ RowLayout {
     property alias tabbar: bar
     spacing: 5
 
-    Item {
-        Layout.preferredWidth: 1
-        Layout.fillHeight: true
-    }
 
     /* LOGO */
     Image {
@@ -53,10 +50,10 @@ RowLayout {
             // Layout.fillHeight: true
             // Layout.preferredWidth: 300
             // Layout.preferredHeight: 50
-            TabButton {
+            MyTabButton {
                 text: qsTr("Costumes")
             }
-            TabButton {
+            MyTabButton {
                 text: qsTr("Emprunteurs")
             }
         }

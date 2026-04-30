@@ -28,13 +28,12 @@ Window {
                 anchors.fill: parent
                 title: appli.headtitle
             }
-            layer.enabled: true
         }
 
         Rectangle {
             id: content
 
-            color: Colors.bluegrey25
+            color: Colors.bluegrey50
             anchors.top: headerContainer.bottom
             anchors.topMargin: 4
             anchors.left: parent.left
