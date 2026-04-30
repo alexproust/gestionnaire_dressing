@@ -30,7 +30,8 @@ public:
     Q_INVOKABLE void duplicateCostume(QJsonObject costume);
     Q_INVOKABLE void updateCostume(QJsonObject costume);
     Q_INVOKABLE void deleteCostume(QString id);
-    Q_INVOKABLE void loadAdherents();    
+    Q_INVOKABLE void loadAdherents();
+    Q_INVOKABLE void addAdherent(QJsonObject adherent);
 
     QVariantList costumes() const { return m_costumes; }
     QVariantList adherents() const { return m_adherents; }

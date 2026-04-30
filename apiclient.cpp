@@ -26,7 +26,9 @@ void ApiClient::addAuthHeader(QNetworkRequest& req) const {
 
 void ApiClient::loadCostumes()
 {
-    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/costume");
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
 
@@ -38,6 +40,11 @@ void ApiClient::loadCostumes()
     }
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (http >= 400)
+        {
+            emit error(QString("HTTP error %1").arg(http));
+            return;
+        }
         const QByteArray data = reply->readAll();
         // qDebug() << "HTTP" << http
         //          << "QtError" << reply->error() << reply->errorString()
@@ -69,7 +76,9 @@ void ApiClient::loadCostumes()
 
 void ApiClient::addCostume()
 {
-    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/costume");
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
 
@@ -79,11 +88,14 @@ void ApiClient::addCostume()
         m_manager.post(req, QJsonDocument(obj).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-
+        const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (http >= 400)
+        {
+            emit error(QString("HTTP error %1").arg(http));
+            return;
+        }
         QByteArray data = reply->readAll();
-        qDebug() << "HTTP status ="
-                 << status.toInt();
+        qDebug() << "HTTP status =" << http;
         qDebug() << "[POST response]" << data;
 
         if (data.isEmpty()) {
@@ -123,7 +135,9 @@ void ApiClient::updateCostume(QJsonObject costume)
 {
     qDebug() << "[ApiClient] updateCostume" << costume["id"].toString();
 
-    QNetworkRequest req(QUrl(m_baseUrl + "/costume/" + costume["id"].toString()));
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/costume/" + costume["id"].toString());
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
 
@@ -131,11 +145,14 @@ void ApiClient::updateCostume(QJsonObject costume)
         m_manager.put(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        QVariant status =
-            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-
+        const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (http >= 400)
+        {
+            emit error(QString("HTTP error %1").arg(http));
+            return;
+        }
         QByteArray data = reply->readAll();
-        qDebug() << "HTTP status =" << status.toInt();
+        qDebug() << "HTTP status =" << http;
         qDebug() << "[PUT response]" << data;
 
         if (data.isEmpty()) {
@@ -173,7 +190,9 @@ void ApiClient::duplicateCostume(QJsonObject costume)
 {
     qDebug() << "[ApiClient] duplicateCostume" << costume;
 
-    QNetworkRequest req(QUrl(m_baseUrl + "/costume"));
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/costume");
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
 
@@ -181,11 +200,14 @@ void ApiClient::duplicateCostume(QJsonObject costume)
         m_manager.post(req, QJsonDocument(costume).toJson(QJsonDocument::Compact));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        QVariant status =
-            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-
+        const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (http >= 400)
+        {
+            emit error(QString("HTTP error %1").arg(http));
+            return;
+        }
         QByteArray data = reply->readAll();
-        qDebug() << "HTTP status =" << status.toInt();
+        qDebug() << "HTTP status =" << http;
         qDebug() << "[POST response]" << data;
 
         if (data.isEmpty()) {
@@ -276,7 +298,9 @@ void ApiClient::deleteCostume(QString id)
 
 void ApiClient::loadAdherents()
 {
-    QNetworkRequest req(QUrl(m_baseUrl + "/adherent"));
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/adherent");
+    QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addAuthHeader(req);
     m_managerAdherent.get(req);
@@ -287,6 +311,62 @@ void ApiClient::loadAdherents()
     }
 }
 
+void ApiClient::addAdherent(QJsonObject adherent)
+{
+    qDebug() << "[ApiClient] addAdherent" << adherent;
+
+    QUrl url = QUrl(m_baseUrl);
+    url.setPath(url.path() + "/adherent");
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addAuthHeader(req);
+
+    QNetworkReply *reply =
+        m_manager.post(req, QJsonDocument(adherent).toJson(QJsonDocument::Compact));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        const int http = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (http >= 400)
+        {
+            emit error(QString("HTTP error %1").arg(http));
+            return;
+        }
+        QByteArray data = reply->readAll();
+        qDebug() << "HTTP status =" << http;
+        qDebug() << "[POST response]" << data;
+
+        if (data.isEmpty()) {
+            qWarning() << "Empty response body";
+            reply->deleteLater();
+            return;
+        }
+
+        if (reply->error() != QNetworkReply::NoError) {
+            emit error(reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (!doc.isObject()) {
+            qWarning() << "Invalid JSON response";
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonObject res = doc.object();
+
+        int id = res["id"].isString()
+                     ? res["id"].toString().toInt()
+                     : res["id"].toInt();
+
+        qDebug() << "New adherent id =" << id;
+        emit adherentsChanged();
+
+        loadAdherents();
+        reply->deleteLater();
+    });
+}
 void ApiClient::onReplyAdherents(QNetworkReply *reply)
 {
     if (reply->error() != QNetworkReply::NoError) {
@@ -311,6 +391,18 @@ void ApiClient::onReplyAdherents(QNetworkReply *reply)
     }
 
     qDebug() << "[ApiClient] emit adherentsChanged";
+
+    std::sort(m_adherents.begin(), m_adherents.end(),
+              [](const QVariant &a, const QVariant &b) {
+                  const auto ma = a.toMap();
+                  const auto mb = b.toMap();
+
+                  QString nameA = ma["name"].toString().toLower();
+                  QString nameB = mb["name"].toString().toLower();
+
+                  return nameA < nameB;
+              });
+
     emit adherentsChanged();
     reply->deleteLater();
 }

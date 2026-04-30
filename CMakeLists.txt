@@ -29,6 +29,8 @@ QML_FILES WindowDetailsAdherent.qml
 QML_FILES ModelCostumesOfOneAdherent.qml
 QML_FILES
 SOURCES apiclient.h apiclient.cpp
+QML_FILES Theme/QUANTUM/Controls/MyTabButton.qml
+QML_FILES WindowNewAdherent.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

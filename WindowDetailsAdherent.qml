@@ -24,7 +24,6 @@ Rectangle {
     radius: 50
     visible: false
     color: Colors.bluegrey50
-    signal recordModification()
     signal deleteCostume()
     signal duplicateCostume()
     signal emprunterCostume()
@@ -43,36 +42,13 @@ Rectangle {
     }
 
     Button {
-        id: modificationButton
-        text: windowDetailsAdherent.editMode ? "Annuler" : "Modifier"
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.margins: 16
-        onClicked: windowDetailsAdherent.editMode = !windowDetailsAdherent.editMode
-    }
-
-    Button {
-        text: windowDetailsAdherent.editMode ? "Sauvegarder" : "Fermer"
+        id: closeButton
+        text: "Fermer"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 16
         onClicked: {
-            if (windowDetailsAdherent.editMode){
-                windowDetailsAdherent.editMode = !windowDetailsAdherent.editMode
-                adherentSelected.emprunteur = emprunteur
-                if (emprunteur){
-                    adherentSelected.date_emprunt = jourEmprunt + "/" + moisEmprunt + "/" + anneeEmprunt
-                    adherentSelected.date_retour = ""
-                }
-                else {
-                    adherentSelected.date_retour = jourRetour + "/" + moisRetour + "/" + anneeRetour
-                    adherentSelected.date_emprunt = ""
-                }
-                windowDetailsAdherent.recordModification()
-            }
-            else {
-                parent.visible = false
-            }
+            parent.visible = false
         }
     }
 
@@ -83,7 +59,7 @@ Rectangle {
 
     ColumnLayout {
         id: row
-        anchors.top: modificationButton.bottom
+        anchors.top: closeButton.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right

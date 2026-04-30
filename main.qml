@@ -117,14 +117,28 @@ AppliQuantum {
             }
         }
 
-        ScrollView {
-            Layout.alignment: Qt.AlignVCenter
-            contentWidth: availableWidth
-            clip: true
-            GridView {
-                anchors.fill: parent
-                model: modelAdherents
-                cellWidth: 310; cellHeight: 90
+        ColumnLayout{
+            spacing: 12
+            Button {
+                id : addButton
+                text: qsTr("Ajouter")
+                onClicked: {
+                    windowNewAdherent.visible = true
+                }
+            }
+
+            ScrollView {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                GridView {
+                    anchors.fill: parent
+                    model: modelAdherents
+                    cellWidth: 310; cellHeight: 90
+                }
             }
         }
     }
@@ -163,6 +177,15 @@ AppliQuantum {
         onEmprunterCostume: {
             windowEmpruntCostume.costumeSelected = windowDetailsCostume.costumeSelected
             windowEmpruntCostume.visible = true
+        }
+    }
+
+    WindowNewAdherent{
+        id: windowNewAdherent
+        onAddAdherent: {
+            console.log("Add new Adherent : ", windowNewAdherent.newAdherent.name)
+            api.addAdherent(windowNewAdherent.newAdherent)
+            windowNewAdherent.visible = false
         }
     }
 
